@@ -117,13 +117,11 @@ button {
   box-shadow: var(--shadow-sm);
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1000;
   height: 80px;
   display: flex;
   align-items: center;
   border-bottom: 2px solid var(--color-primary-blue);
-  position: relative;
-  overflow: hidden;
 }
 
 .header-video-banner {
@@ -276,6 +274,7 @@ button {
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: var(--radius-full);
   padding: 3px 8px 3px 4px;
+  position: relative;
 }
 
 .delivery-type-pill {
@@ -2233,13 +2232,13 @@ button {
 /* --- DELIVERY MODE DROPDOWN --- */
 .delivery-dropdown-list {
   position: absolute;
-  top: 45px;
+  top: 38px;
   left: 0;
   background-color: white;
   border: 1px solid var(--color-border);
   box-shadow: var(--shadow-md);
   border-radius: var(--radius-md);
-  z-index: 100;
+  z-index: 1100;
   width: 200px;
   overflow: hidden;
 }
