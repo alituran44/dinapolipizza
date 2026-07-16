@@ -250,15 +250,15 @@ button {
 .header-right-group {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: 10px;
 }
 
 .header-search-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: var(--radius-full);
   transition: var(--transition-smooth);
 }
@@ -271,29 +271,29 @@ button {
 .address-picker-widget {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   background-color: rgba(255, 255, 255, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: var(--radius-full);
-  padding: 4px 12px 4px 6px;
+  padding: 3px 8px 3px 4px;
 }
 
 .delivery-type-pill {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   background-color: white;
   color: var(--color-primary-red);
-  padding: 6px 12px;
+  padding: 4px 8px;
   border-radius: var(--radius-full);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 800;
   box-shadow: var(--shadow-sm);
 }
 
 .delivery-dot {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   background-color: var(--color-primary-red);
   border-radius: var(--radius-full);
   display: inline-block;
@@ -307,7 +307,7 @@ button {
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
   color: white;
 }
@@ -317,7 +317,7 @@ button {
 }
 
 .address-text {
-  max-width: 150px;
+  max-width: 95px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -338,12 +338,12 @@ button {
 .auth-btn-white {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   color: white;
-  padding: 8px 16px;
+  padding: 6px 12px;
   border-radius: var(--radius-full);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
 }
 
@@ -356,13 +356,13 @@ button {
 .cart-btn-white {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   background-color: var(--color-primary-blue);
   border: 1px solid var(--color-primary-blue);
   color: var(--color-dark-blue);
-  padding: 8px 18px;
+  padding: 6px 14px;
   border-radius: var(--radius-full);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
 }
