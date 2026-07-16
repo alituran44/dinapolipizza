@@ -58,8 +58,13 @@ export default function AiPizzaChef({
   };
 
   const analyzeChefInput = (text, currentMessages) => {
-    const textLower = text.toLowerCase();
+    const textLower = text.toLowerCase().trim();
     
+    // Check intents
+    const isAffirmative = ['olsun', 'evet', 'tamam', 'olur', 'istiyorum', 'ekle', 'seç', 'aynen', 'hadi', 'koy', 'eklensin'].some(w => textLower.includes(w));
+    const isNegative = ['olmasın', 'hayır', 'istemiyorum', 'kalsın', 'yok', 'çıkar', 'sade', 'istemem'].some(w => textLower.includes(w));
+    const isFinalize = ['fırına', 'sepete', 'sipariş', 'hazır', 'bitti', 'tamamdır'].some(w => textLower.includes(w));
+
     // 1. Dough matching
     let foundDough = detectedDough;
     doughOptions.forEach(d => {
@@ -82,7 +87,6 @@ export default function AiPizzaChef({
     
     ingredientOptions.forEach(ing => {
       const ingNameLower = ing.name.toLowerCase();
-      // Match raw name or plural forms (sucuk -> sucuklar, mantar -> mantarlı)
       if (textLower.includes(ingNameLower) || 
           (ingNameLower === 'sucuk' && textLower.includes('sucuklu')) ||
           (ingNameLower === 'sosis' && textLower.includes('sosisli')) ||
@@ -100,23 +104,47 @@ export default function AiPizzaChef({
       }
     });
 
-    // Update state
-    setDetectedDough(foundDough);
-    setDetectedCrust(foundCrust);
-    setDetectedExtras(updatedExtras);
+    // Update state variables first
+    let finalDough = foundDough;
+    let finalCrust = foundCrust;
+    let finalExtras = updatedExtras;
 
-    // Dynamic pizza name generator based on ingredients
-    if (updatedExtras.length > 0) {
-      if (updatedExtras.length >= 3) {
-        setPizzaName('Şef Luigi Bol Malzemeli Özel');
-      } else {
-        setPizzaName(`Şef Luigi ${updatedExtras.map(e => e.name).join(' & ')} Pizza`);
-      }
+    // Decision tree
+    let chefResponse = '';
+
+    if (isFinalize) {
+      chefResponse = 'Mamma mia! Pizzan tam istediğin kıvamda odun ateşine girdi. 1 saniye içinde sepetine ekliyorum, afiyet olsun sinyor!';
+      setMessages([...currentMessages, { sender: 'chef', text: chefResponse }]);
+      setTimeout(() => {
+        // Directly trigger cart insertion
+        const finalPrice = 290 + (finalDough?.price || 0) + (finalCrust?.price || 0) + finalExtras.reduce((s, e) => s + e.price, 0);
+        const aiPizzaItem = {
+          id: `ai-custom-pizza-${Date.now()}`,
+          name: finalExtras.length > 0 ? (finalExtras.length >= 3 ? 'Şef Luigi Bol Malzemeli Özel' : `Şef Luigi ${finalExtras.map(e => e.name).join(' & ')} Pizza`) : 'Şef Luigi Özel Pizzası',
+          description: `Şef Luigi tarafından hazırlanan özel lezzet. Hamur: ${finalDough.name}, Kenar: ${finalCrust.name}. Malzemeler: ${finalExtras.length > 0 ? finalExtras.map(e => e.name).join(', ') : 'Sadece Sos & Peynir'}`,
+          basePrice: finalPrice,
+          price: finalPrice,
+          image: '/logo.png',
+          customizable: true,
+          quantity: 1,
+          customInfo: {
+            isCampaignWizard: false,
+            selectedPizzas: [{
+              name: finalExtras.length > 0 ? (finalExtras.length >= 3 ? 'Şef Luigi Bol Malzemeli Özel' : `Şef Luigi ${finalExtras.map(e => e.name).join(' & ')} Pizza`) : 'Şef Luigi Özel Pizzası',
+              image: '/logo.png',
+              selectedDough: finalDough,
+              selectedCrust: finalCrust,
+              removedIngredients: [],
+              extras: finalExtras
+            }]
+          }
+        };
+        onAddToCart(aiPizzaItem);
+        onClose();
+      }, 1200);
+      return;
     }
 
-    // Build chef feedback response
-    let chefResponse = '';
-    
     if (matchedNames.length > 0) {
       chefResponse += `Mamma mia! Harika tercihler. Taze fırın tepsimize hemen **${matchedNames.join(', ')}** ekledim. `;
     }
@@ -129,11 +157,51 @@ export default function AiPizzaChef({
       chefResponse += `Kenar tipini de nefis **${foundCrust.name}** olarak sardım! `;
     }
 
-    // Fallback response if nothing matched
+    // Handle yes/no or empty inputs smart
     if (matchedNames.length === 0 && foundDough.id === detectedDough.id && foundCrust.id === detectedCrust.id) {
-      chefResponse = 'Anladım! Pizzanda sucuk, sosis, mantar, zeytin, mısır veya köz biber gibi usta malzemeler olsun mu? Hamurunu ince mi, klasik mi istersin? Bana söyle, hemen açayım!';
+      if (isAffirmative) {
+        // User said "yes" to general recommendation, let's add popular items automatically
+        const popularItems = ingredientOptions.filter(ing => ['sucuk', 'mantar', 'zeytin'].includes(ing.id));
+        if (popularItems.length > 0) {
+          popularItems.forEach(item => {
+            if (!finalExtras.some(e => e.id === item.id)) {
+              finalExtras.push(item);
+            }
+          });
+          chefResponse = `Harika sinyor! O zaman fırın tepsimize hemen **Sucuk, Mantar ve Zeytin** kombinasyonunu ekledim. Pizzan fırına girmeye hazır görünüyor! Fırına verelim mi, yoksa başka bir isteğin var mı?`;
+        } else {
+          chefResponse = 'Süper! Pizzana hangi nefis malzemeleri ekleyelim? Sucuk, sosis, mantar veya zeytin ister misin?';
+        }
+      } else if (isNegative) {
+        chefResponse = 'Anladım sinyor! Pizzanı sade, sadece özel Di Napoli sosu ve eriyen mozzarella peyniriyle hazırlıyorum. İnce hamur mu istersin, klasik hamur mu?';
+      } else {
+        // Fallback variations to prevent repetition loop
+        const fallbacks = [
+          "Anladım sinyor! Pizzanda sucuk, sosis, mantar, zeytin, mısır veya köz biber gibi usta malzemeler olsun mu? Yoksa sadece peynirli mi istersin?",
+          "Şef Luigi fırını hazırladı! Pizzana dana salam, sosis veya acı sos eklememi ister misin? Canın şu an hangisini çekiyor?",
+          "Hamur kalınlığını (ince/klasik) veya kenar tipini (sarımsaklı/peynirli) de değiştirebilirim. Canın ne çekiyor, bana söyle sinyor!",
+          "Eğer pizzan hazırsa 'sepete ekle' veya 'fırına at' yazarak siparişe geçebiliriz. Fırına verelim mi?"
+        ];
+        // Select random fallback
+        const randomIdx = Math.floor(Math.random() * fallbacks.length);
+        chefResponse = fallbacks[randomIdx];
+      }
     } else {
-      chefResponse += `Şu an pizzan fırına girmeye hazır sinyor! Fiyatımız ${290 + (foundDough.price || 0) + (foundCrust.price || 0) + updatedExtras.reduce((s, e) => s + e.price, 0)} TL. Fırına atalım mı, yoksa başka bir malzeme eklemek ister misin?`;
+      chefResponse += `Şu an pizzan fırına girmeye hazır sinyor! Fiyatımız ${290 + (foundDough.price || 0) + (foundCrust.price || 0) + finalExtras.reduce((s, e) => s + e.price, 0)} TL. Fırına atalım mı (sepete ekle), yoksa başka bir malzeme ekleyelim mi?`;
+    }
+
+    // Apply states
+    setDetectedDough(finalDough);
+    setDetectedCrust(finalCrust);
+    setDetectedExtras(finalExtras);
+
+    // Dynamic name generator
+    if (finalExtras.length > 0) {
+      if (finalExtras.length >= 3) {
+        setPizzaName('Şef Luigi Bol Malzemeli Özel');
+      } else {
+        setPizzaName(`Şef Luigi ${finalExtras.map(e => e.name).join(' & ')} Pizza`);
+      }
     }
 
     setMessages([...currentMessages, { sender: 'chef', text: chefResponse }]);
