@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Award, ChevronRight, Gift } from 'lucide-react';
+import RewardModal from './RewardModal';
 
 export default function PromoWidgets({ yeKazanSlices }) {
+  const [isRewardOpen, setIsRewardOpen] = useState(false);
   const totalSlicesNeeded = 6;
+  
+  const handleOpenReward = (e) => {
+    e.preventDefault();
+    setIsRewardOpen(true);
+  };
   
   return (
     <section className="promo-widgets-section">
@@ -63,7 +70,7 @@ export default function PromoWidgets({ yeKazanSlices }) {
         <div className="ye-kazan-loyalty-card">
           <div className="loyalty-header">
             <h3>Di Napoli Ye-Kazan</h3>
-            <a href="#menu" className="loyalty-details-link">Detayı Gör &gt;</a>
+            <button onClick={handleOpenReward} className="loyalty-details-link">Detayı Gör &gt;</button>
           </div>
           
           <div className="loyalty-body">
@@ -72,7 +79,7 @@ export default function PromoWidgets({ yeKazanSlices }) {
                 <Award size={18} className="loyalty-award-icon" />
                 <span>Sipariş ver, Napoli dilimi kazan!</span>
               </div>
-              <button className="loyalty-join-btn">Ustalara Katıl</button>
+              <button className="loyalty-join-btn" onClick={handleOpenReward}>Ustalara Katıl</button>
             </div>
 
             {/* Slices progression */}
@@ -112,11 +119,14 @@ export default function PromoWidgets({ yeKazanSlices }) {
 
             <div className="loyalty-footer-tip">
               <span>Her pizza siparişinde 1 dilim kazanırsınız.</span>
-              <a href="#menu" className="faq-link">Nasıl hediye kazanırım?</a>
+              <a href="#" onClick={handleOpenReward} className="faq-link">Nasıl hediye kazanırım?</a>
             </div>
           </div>
         </div>
       </div>
+
+      {/* How to win reward modal */}
+      <RewardModal isOpen={isRewardOpen} onClose={() => setIsRewardOpen(false)} />
     </section>
   );
 }
