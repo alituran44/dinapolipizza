@@ -56,7 +56,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Margarita Pizza',
     description: 'Özel Di Napoli Sosu, Mozzarella Peyniri, Taze Fesleğen, Taze Karabiber',
     basePrice: 169,
-    image: 'https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?auto=format&fit=crop&w=600&q=80',
+    image: '/margarita.jpg',
     yeKazanSlice: 1,
     popular: true,
     customizable: true,
