@@ -232,15 +232,15 @@ export default function App() {
             <main className="main-content">
               <PromoWidgets yeKazanSlices={yeKazanSlices} />
 
-              {/* Usta AI Pizza Asistanı Giriş Banner'ı */}
+              {/* Usta AI Pizza Asistanı Giriş Banner\'ı */}
               <div className="ai-chef-promo-banner" onClick={() => setIsAiChefOpen(true)}>
                 <div className="ai-promo-content">
                   <div className="ai-badge">✨ YAPAY ZEKA DESTEKLİ</div>
                   <h3>Kendi Pizzanı Kendin Tasarla! 🧑‍🍳</h3>
-                  <p>Nasıl bir pizza canın çekiyor? Usta AI'a anlat, hamuru ve malzemeleri anında senin için fırına hazırlasın!</p>
+                  <p>Nasıl bir pizza canın çekiyor? Şef Luigi'ye anlat, hamuru ve malzemeleri anında senin için fırına hazırlasın!</p>
                 </div>
                 <button className="ai-start-btn">
-                  Usta AI Asistanı Başlat
+                  Şef Luigi'yi Başlat
                 </button>
               </div>
               

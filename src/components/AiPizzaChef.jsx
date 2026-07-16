@@ -14,18 +14,18 @@ export default function AiPizzaChef({
   const [messages, setMessages] = useState([
     {
       sender: 'chef',
-      text: 'Selamlar sinyor! Ben Di Napoli fırınının usta şefi AI. 🧑‍🍳 Bugün canın nasıl bir pizza çekiyor? Malzemeleri, hamur kalınlığını, acı seviyesini bana anlat, senin için usta ellerimle özel bir pizza açayım!'
+      text: 'Selamlar sinyor! Ben Di Napoli fırınının usta İtalyan şefi Luigi. 🧑‍🍳 Bugün canın nasıl bir pizza çekiyor? Malzemeleri, hamur kalınlığını, acı seviyesini bana anlat, senin için usta ellerimle özel bir pizza açayım!'
     }
   ]);
   
   const [inputText, setInputText] = useState('');
   
   // Track dynamically detected elements from chat text
-  const [detectedDough, setDetectedDough] = useState(doughOptions[0]); // default: İnce Hamur
-  const [detectedCrust, setDetectedCrust] = useState(crustOptions[0]); // default: Klasik Kenar
+  const [detectedDough, setDetectedDough] = useState(doughOptions?.[0] || { id: 'ince', name: 'İnce Hamur', price: 0 });
+  const [detectedCrust, setDetectedCrust] = useState(crustOptions?.[0] || { id: 'klasik', name: 'Klasik Kenar', price: 0 });
   const [detectedExtras, setDetectedExtras] = useState([]); // extra ingredients identified
-  const [pizzaName, setPizzaName] = useState('Usta AI Özel Pizzası');
-
+  const [pizzaName, setPizzaName] = useState('Şef Luigi Özel Pizzası');
+  
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -35,10 +35,10 @@ export default function AiPizzaChef({
   // Calculate dynamic price based on detected selections
   const calculatePizzaPrice = () => {
     let price = 290; // base price for custom AI pizza
-    price += (detectedDough.price || 0);
-    price += (detectedCrust.price || 0);
+    price += (detectedDough?.price || 0);
+    price += (detectedCrust?.price || 0);
     detectedExtras.forEach(extra => {
-      price += (extra.price || 0);
+      price += (extra?.price || 0);
     });
     return price;
   };
@@ -108,9 +108,9 @@ export default function AiPizzaChef({
     // Dynamic pizza name generator based on ingredients
     if (updatedExtras.length > 0) {
       if (updatedExtras.length >= 3) {
-        setPizzaName('Usta AI Bol Malzemeli Özel');
+        setPizzaName('Şef Luigi Bol Malzemeli Özel');
       } else {
-        setPizzaName(`Usta AI ${updatedExtras.map(e => e.name).join(' & ')} Pizza`);
+        setPizzaName(`Şef Luigi ${updatedExtras.map(e => e.name).join(' & ')} Pizza`);
       }
     }
 
@@ -181,7 +181,7 @@ export default function AiPizzaChef({
             <div className="chef-header-bar">
               <Bot className="chef-bot-icon" size={24} />
               <div>
-                <h3>Usta AI Pizza Asistanı</h3>
+                <h3>Şef Luigi - AI Pizza Asistanı</h3>
                 <span className="online-tag">● Fırın Sıcak (250°C)</span>
               </div>
             </div>
