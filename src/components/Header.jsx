@@ -22,7 +22,8 @@ export default function Header({
   onOpenRewards,
   onOpenAddresses,
   onGoToAbout,
-  onGoToContact
+  onGoToContact,
+  onGoToMenu
 }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
@@ -51,9 +52,30 @@ export default function Header({
           </a>
           
           <nav className="header-nav-links">
-            <a href="#menu" className="nav-link-white">Tüm Kampanyalar</a>
-            <a href="#menu" className="nav-link-white">Tüm Pizzalar</a>
-            <a href="#menu" className="nav-link-white">Yan Ürünler</a>
+            <a href="#menu" className="nav-link-white" onClick={(e) => { 
+              e.preventDefault(); 
+              onGoToMenu();
+              setTimeout(() => {
+                const element = document.querySelector('.promo-widgets-section') || document.querySelector('.header-video-banner');
+                if (element) element.scrollIntoView({ behavior: 'smooth' });
+              }, 120);
+            }}>Tüm Kampanyalar</a>
+            <a href="#menu" className="nav-link-white" onClick={(e) => { 
+              e.preventDefault(); 
+              onGoToMenu();
+              setTimeout(() => {
+                const element = document.getElementById('pizzalar');
+                if (element) element.scrollIntoView({ behavior: 'smooth' });
+              }, 120);
+            }}>Tüm Pizzalar</a>
+            <a href="#menu" className="nav-link-white" onClick={(e) => { 
+              e.preventDefault(); 
+              onGoToMenu();
+              setTimeout(() => {
+                const element = document.getElementById('yan-urunler') || document.getElementById('icecekler') || document.getElementById('tatlilar');
+                if (element) element.scrollIntoView({ behavior: 'smooth' });
+              }, 120);
+            }}>Yan Ürünler</a>
             <a href="#about" className="nav-link-white" onClick={(e) => { e.preventDefault(); onGoToAbout(); }}>Hakkımızda</a>
             <a href="#contact" className="nav-link-white" onClick={(e) => { e.preventDefault(); onGoToContact(); }}>İletişim</a>
           </nav>

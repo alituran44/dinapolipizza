@@ -379,6 +379,7 @@ export default function App() {
               onOpenAddresses={() => setIsAddressesModalOpen(true)}
               onGoToAbout={() => setCurrentPage('about')}
               onGoToContact={() => setCurrentPage('contact')}
+              onGoToMenu={() => setCurrentPage('menu')}
             />
 
             {currentPage === 'menu' && (
