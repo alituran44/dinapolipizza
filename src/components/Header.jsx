@@ -8,9 +8,14 @@ export default function Header({
   setCartOpen,
   address,
   onOpenMap,
-  onGoToCartPage
+  onGoToCartPage,
+  user,
+  onLoginClick,
+  onLogout,
+  yeKazanSlices
 }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   const handleSelectMode = (mode) => {
@@ -91,11 +96,45 @@ export default function Header({
             </div>
           </div>
 
-          {/* User Sign In */}
-          <button className="auth-btn-white">
-            <User size={16} />
-            <span>Giriş Yap</span>
-          </button>
+          {/* User Sign In / Profile dropdown */}
+          {user ? (
+            <div className="user-profile-dropdown-container" style={{ position: 'relative' }}>
+              <button 
+                className="auth-btn-white user-logged-btn" 
+                onClick={() => setProfileMenuOpen(!profileMenuOpen)}
+                style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+              >
+                {user.avatar ? (
+                  <img src={user.avatar} alt="avatar" className="header-user-avatar" style={{ width: '18px', height: '18px', borderRadius: '50%', objectFit: 'cover' }} />
+                ) : (
+                  <User size={16} />
+                )}
+                <span>{user.name.length > 8 ? user.name.slice(0, 8) + '..' : user.name}</span>
+                <ChevronDown size={12} className="logged-arrow" />
+              </button>
+              
+              {profileMenuOpen && (
+                <div className="profile-dropdown-list">
+                  <div className="profile-dropdown-header">
+                    <span className="user-email-lbl">{user.email}</span>
+                    <span className="user-slices-lbl">🍕 {yeKazanSlices} Dilim Pizzam Var</span>
+                  </div>
+                  <div className="profile-dropdown-divider"></div>
+                  <button className="profile-dropdown-item" onClick={() => { alert('Sipariş geçmişiniz hazırlanıyor sinyor!'); setProfileMenuOpen(false); }}>
+                    Siparişlerim
+                  </button>
+                  <button className="profile-dropdown-item logout" onClick={() => { onLogout(); setProfileMenuOpen(false); }}>
+                    Çıkış Yap
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <button className="auth-btn-white" onClick={onLoginClick}>
+              <User size={16} />
+              <span>Giriş Yap</span>
+            </button>
+          )}
 
           {/* Sepetim Button */}
           <button className="cart-btn-white" onClick={onGoToCartPage}>

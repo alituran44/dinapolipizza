@@ -12,6 +12,7 @@ import BranchMapModal from './components/BranchMapModal';
 import AiPizzaChef from './components/AiPizzaChef';
 import CartPage from './components/CartPage';
 import KuryeSlipModal from './components/KuryeSlipModal';
+import AuthModal from './components/AuthModal';
 import { 
   INITIAL_PRODUCTS, INITIAL_DOUGHS, INITIAL_CRUSTS, INITIAL_INGREDIENTS 
 } from './data/products';
@@ -32,6 +33,10 @@ export default function App() {
   
   // Wizard Active item selection state
   const [activeCustomizeItem, setActiveCustomizeItem] = useState(null);
+  
+  // User Authentication & Modal States
+  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('dinapoli_user') || 'null'));
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   // Cart & Order Tracking States
   const [cart, setCart] = useState([]);
@@ -221,6 +226,13 @@ export default function App() {
               address={address}
               onOpenMap={() => setIsMapModalOpen(true)}
               onGoToCartPage={() => setCurrentPage('cart')}
+              user={user}
+              onLoginClick={() => setIsAuthModalOpen(true)}
+              onLogout={() => {
+                localStorage.removeItem('dinapoli_user');
+                setUser(null);
+              }}
+              yeKazanSlices={yeKazanSlices}
             />
 
             {/* Header Altı Video Banner Akışı */}
@@ -327,6 +339,13 @@ export default function App() {
               crustOptions={crusts}
               ingredientOptions={ingredients}
               onAddToCart={handleAddToCart}
+            />
+
+            {/* Auth Login/Register Modal */}
+            <AuthModal 
+              isOpen={isAuthModalOpen}
+              onClose={() => setIsAuthModalOpen(false)}
+              onLoginSuccess={(loggedUser) => setUser(loggedUser)}
             />
           </>
         )

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { 
-  ChevronRight, ChevronLeft, Plus, Minus, X, Check, Search
+  ChevronRight, ChevronLeft, Plus, Minus, X, Check, Search, Share2, Twitter, Facebook, MessageSquare, Link
 } from 'lucide-react';
 
 export default function CustomizeWizard({ 
@@ -13,6 +13,12 @@ export default function CustomizeWizard({
   onClose 
 }) {
   const isSinglePizza = !product.requiredPizzaSelections || product.requiredPizzaSelections <= 1;
+  const [linkCopied, setLinkCopied] = useState(false);
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setLinkCopied(true);
+    setTimeout(() => setLinkCopied(false), 2000);
+  };
 
   // Wizard stages: 'summary' (main screen), 'pizza-select' (selecting a slot), 'pizza-customize' (fine tuning a selected pizza)
   const [wizardStage, setWizardStage] = useState(isSinglePizza ? 'pizza-customize' : 'summary'); 
@@ -222,6 +228,48 @@ export default function CustomizeWizard({
           <h1 className="wizard-product-title">
             {isSinglePizza && tempCustomization ? tempCustomization.name : product.name}
           </h1>
+
+          {/* Sosyal Medya Paylaşım Butonları */}
+          <div className="wizard-share-bar">
+            <span className="share-title"><Share2 size={13} /> Paylaş:</span>
+            <div className="share-buttons-group">
+              <a 
+                href={`https://api.whatsapp.com/send?text=${encodeURIComponent('Di Napoli Çanakkale\'de enfes ' + (isSinglePizza && tempCustomization ? tempCustomization.name : product.name) + ' lezzetini keşfettim! Sen de mutlaka dene: ' + window.location.href)}`}
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="share-icon-btn whatsapp"
+                title="WhatsApp ile Paylaş"
+              >
+                <MessageSquare size={14} />
+              </a>
+              <a 
+                href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent('Di Napoli Çanakkale\'de enfes ' + (isSinglePizza && tempCustomization ? tempCustomization.name : product.name) + ' lezzetini denemelisin! 🍕')}`}
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="share-icon-btn twitter"
+                title="X ile Paylaş"
+              >
+                <Twitter size={14} />
+              </a>
+              <a 
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="share-icon-btn facebook"
+                title="Facebook ile Paylaş"
+              >
+                <Facebook size={14} />
+              </a>
+              <button 
+                onClick={handleCopyLink} 
+                className={`share-icon-btn copy-link ${linkCopied ? 'copied' : ''}`}
+                title="Bağlantıyı Kopyala"
+              >
+                <Link size={14} />
+                {linkCopied && <span className="copy-tooltip">Kopyalandı!</span>}
+              </button>
+            </div>
+          </div>
           
           <div className="wizard-image-card">
             <img 
