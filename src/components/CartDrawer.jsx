@@ -9,7 +9,8 @@ export default function CartDrawer({
   onRemoveItem,
   deliveryMode,
   yeKazanSlices,
-  onPlaceOrder
+  onPlaceOrder,
+  onGoToCartPage
 }) {
   const [couponCode, setCouponCode] = useState('');
   const [discount, setDiscount] = useState(0);
@@ -216,9 +217,21 @@ export default function CartDrawer({
 
         {/* Drawer Footer */}
         {cart.length > 0 && (
-          <div className="cart-drawer-footer">
+          <div className="cart-drawer-footer" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <button 
+              className="place-order-btn" 
+              style={{ backgroundColor: '#2d3748' }}
+              onClick={() => {
+                onGoToCartPage();
+                onClose();
+              }}
+            >
+              <span>Sepete Git (Kupon & Detaylar)</span>
+              <ChevronRight size={20} />
+            </button>
+            
             <button className="place-order-btn" onClick={handleCheckout}>
-              <span>Siparişi Onayla ve Takip Et</span>
+              <span>Hızlı Siparişi Tamamla</span>
               <ChevronRight size={20} />
             </button>
           </div>

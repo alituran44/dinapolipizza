@@ -10,12 +10,14 @@ import AdminPanel from './components/AdminPanel';
 import CustomizeWizard from './components/CustomizeWizard';
 import BranchMapModal from './components/BranchMapModal';
 import AiPizzaChef from './components/AiPizzaChef';
+import CartPage from './components/CartPage';
 import { 
   INITIAL_PRODUCTS, INITIAL_DOUGHS, INITIAL_CRUSTS, INITIAL_INGREDIENTS 
 } from './data/products';
 
 export default function App() {
   const [isAdminMode, setIsAdminMode] = useState(false);
+  const [currentPage, setCurrentPage] = useState('menu'); // 'menu' or 'cart'
   const [deliveryMode, setDeliveryMode] = useState('delivery'); // 'delivery' or 'pickup'
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
   const [isAiChefOpen, setIsAiChefOpen] = useState(false);
@@ -186,6 +188,25 @@ export default function App() {
             onAddToCart={handleAddToCart}
             onClose={() => setActiveCustomizeItem(null)}
           />
+        ) : currentPage === 'cart' ? (
+          /* Tam Ekran Sepet Sayfası */
+          <CartPage 
+            cart={cart}
+            onUpdateQuantity={(index, q) => handleUpdateQuantity(index, q)}
+            onRemoveItem={(index) => handleRemoveItem(index)}
+            onCheckout={() => {
+              const itemsSubtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+              const deliveryFee = deliveryMode === 'delivery' ? 15 : 0;
+              handlePlaceOrder({
+                total: itemsSubtotal + deliveryFee,
+                slicesGained: cart.reduce((sum, item) => sum + ((item.yeKazanSlice || 0) * item.quantity), 0)
+              });
+              setCurrentPage('menu');
+            }}
+            onClose={() => setCurrentPage('menu')}
+            deliveryMode={deliveryMode}
+            selectedAddress={address}
+          />
         ) : (
           /* Default customer view */
           <>
@@ -196,6 +217,7 @@ export default function App() {
               setCartOpen={setCartOpen}
               address={address}
               onOpenMap={() => setIsMapModalOpen(true)}
+              onGoToCartPage={() => setCurrentPage('cart')}
             />
 
             {/* Header Altı Video Banner Akışı */}
@@ -259,6 +281,7 @@ export default function App() {
               deliveryMode={deliveryMode}
               yeKazanSlices={yeKazanSlices}
               onPlaceOrder={handlePlaceOrder}
+              onGoToCartPage={() => setCurrentPage('cart')}
             />
 
             {/* Live Order Tracker */}

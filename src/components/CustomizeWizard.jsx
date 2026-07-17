@@ -231,6 +231,33 @@ export default function CustomizeWizard({
             />
           </div>
 
+          {/* Şef Luigi AI Gurme Açıklama Kutusu */}
+          <div className="luigi-ai-box">
+            <div className="luigi-header">
+              <span className="luigi-avatar">🧑‍🍳</span>
+              <h4>Şef Luigi'nin Gurme Tavsiyesi (AI)</h4>
+              <div className="italy-flag-tiny">
+                <span className="flag-green"></span>
+                <span className="flag-white"></span>
+                <span className="flag-red"></span>
+              </div>
+            </div>
+            <p className="luigi-desc-text">
+              "{product.name.toLowerCase().includes('margarita') ? 'Odun ateşinin taş fırında peynir ve fesleğenle dansı. İtalyan klasiklerinin en saf hali. Şef Luigi der ki: İnce hamur seçerek hamurun çıtırlığını hissetmelisiniz!' :
+                product.name.toLowerCase().includes('fungi') ? 'Taze toplanmış mantarların erimiş mozzarella ve Napoli domates sosuyla mükemmel uyumu. Kekik dokunuşuyla zenginleşen gurme lezzet.' :
+                product.name.toLowerCase().includes('tonno') ? 'Leziz ton balığı parçalarının tatlı kırmızı soğan ve mozzarella ile mükemmel deniz esintisi. Şef Luigi\'nin tavsiyesi: Ekstra mısır ekleyerek lezzeti tatlandırın!' :
+                product.name.toLowerCase().includes('romano') ? 'İtalyan salamının ve mantarın nefis birlikteliği. Roma sokaklarının en popüler taş fırın tariflerinden biri.' :
+                product.name.toLowerCase().includes('mista') ? 'Salam, sosis, mantar ve biberlerin bol mozzarella altındaki lezzet şöleni. Zengin malzeme sevenlerin favorisi.' :
+                product.name.toLowerCase().includes('meksikano') ? 'Jalapeno biberlerinin acısı ve dana kıymanın doyurucu lezzetiyle harmanlanmış, Meksika esintili ateşli bir Napoli klasiği.' :
+                product.name.toLowerCase().includes('vejetaryen') ? 'Taze biberler, mısır, zeytin ve mantarlarla bezeli, doğallığın en renkli ve taze hali. Hafif ve sağlıklı bir İtalyan deneyimi.' :
+                product.name.toLowerCase().includes('pide') ? 'İtalyan pizza hamurundan Türk Karadeniz usulü çıtır pide. Napoli fırın felsefesiyle tereyağı ve eriyen peynir kokusu.' :
+                product.name.toLowerCase().includes('kalzone') ? 'İçi bol malzeme ve erimiş peynirle kapalı, dışı çıtır İtalyan bohça pizzası. Şef Luigi\'nin imza fırın lezzetlerinden biri.' :
+                product.name.toLowerCase().includes('apollo') ? 'Türk kasap sucuklarının, mısır ve biberle Napoli sosu üzerindeki eşsiz uyumu. Yerel tatların İtalyan fırınıyla buluşması.' :
+                product.name.toLowerCase().includes('sefin') ? 'Şef Luigi\'nin kendi seçtiği özel sosis, zeytin, mısır ve taze biber kombinasyonu. Napoli mutfağının özel imza lezzeti!' :
+                'Di Napoli taş fırınlarında odun ateşinde pişirilen, usta ellerden çıkan taptaze malzemelerle dolu nefis gurme lezzetimiz. Buon appetito!'}"
+            </p>
+          </div>
+
           <div className="wizard-bottom-controls">
             <div className="wizard-price-block">
               <span className="price-label">Fiyat</span>
@@ -432,6 +459,40 @@ export default function CustomizeWizard({
             </div>
           )}
 
+        </div>
+      </div>
+
+      {/* Diğer Ürünler Öneri Bandı */}
+      <div className="wizard-suggestions-container">
+        <div className="container">
+          <h3 className="suggestions-section-title">Bunları da Denemek İster Misiniz? 🍕</h3>
+          <div className="suggestions-band">
+            {pizzas.filter(p => p.id !== product.id).slice(0, 10).map((pItem) => (
+              <div key={pItem.id} className="suggestion-card">
+                <div className="suggestion-thumb">
+                  <img src={pItem.image} alt={pItem.name} />
+                </div>
+                <div className="suggestion-body">
+                  <h4>{pItem.name}</h4>
+                  <span className="suggestion-price">{pItem.basePrice} TL</span>
+                  <button 
+                    className="suggestion-add-btn"
+                    onClick={() => {
+                      onAddToCart({
+                        ...pItem,
+                        price: pItem.basePrice,
+                        quantity: 1,
+                        customInfo: null
+                      });
+                      alert(`${pItem.name} sepetinize eklendi!`);
+                    }}
+                  >
+                    Sepete Ekle
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

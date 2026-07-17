@@ -7,7 +7,8 @@ export default function Header({
   cart, 
   setCartOpen,
   address,
-  onOpenMap
+  onOpenMap,
+  onGoToCartPage
 }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -97,7 +98,7 @@ export default function Header({
           </button>
 
           {/* Sepetim Button */}
-          <button className="cart-btn-white" onClick={() => setCartOpen(true)}>
+          <button className="cart-btn-white" onClick={onGoToCartPage}>
             <div className="cart-icon-container">
               <ShoppingBag size={18} />
               {totalItems > 0 && <span className="cart-badge-blue">{totalItems}</span>}
