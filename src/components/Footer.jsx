@@ -6,8 +6,40 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="site-footer">
-      <div className="container">
+    <footer className="site-footer" style={{ position: 'relative', overflow: 'hidden', zIndex: 1 }}>
+      {/* Video Background (Odun Atesinde Pizza) */}
+      <video 
+        src="/header-video.mp4" 
+        autoPlay 
+        loop 
+        muted 
+        playsInline 
+        className="footer-video-bg"
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          zIndex: -2,
+          opacity: 0.8
+        }}
+      />
+      {/* Dark Bordo Overlay */}
+      <div 
+        className="footer-video-overlay"
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          background: 'linear-gradient(rgba(31, 0, 0, 0.85), rgba(41, 4, 4, 0.95))',
+          zIndex: -1
+        }}
+      />
+      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         {/* Footer Top Contact Badges */}
         <div className="footer-badges">
           <div className="badge-item">

@@ -57,39 +57,17 @@ export default function Header({
           </button>
 
           {/* Location / Address Picker Dropdown */}
-          <div className="address-picker-widget" style={{ position: 'relative' }}>
-            <div 
-              className="delivery-type-pill" 
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-              style={{ cursor: 'pointer', position: 'relative' }}
-            >
+          {/* Location / Address Picker Directly Triggers Map */}
+          <div className="address-picker-widget" onClick={onOpenMap} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+            <div className="delivery-type-pill" style={{ pointerEvents: 'none' }}>
               <span className="delivery-dot"></span>
               <span className="delivery-mode-text">
                 {deliveryMode === 'delivery' ? 'Adrese Teslim' : 'Gel-Al'}
               </span>
               <ChevronDown size={14} className="dropdown-arrow" />
             </div>
-
-            {dropdownOpen && (
-              <div className="delivery-dropdown-list">
-                <div 
-                  className={`dropdown-item-row ${deliveryMode === 'delivery' ? 'active' : ''}`}
-                  onClick={() => handleSelectMode('delivery')}
-                >
-                  <span className="delivery-dot"></span>
-                  <span>Adrese Teslim</span>
-                </div>
-                <div 
-                  className={`dropdown-item-row ${deliveryMode === 'pickup' ? 'active' : ''}`}
-                  onClick={() => handleSelectMode('pickup')}
-                >
-                  <span className="delivery-dot pickup"></span>
-                  <span>Beklemeden Gel-Al</span>
-                </div>
-              </div>
-            )}
             
-            <div className="address-details" onClick={onOpenMap} style={{ cursor: 'pointer' }}>
+            <div className="address-details" style={{ pointerEvents: 'none' }}>
               <MapPin size={14} className="pin-icon" />
               <span className="address-text">{address}</span>
               <button className="address-edit-btn" aria-label="Haritayı Aç">
