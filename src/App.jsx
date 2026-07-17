@@ -17,6 +17,7 @@ import OrdersHistoryModal from './components/OrdersHistoryModal';
 import ReferralPage from './components/ReferralPage';
 import RewardModal from './components/RewardModal';
 import AddressesModal from './components/AddressesModal';
+import AboutPage from './components/AboutPage';
 import { 
   INITIAL_PRODUCTS, INITIAL_DOUGHS, INITIAL_CRUSTS, INITIAL_INGREDIENTS 
 } from './data/products';
@@ -363,6 +364,9 @@ export default function App() {
             onApplyReferralCode={handleApplyReferralCode}
             rewardAmountTier={user ? getUserReferralRewardTier(user.id) : 75}
           />
+        ) : currentPage === 'about' ? (
+          /* Hakkımızda Sayfası */
+          <AboutPage onGoToMenu={() => setCurrentPage('menu')} />
         ) : (
           /* Default customer view */
           <>
@@ -386,6 +390,7 @@ export default function App() {
               onGoToReferral={() => setCurrentPage('referral')}
               onOpenRewards={() => setIsRewardModalOpen(true)}
               onOpenAddresses={() => setIsAddressesModalOpen(true)}
+              onGoToAbout={() => setCurrentPage('about')}
             />
 
             {/* Header Altı Video Banner Akışı */}
@@ -437,7 +442,7 @@ export default function App() {
               <Menu onAddToCart={handleAddToCart} products={products} />
             </main>
 
-            <Footer />
+            <Footer onGoToAbout={() => setCurrentPage('about')} />
 
             {/* Cart Drawer */}
             <CartDrawer 

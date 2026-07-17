@@ -20,7 +20,8 @@ export default function Header({
   yeKazanSlices,
   onGoToReferral,
   onOpenRewards,
-  onOpenAddresses
+  onOpenAddresses,
+  onGoToAbout
 }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
@@ -52,6 +53,7 @@ export default function Header({
             <a href="#menu" className="nav-link-white">Tüm Kampanyalar</a>
             <a href="#menu" className="nav-link-white">Tüm Pizzalar</a>
             <a href="#menu" className="nav-link-white">Yan Ürünler</a>
+            <a href="#about" className="nav-link-white" onClick={(e) => { e.preventDefault(); onGoToAbout(); }}>Hakkımızda</a>
           </nav>
         </div>
 

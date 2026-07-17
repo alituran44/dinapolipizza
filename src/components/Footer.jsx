@@ -4,7 +4,7 @@ import {
   Instagram, Facebook, Youtube 
 } from 'lucide-react';
 
-export default function Footer() {
+export default function Footer({ onGoToAbout }) {
   return (
     <footer className="site-footer" style={{ position: 'relative', overflow: 'hidden', zIndex: 1 }}>
       {/* Video Background (Google Drive Custom Video) */}
@@ -78,6 +78,12 @@ export default function Footer() {
             <p className="brand-desc">
               1997'den beri Çanakkale'nin en sevilen pizzacısı! Di Napoli Pizza, günlük taze hamur, bol malzeme ve usta ellerden çıkan lezzetlerle Saat Kulesi karşısında hizmetinizde.
             </p>
+            <button 
+              onClick={onGoToAbout}
+              style={{ border: 'none', background: 'none', color: '#ffb703', fontWeight: 'bold', fontSize: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', padding: 0, marginTop: '10px' }}
+            >
+              <span>Hikayemizi Okuyun (Hakkımızda) &rarr;</span>
+            </button>
           </div>
 
           <div className="footer-column">
