@@ -51,7 +51,7 @@ export default function ContactPage({ onGoToMenu }) {
             height: '420px'
           }}>
             <iframe 
-              src="https://maps.google.com/maps?q=%C5%9Eair%20Ece%20Ayhan%20Meydan%C4%B1%20Saat%20Kulesi%20Di%20Napoli%20Pizza%20%C3%87anakkale&t=&z=17&ie=UTF8&iwloc=&output=embed" 
+              src="https://maps.google.com/maps?q=Kemalpa%C5%9Fa%20Mah.%20%C5%9Eair%20Ece%20Ayhan%20Meydan%C4%B1%20No%3A9%2FA%20Saat%20Kulesi%20Kar%C5%9F%C4%B1s%C4%B1%20Merkez%20%2F%20%C3%87anakkale&t=&z=17&ie=UTF8&iwloc=&output=embed" 
               width="100%" 
               height="100%" 
               style={{ border: 0 }} 
