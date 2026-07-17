@@ -11,6 +11,7 @@ import CustomizeWizard from './components/CustomizeWizard';
 import BranchMapModal from './components/BranchMapModal';
 import AiPizzaChef from './components/AiPizzaChef';
 import CartPage from './components/CartPage';
+import KuryeSlipModal from './components/KuryeSlipModal';
 import { 
   INITIAL_PRODUCTS, INITIAL_DOUGHS, INITIAL_CRUSTS, INITIAL_INGREDIENTS 
 } from './data/products';
@@ -38,6 +39,7 @@ export default function App() {
   const [yeKazanSlices, setYeKazanSlices] = useState(4); 
   const [orders, setOrders] = useState([]); 
   const [activeOrder, setActiveOrder] = useState(null); 
+  const [activeOrderSlip, setActiveOrderSlip] = useState(null);
   const [showTracker, setShowTracker] = useState(false);
 
   // --- ADMIN ACTIONS FOR DATABASE ---
@@ -150,6 +152,7 @@ export default function App() {
 
     setOrders([...orders, newOrder]);
     setActiveOrder(newOrder);
+    setActiveOrderSlip(newOrder);
     
     let newSlices = yeKazanSlices + summary.slicesGained;
     if (newSlices < 0) newSlices = 0;
@@ -289,6 +292,20 @@ export default function App() {
               <Tracker 
                 orderDetails={activeOrder}
                 onReset={handleResetOrder}
+              />
+            )}
+
+            {/* Kurye Sipariş Fişi Modalı */}
+            {activeOrderSlip && (
+              <KuryeSlipModal 
+                order={activeOrderSlip}
+                cart={cart}
+                onClose={() => {
+                  setActiveOrderSlip(null);
+                  setCart([]); // Sipariş onaylandıktan sonra sepeti sıfırla
+                }}
+                deliveryMode={deliveryMode}
+                address={address}
               />
             )}
 
