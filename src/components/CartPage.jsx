@@ -76,7 +76,7 @@ export default function CartPage({
               <div className="panel-header">
                 <h2>Sepetim ({cart.reduce((sum, i) => sum + i.quantity, 0)} Ürün)</h2>
                 {cart.length > 0 && (
-                  <button className="btn-text-danger" onClick={() => cart.forEach(item => onRemoveItem(item.id))}>
+                  <button className="btn-text-danger" onClick={() => cart.forEach(() => onRemoveItem(0))}>
                     Tümünü Temizle
                   </button>
                 )}
@@ -93,7 +93,7 @@ export default function CartPage({
                 </div>
               ) : (
                 <div className="cart-items-list">
-                  {cart.map((item) => {
+                  {cart.map((item, idx) => {
                     const isCustomized = item.customInfo && item.customInfo.selectedPizzas;
                     return (
                       <div key={item.id} className="cart-item-row">
@@ -142,17 +142,17 @@ export default function CartPage({
                         <div className="cart-item-controls">
                           <div className="quantity-selector-custom">
                             <button 
-                              onClick={() => onUpdateQuantity(item.id, Math.max(1, item.quantity - 1))}
+                              onClick={() => onUpdateQuantity(idx, Math.max(1, item.quantity - 1))}
                               disabled={item.quantity <= 1}
                             >
                               <Minus size={14} />
                             </button>
                             <span className="quantity-val">{item.quantity}</span>
-                            <button onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}>
+                            <button onClick={() => onUpdateQuantity(idx, item.quantity + 1)}>
                               <Plus size={14} />
                             </button>
                           </div>
-                          <button className="remove-btn" onClick={() => onRemoveItem(item.id)}>
+                          <button className="remove-btn" onClick={() => onRemoveItem(idx)}>
                             <Trash2 size={16} />
                           </button>
                         </div>
