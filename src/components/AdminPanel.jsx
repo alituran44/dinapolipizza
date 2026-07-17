@@ -35,6 +35,7 @@ export default function AdminPanel({
   usersList = [],
   onUpdateUserWallet,
   onSendMailNotification,
+  referralTransactions = [],
   
   onClose 
 }) {
@@ -958,6 +959,47 @@ export default function AdminPanel({
                           <span style={{ fontSize: '10px', color: '#64748b' }}>TL</span>
                         </div>
                       </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="deals-card" style={{ padding: '24px', marginBottom: '24px' }}>
+              <h3>Kayıtlı Davet & Kod Kullanım Geçmişi</h3>
+              <table className="admin-table" style={{ marginTop: '16px', boxShadow: 'none' }}>
+                <thead>
+                  <tr>
+                    <th>Davet Eden</th>
+                    <th>Davet Kodu</th>
+                    <th>Davet Edilen Arkadaş</th>
+                    <th>Telefon</th>
+                    <th>Durum</th>
+                    <th>Kazanılan Tutar</th>
+                    <th>Tarih</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {referralTransactions.map(t => (
+                    <tr key={t.id}>
+                      <td className="bold">{t.referrerName}</td>
+                      <td className="text-red bold">{t.code}</td>
+                      <td className="bold">{t.refereeName}</td>
+                      <td>{t.refereePhone}</td>
+                      <td>
+                        <span style={{ 
+                          padding: '2px 8px', 
+                          borderRadius: '9999px', 
+                          fontSize: '10px', 
+                          fontWeight: 'bold', 
+                          backgroundColor: t.status === 'completed' ? '#ecfdf5' : '#fffbeb', 
+                          color: t.status === 'completed' ? '#065f46' : '#b45309' 
+                        }}>
+                          {t.status === 'completed' ? 'Satış Alındı (Tamamlandı)' : 'Üye Oldu (Sipariş Bekleniyor)'}
+                        </span>
+                      </td>
+                      <td className="bold text-green">+{t.rewardAmount} TL</td>
+                      <td>{t.date}</td>
                     </tr>
                   ))}
                 </tbody>

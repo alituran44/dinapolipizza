@@ -45,6 +45,16 @@ export default function App() {
     { id: 'u3', name: 'Mehmet Yılmaz', email: 'mehmet@example.com', phone: '(555) 123 45 67', walletBalance: 0, joinDate: '2026-06-20' },
   ]);
 
+  const [referralTransactions, setReferralTransactions] = useState([
+    { id: 't1', referrerId: 'u2', referrerName: 'Şef Luigi', code: 'DN-75TL-1717', refereeName: 'Mehmet Yılmaz', refereePhone: '(555) 123 45 67', rewardAmount: 75, status: 'completed', date: '2026-07-10' },
+    { id: 't2', referrerId: 'u1', referrerName: 'Ali Turan', code: 'DN-75TL-0660', refereeName: 'Selin Kaya', refereePhone: '(532) 987 65 43', rewardAmount: 75, status: 'pending', date: '2026-07-15' },
+  ]);
+
+  const getUserReferralRewardTier = (userId) => {
+    const count = referralTransactions.filter(t => t.referrerId === userId && t.status === 'completed').length;
+    return count >= 10 ? 100 : 75;
+  };
+
   const [user, setUser] = useState(() => {
     const saved = localStorage.getItem('dinapoli_user');
     if (saved) {
@@ -75,6 +85,58 @@ export default function App() {
 
   const handleUpdateUserWallet = (userId, newBalance) => {
     setUsersList(prev => prev.map(u => u.id === userId ? { ...u, walletBalance: newBalance } : u));
+  };
+
+  const handleApplyReferralCode = (refereeId, referralCode) => {
+    const suffix = referralCode.split('-').pop();
+    const referrer = usersList.find(u => u.phone && u.phone.replace(/\D/g, '').slice(-4) === suffix);
+    const referee = usersList.find(u => u.id === refereeId);
+    
+    if (!referrer || !referee) {
+      return { success: false, message: 'Geçersiz veya bulunamayan davet kodu!' };
+    }
+    if (referrer.id === referee.id) {
+      return { success: false, message: 'Kendi davet kodunuzu kullanamazsınız.' };
+    }
+    
+    // Tek kullanımlık davet kodu kontrolü (bu referee telefonu daha önce kullanmış mı?)
+    const alreadyUsed = referralTransactions.some(t => t.refereePhone === referee.phone);
+    if (alreadyUsed) {
+      return { success: false, message: 'Bu hesap için davet indirim kodu zaten kullanılmış.' };
+    }
+    
+    const rewardTier = getUserReferralRewardTier(referrer.id);
+    
+    const newTx = {
+      id: `tx-${Date.now()}`,
+      referrerId: referrer.id,
+      referrerName: referrer.name,
+      code: referralCode,
+      refereeName: referee.name,
+      refereePhone: referee.phone,
+      rewardAmount: rewardTier,
+      status: 'pending',
+      date: new Date().toISOString().split('T')[0]
+    };
+    
+    setReferralTransactions(prev => [...prev, newTx]);
+    handleUpdateUserWallet(referee.id, (referee.walletBalance || 0) + rewardTier);
+    
+    return { success: true, rewardAmount: rewardTier };
+  };
+
+  const handleCompleteReferralSale = (refereePhone) => {
+    setReferralTransactions(prev => prev.map(t => {
+      if (t.refereePhone === refereePhone && t.status === 'pending') {
+        const referrer = usersList.find(u => u.id === t.referrerId);
+        if (referrer) {
+          const rewardAmount = getUserReferralRewardTier(referrer.id);
+          handleUpdateUserWallet(referrer.id, (referrer.walletBalance || 0) + rewardAmount);
+        }
+        return { ...t, status: 'completed' };
+      }
+      return t;
+    }));
   };
 
   const handleSendMailNotification = (emails, subject, message) => {
@@ -204,6 +266,11 @@ export default function App() {
     setOrders([...orders, newOrder]);
     setActiveOrder(newOrder);
     
+    // Complete referral transaction if user phone matches any invite
+    if (user && user.phone) {
+      handleCompleteReferralSale(user.phone);
+    }
+    
     let newSlices = yeKazanSlices + summary.slicesGained;
     if (newSlices < 0) newSlices = 0;
     setYeKazanSlices(newSlices);
@@ -269,6 +336,9 @@ export default function App() {
             usersList={usersList}
             onUpdateUserWallet={handleUpdateUserWallet}
             onGoToMenu={() => setCurrentPage('menu')}
+            referralTransactions={referralTransactions}
+            onApplyReferralCode={handleApplyReferralCode}
+            rewardAmountTier={user ? getUserReferralRewardTier(user.id) : 75}
           />
         ) : (
           /* Default customer view */
@@ -454,6 +524,7 @@ export default function App() {
           usersList={usersList}
           onUpdateUserWallet={handleUpdateUserWallet}
           onSendMailNotification={handleSendMailNotification}
+          referralTransactions={referralTransactions}
           
           onClose={() => setIsAdminMode(false)}
         />

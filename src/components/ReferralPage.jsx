@@ -1,19 +1,29 @@
 import React, { useState } from 'react';
 import { Share2, ChevronDown, ChevronUp, Gift, Key, HelpCircle } from 'lucide-react';
 
-export default function ReferralPage({ user, usersList, onUpdateUserWallet, onGoToMenu }) {
+export default function ReferralPage({ 
+  user, 
+  usersList, 
+  onUpdateUserWallet, 
+  onGoToMenu, 
+  referralTransactions = [], 
+  onApplyReferralCode,
+  rewardAmountTier = 75
+}) {
   const [referralCodeInput, setReferralCodeInput] = useState('');
   const [couponStatus, setCouponStatus] = useState({ type: '', message: '' });
-  const [faqOpen, setFaqOpen] = useState({ 0: true }); // FSS akordeon adımları
+  const [faqOpen, setFaqOpen] = useState({ 0: true });
 
-  // Generate unique code based on user phone or random generator
   const userReferralCode = user 
-    ? `DN-75TL-${user.phone ? user.phone.replace(/\D/g, '').slice(-4) : 'LUIGI'}`
+    ? `DN-${rewardAmountTier}TL-${user.phone ? user.phone.replace(/\D/g, '').slice(-4) : 'LUIGI'}`
     : 'DN-75TL-MISAFIR';
+
+  const myReferrals = user ? referralTransactions.filter(t => t.referrerId === user.id) : [];
+  const successfulReferralsCount = myReferrals.filter(t => t.status === 'completed').length;
 
   const handleShare = () => {
     navigator.clipboard.writeText(userReferralCode);
-    alert(`Davet kodunuz kopyalandı!\n\nKod: ${userReferralCode}\nArkadaşınızla paylaşarak 75 TL kazanabilirsiniz.`);
+    alert(`Davet kodunuz kopyalandı!\n\nKod: ${userReferralCode}\nArkadaşınızla paylaşarak ${rewardAmountTier} TL kazanabilirsiniz.`);
   };
 
   const handleApplyReferral = (e) => {
@@ -32,22 +42,15 @@ export default function ReferralPage({ user, usersList, onUpdateUserWallet, onGo
       return;
     }
 
-    if (formattedCode.startsWith('DN-75TL-')) {
-      // Valid format, reward the user 75 TL in their wallet
-      const matchedUser = usersList.find(u => u.phone === user.phone || u.email === user.email);
-      if (matchedUser) {
-        const newBalance = (matchedUser.walletBalance || 0) + 75;
-        onUpdateUserWallet(matchedUser.id, newBalance);
-        setCouponStatus({
-          type: 'success',
-          message: 'Harika! Davet kodu başarıyla uygulandı ve cüzdanınıza 75 TL tanımlandı.'
-        });
-        setReferralCodeInput('');
-      } else {
-        setCouponStatus({ type: 'error', message: 'Kullanıcı kaydı bulunamadı.' });
-      }
+    const res = onApplyReferralCode(user.id, formattedCode);
+    if (res.success) {
+      setCouponStatus({
+        type: 'success',
+        message: `Harika! Davet kodu başarıyla uygulandı ve cüzdanınıza ${res.rewardAmount} TL tanımlandı.`
+      });
+      setReferralCodeInput('');
     } else {
-      setCouponStatus({ type: 'error', message: 'Geçersiz veya süresi dolmuş davet kodu.' });
+      setCouponStatus({ type: 'error', message: res.message });
     }
   };
 
@@ -61,12 +64,12 @@ export default function ReferralPage({ user, usersList, onUpdateUserWallet, onGo
       a: 'Kampanya Di Napoli Pizza mobil arayüzü ve web sitesi üzerinden verilen siparişlerde geçerlidir.'
     },
     {
-      q: 'Kampanyadan nasıl yararlanırım?',
-      a: 'Davet eden kişinin "Arkadaşına Öner" sekmesine gelerek kodu paylaşması gerekmektedir. Davet edilen kişi üye girişi yaptıktan sonra bu kodu girdiğinde anında 75 TL cüzdan indirimi kazanır. Davet eden kişi ise davet ettiği arkadaşı siparişini tamamladığında 75 TL cüzdan ödülü kazanacaktır.'
+      q: '10 Davet / 100 TL Kuralı nedir?',
+      a: 'Eğer davet kodunuz ile sitemize getirdiğiniz 10 yeni üye sipariş (satış) verirse, bundan sonraki her davetiniz ve kendi siparişleriniz için kazanacağınız cüzdan indirimi kalıcı olarak 100 TL olacaktır!'
     },
     {
-      q: 'Herhangi bir arkadaş sınırı bulunmakta mıdır?',
-      a: 'Hayır, dilediğiniz kadar arkadaşınızı davet edebilir ve her başarılı siparişte cüzdan bakiyenizi 75 TL artırabilirsiniz.'
+      q: 'Davet indirimi tek kullanımlık mıdır?',
+      a: 'Evet, her davet kodu ve her yeni üyenin davet indirim hakkı tek kullanımlıktır.'
     },
     {
       q: 'Cüzdan indirimi nasıl kullanılır?',
@@ -137,8 +140,69 @@ export default function ReferralPage({ user, usersList, onUpdateUserWallet, onGo
         )}
       </div>
 
+      {/* Invite progress bar */}
+      <div style={{ backgroundColor: 'white', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '24px', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05)', marginBottom: '32px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+          <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 'bold', textAlign: 'left' }}>10 Sipariş Hedefi İlerlemesi</h4>
+          <span style={{ fontSize: '13px', fontWeight: '800', color: 'var(--color-burgundy)' }}>{successfulReferralsCount} / 10 Başarılı Davet</span>
+        </div>
+        <div style={{ width: '100%', height: '12px', backgroundColor: '#e2e8f0', borderRadius: '9999px', overflow: 'hidden', marginBottom: '8px' }}>
+          <div style={{ width: `${Math.min(100, (successfulReferralsCount / 10) * 100)}%`, height: '100%', backgroundColor: '#10b981', transition: 'width 0.4s ease' }} />
+        </div>
+        <p style={{ margin: 0, fontSize: '11px', color: '#64748b', textAlign: 'left' }}>
+          {successfulReferralsCount >= 10 
+            ? 'Tebrikler! 10 başarılı davet barajını aştınız. Bundan sonraki tüm kazançlarınız kalıcı olarak sipariş başına 100 TL olacaktır!' 
+            : `10 başarılı davete ulaştığınızda, kazancınız ve arkadaş indirimi otomatik olarak 100 TL'ye yükselecektir! (Kalan: ${10 - successfulReferralsCount} davet)`
+          }
+        </p>
+      </div>
+
+      {/* My Invites list */}
+      <div style={{ backgroundColor: 'white', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '24px', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05)', marginBottom: '32px' }}>
+        <h4 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: 'bold', borderBottom: '1px solid #f1f5f9', paddingBottom: '10px', textAlign: 'left' }}>Davet Ettiklerim ve Durumları</h4>
+        {myReferrals.length === 0 ? (
+          <p style={{ margin: 0, fontSize: '12px', color: '#64748b', textAlign: 'left' }}>Henüz kodunuzu kullanan bir arkadaşınız bulunmuyor.</p>
+        ) : (
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', textAlign: 'left' }}>
+            <thead>
+              <tr style={{ borderBottom: '2px solid #f1f5f9', color: '#64748b' }}>
+                <th style={{ padding: '8px 4px' }}>Arkadaş Adı</th>
+                <th style={{ padding: '8px 4px' }}>Telefon</th>
+                <th style={{ padding: '8px 4px' }}>Durum</th>
+                <th style={{ padding: '8px 4px' }}>Senin Kazancın</th>
+                <th style={{ padding: '8px 4px' }}>Tarih</th>
+              </tr>
+            </thead>
+            <tbody>
+              {myReferrals.map(t => (
+                <tr key={t.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                  <td style={{ padding: '10px 4px', fontWeight: 'bold' }}>{t.refereeName}</td>
+                  <td style={{ padding: '10px 4px' }}>{t.refereePhone}</td>
+                  <td style={{ padding: '10px 4px' }}>
+                    <span style={{ 
+                      padding: '2px 8px', 
+                      borderRadius: '9999px', 
+                      fontSize: '10px', 
+                      fontWeight: 'bold', 
+                      backgroundColor: t.status === 'completed' ? '#ecfdf5' : '#fffbeb', 
+                      color: t.status === 'completed' ? '#065f46' : '#b45309' 
+                    }}>
+                      {t.status === 'completed' ? 'Sipariş Verdi' : 'Üye Oldu (Beklemede)'}
+                    </span>
+                  </td>
+                  <td style={{ padding: '10px 4px', fontWeight: 'bold', color: t.status === 'completed' ? '#10b981' : '#64748b' }}>
+                    {t.status === 'completed' ? `+${t.rewardAmount} TL` : 'Beklemede'}
+                  </td>
+                  <td style={{ padding: '10px 4px', color: '#64748b' }}>{t.date}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+
       {/* Conditions Accordion */}
-      <div style={{ backgroundColor: 'white', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '24px', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05)' }}>
+      <div style={{ backgroundColor: 'white', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '24px', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05)', marginBottom: '32px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', borderBottom: '1px solid #f1f5f9', paddingBottom: '12px' }}>
           <HelpCircle size={20} color="var(--color-burgundy)" />
           <h3 style={{ fontSize: '16px', fontWeight: '800' }}>Katılım Koşulları & SSS</h3>
