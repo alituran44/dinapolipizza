@@ -3013,4 +3013,36 @@ button {
   }
 }
 
+/* --- PRODUCT LOGO OVERLAY --- */
+.product-logo-overlay {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  pointer-events: none;
+  width: 72px;
+  height: auto;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.15));
+}
+
+.overlay-logo-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.product-card:hover .product-logo-overlay {
+  transform: scale(1.08) rotate(2deg);
+}
+
+@media (max-width: 768px) {
+  .product-logo-overlay {
+    width: 58px;
+    top: 8px;
+    right: 8px;
+  }
+}
+
+
 
