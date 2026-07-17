@@ -234,6 +234,7 @@ export default function App() {
                 setUser(null);
               }}
               onShowHistory={() => setIsOrdersHistoryOpen(true)}
+              onAdminClick={() => setIsAdminMode(true)}
               yeKazanSlices={yeKazanSlices}
             />
 

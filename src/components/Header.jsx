@@ -13,6 +13,7 @@ export default function Header({
   onLoginClick,
   onLogout,
   onShowHistory,
+  onAdminClick,
   yeKazanSlices
 }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -121,6 +122,14 @@ export default function Header({
                     <span className="user-slices-lbl">🍕 {yeKazanSlices} Dilim Pizzam Var</span>
                   </div>
                   <div className="profile-dropdown-divider"></div>
+                  {user.isAdmin && (
+                    <>
+                      <button className="profile-dropdown-item admin-link" onClick={() => { onAdminClick(); setProfileMenuOpen(false); }} style={{ color: 'var(--color-primary-red)', fontWeight: '800' }}>
+                        🛡 Yönetici Paneli
+                      </button>
+                      <div className="profile-dropdown-divider"></div>
+                    </>
+                  )}
                   <button className="profile-dropdown-item" onClick={() => { onShowHistory(); setProfileMenuOpen(false); }}>
                     Siparişlerim
                   </button>

@@ -76,11 +76,13 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
       setErrorMessage('Lütfen tüm alanları doldurun.');
       return;
     }
+    const isAdmin = loginData.email.toLowerCase() === 'admin@dinapolipizza.com';
     const loggedUser = {
-      name: loginData.email.split('@')[0].toUpperCase(),
+      name: isAdmin ? 'Yönetici' : loginData.email.split('@')[0].toUpperCase(),
       email: loginData.email,
-      phone: '0542 388 30 10',
-      avatar: null
+      phone: isAdmin ? '0286 217 00 17' : '0542 388 30 10',
+      avatar: null,
+      isAdmin: isAdmin
     };
     localStorage.setItem('dinapoli_user', JSON.stringify(loggedUser));
     onLoginSuccess(loggedUser);
@@ -149,11 +151,13 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
   };
 
   const handleSelectGoogleAccount = (accountName, accountEmail) => {
+    const isAdmin = accountEmail === 'chef.luigi@dinapolipizza.com';
     const googleUser = {
       name: accountName,
       email: accountEmail,
       avatar: '/logo.png',
-      isGoogle: true
+      isGoogle: true,
+      isAdmin: isAdmin
     };
     localStorage.setItem('dinapoli_user', JSON.stringify(googleUser));
     onLoginSuccess(googleUser);
