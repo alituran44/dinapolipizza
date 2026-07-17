@@ -354,28 +354,8 @@ export default function App() {
             onSelectAddress={(addrText) => setAddress(addrText)}
             onOpenAddresses={() => setIsAddressesModalOpen(true)}
           />
-        ) : currentPage === 'referral' ? (
-          /* Arkadaşına Öner Sayfası */
-          <ReferralPage 
-            user={user}
-            usersList={usersList}
-            onUpdateUserWallet={handleUpdateUserWallet}
-            onGoToMenu={() => setCurrentPage('menu')}
-            referralTransactions={referralTransactions}
-            onApplyReferralCode={handleApplyReferralCode}
-            rewardAmountTier={user ? getUserReferralRewardTier(user.id) : 75}
-          />
-        ) : currentPage === 'about' ? (
-          /* Hakkımızda Sayfası */
-          <AboutPage 
-            onGoToMenu={() => setCurrentPage('menu')} 
-            onGoToContact={() => setCurrentPage('contact')} 
-          />
-        ) : currentPage === 'contact' ? (
-          /* İletişim Sayfası */
-          <ContactPage onGoToMenu={() => setCurrentPage('menu')} />
         ) : (
-          /* Default customer view */
+          /* Default customer view with persistent Header and Footer */
           <>
             <Header 
               deliveryMode={deliveryMode} 
@@ -401,53 +381,84 @@ export default function App() {
               onGoToContact={() => setCurrentPage('contact')}
             />
 
-            {/* Header Altı Video Banner Akışı */}
-            <div className="header-video-banner">
-              <video 
-                src="/header-video.mp4" 
-                autoPlay 
-                loop 
-                muted 
-                playsInline 
-                className="banner-video-element"
-              />
-              <div className="banner-video-overlay-tint">
-                <div className="container">
-                  <span className="banner-badge-gold">1997'DEN BERİ TAŞ FIRIN LEZZETİ</span>
-                  <h2>Pizzada Usta Eller</h2>
-                  <p className="banner-subtitle">Odun ateşinde pişen, el yapımı nefis İtalyan pizzaları ve doyuran menülerimizle hizmetinizdeyiz.</p>
-                  <a href="#menu" className="banner-action-btn" style={{ marginTop: '16px', display: 'inline-block' }}>
-                    Lezzetleri Keşfet
-                  </a>
+            {currentPage === 'menu' && (
+              <>
+                {/* Header Altı Video Banner Akışı */}
+                <div className="header-video-banner">
+                  <video 
+                    src="/header-video.mp4" 
+                    autoPlay 
+                    loop 
+                    muted 
+                    playsInline 
+                    className="banner-video-element"
+                  />
+                  <div className="banner-video-overlay-tint">
+                    <div className="container">
+                      <span className="banner-badge-gold">1997'DEN BERİ TAŞ FIRIN LEZZETİ</span>
+                      <h2>Pizzada Usta Eller</h2>
+                      <p className="banner-subtitle">Odun ateşinde pişen, el yapımı nefis İtalyan pizzaları ve doyuran menülerimizle hizmetinizdeyiz.</p>
+                      <a href="#menu" className="banner-action-btn" style={{ marginTop: '16px', display: 'inline-block' }}>
+                        Lezzetleri Keşfet
+                      </a>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            
-            <div className="admin-entry-bar">
-              <div className="container flex justify-between align-center">
-                <span>🔧 Sistem Yönetim Paneline erişmek ister misiniz?</span>
-                <button className="admin-toggle-btn" onClick={() => setIsAdminMode(true)}>
-                  Yönetim Paneli (Admin)
-                </button>
-              </div>
-            </div>
+                
+                <div className="admin-entry-bar">
+                  <div className="container flex justify-between align-center">
+                    <span>🔧 Sistem Yönetim Paneline erişmek ister misiniz?</span>
+                    <button className="admin-toggle-btn" onClick={() => setIsAdminMode(true)}>
+                      Yönetim Paneli (Admin)
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
 
             <main className="main-content">
-              <PromoWidgets yeKazanSlices={yeKazanSlices} />
+              {currentPage === 'menu' && (
+                <>
+                  <PromoWidgets yeKazanSlices={yeKazanSlices} />
 
-              {/* Usta AI Pizza Asistanı Giriş Banner\'ı */}
-              <div className="ai-chef-promo-banner" onClick={() => setIsAiChefOpen(true)}>
-                <div className="ai-promo-content">
-                  <div className="ai-badge">✨ YAPAY ZEKA DESTEKLİ</div>
-                  <h3>Kendi Pizzanı Kendin Tasarla! 🧑‍🍳</h3>
-                  <p>Nasıl bir pizza canın çekiyor? Şef Luigi'ye anlat, hamuru ve malzemeleri anında senin için fırına hazırlasın!</p>
-                </div>
-                <button className="ai-start-btn">
-                  Şef Luigi'yi Başlat
-                </button>
-              </div>
-              
-              <Menu onAddToCart={handleAddToCart} products={products} />
+                  {/* Usta AI Pizza Asistanı Giriş Banner'ı */}
+                  <div className="ai-chef-promo-banner" onClick={() => setIsAiChefOpen(true)}>
+                    <div className="ai-promo-content">
+                      <div className="ai-badge">✨ YAPAY ZEKA DESTEKLİ</div>
+                      <h3>Kendi Pizzanı Kendin Tasarla! 🧑‍🍳</h3>
+                      <p>Nasıl bir pizza canın çekiyor? Şef Luigi'ye anlat, hamuru ve malzemeleri anında senin için fırına hazırlasın!</p>
+                    </div>
+                    <button className="ai-start-btn">
+                      Şef Luigi'yi Başlat
+                    </button>
+                  </div>
+                  
+                  <Menu onAddToCart={handleAddToCart} products={products} />
+                </>
+              )}
+
+              {currentPage === 'referral' && (
+                <ReferralPage 
+                  user={user}
+                  usersList={usersList}
+                  onUpdateUserWallet={handleUpdateUserWallet}
+                  onGoToMenu={() => setCurrentPage('menu')}
+                  referralTransactions={referralTransactions}
+                  onApplyReferralCode={handleApplyReferralCode}
+                  rewardAmountTier={user ? getUserReferralRewardTier(user.id) : 75}
+                />
+              )}
+
+              {currentPage === 'about' && (
+                <AboutPage 
+                  onGoToMenu={() => setCurrentPage('menu')} 
+                  onGoToContact={() => setCurrentPage('contact')} 
+                />
+              )}
+
+              {currentPage === 'contact' && (
+                <ContactPage onGoToMenu={() => setCurrentPage('menu')} />
+              )}
             </main>
 
             <Footer 

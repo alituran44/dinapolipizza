@@ -51,7 +51,7 @@ export default function ContactPage({ onGoToMenu }) {
             height: '420px'
           }}>
             <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3043.9145618451873!2d26.400588676579624!3d40.15535177148151!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14b1a1391d1e4c7d%3A0xc48eb3a693155700!2sKemalpa%C5%9Fa%2C%20Saat%20Kulesi%20Meydan%C4%B1%2C%2017100%20%C3%87anakkale%20Merkez%2F%C3%87anakkale!5e0!3m2!1str!2str!4v1700000000000" 
+              src="https://maps.google.com/maps?q=%C5%9Eair%20Ece%20Ayhan%20Meydan%C4%B1%20Saat%20Kulesi%20Di%20Napoli%20Pizza%20%C3%87anakkale&t=&z=17&ie=UTF8&iwloc=&output=embed" 
               width="100%" 
               height="100%" 
               style={{ border: 0 }} 
@@ -168,23 +168,33 @@ export default function ContactPage({ onGoToMenu }) {
               <button 
                 type="submit"
                 style={{
-                  backgroundColor: 'var(--color-burgundy)',
-                  color: 'white',
-                  border: 'none',
-                  padding: '12px',
+                  backgroundColor: '#880c0c',
+                  color: '#ffffff',
+                  border: '1px solid #d4af37',
+                  padding: '14px',
                   borderRadius: '8px',
-                  fontWeight: 'bold',
-                  fontSize: '13px',
+                  fontWeight: '900',
+                  fontSize: '14px',
+                  letterSpacing: '1px',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '8px',
-                  boxShadow: '0 4px 6px -1px rgba(136, 12, 12, 0.2)'
+                  boxShadow: '0 6px 12px rgba(136, 12, 12, 0.3)',
+                  transition: 'all 0.2s'
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.backgroundColor = '#eb5e28';
+                  e.currentTarget.style.color = '#ffffff';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.backgroundColor = '#880c0c';
+                  e.currentTarget.style.color = '#ffffff';
                 }}
               >
-                <Send size={16} />
-                <span>Mesajı Gönder</span>
+                <Send size={16} color="#ffffff" />
+                <span style={{ color: '#ffffff' }}>Mesajı Gönder</span>
               </button>
             </form>
           )}

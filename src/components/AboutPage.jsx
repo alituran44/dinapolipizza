@@ -87,9 +87,9 @@ export default function AboutPage({ onGoToMenu, onGoToContact }) {
             <button 
               onClick={handleContactClick}
               style={{
-                backgroundColor: 'var(--color-burgundy)',
-                color: 'white',
-                border: '1px solid var(--color-gold)',
+                backgroundColor: '#880c0c',
+                color: '#ffffff',
+                border: '1px solid #d4af37',
                 padding: '14px 38px',
                 borderRadius: '8px',
                 fontWeight: '900',
@@ -101,14 +101,16 @@ export default function AboutPage({ onGoToMenu, onGoToContact }) {
               }}
               onMouseEnter={e => {
                 e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.backgroundColor = 'var(--color-orange)';
+                e.currentTarget.style.backgroundColor = '#eb5e28';
+                e.currentTarget.style.color = '#ffffff';
               }}
               onMouseLeave={e => {
                 e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.backgroundColor = 'var(--color-burgundy)';
+                e.currentTarget.style.backgroundColor = '#880c0c';
+                e.currentTarget.style.color = '#ffffff';
               }}
             >
-              İLETİŞİME GEÇ
+              <span style={{ color: '#ffffff' }}>İLETİŞİME GEÇ</span>
             </button>
           </div>
         </div>
