@@ -202,6 +202,7 @@ button {
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  max-width: 1380px !important;
   position: relative;
   z-index: 2;
 }
@@ -209,7 +210,7 @@ button {
 .header-left-group {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: clamp(12px, 2vw, 32px);
 }
 
 .brand-logo-white {
@@ -229,13 +230,14 @@ button {
 .header-nav-links {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: clamp(10px, 1.5vw, 20px);
 }
 
 .nav-link-white {
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 14px;
-  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 13.5px;
+  font-weight: 700;
+  white-space: nowrap;
   transition: var(--transition-smooth);
 }
 
@@ -248,7 +250,7 @@ button {
 .header-right-group {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .header-search-btn {
