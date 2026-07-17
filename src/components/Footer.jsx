@@ -7,9 +7,9 @@ import {
 export default function Footer() {
   return (
     <footer className="site-footer" style={{ position: 'relative', overflow: 'hidden', zIndex: 1 }}>
-      {/* Video Background (Odun Atesinde Pizza) */}
+      {/* Video Background (Google Drive Custom Video) */}
       <video 
-        src="/header-video.mp4" 
+        src="/footer-video.mp4" 
         autoPlay 
         loop 
         muted 
