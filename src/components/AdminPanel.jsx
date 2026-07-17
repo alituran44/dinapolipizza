@@ -39,6 +39,7 @@ export default function AdminPanel({
     category: 'pizzalar',
     basePrice: '',
     image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=400&q=80',
+    videoUrl: '',
     popular: false,
     customizable: false,
     requiredPizzaSelections: 0
@@ -73,6 +74,7 @@ export default function AdminPanel({
       category: 'pizzalar',
       basePrice: '',
       image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=400&q=80',
+      videoUrl: '',
       popular: false,
       customizable: false,
       requiredPizzaSelections: 0
@@ -327,6 +329,24 @@ export default function AdminPanel({
                     onChange={(e) => setNewProduct({...newProduct, description: e.target.value})}
                   />
                 </div>
+                <div className="form-group">
+                  <label>Ürün Görsel URL</label>
+                  <input 
+                    type="text" 
+                    placeholder="Resim linki veya public path..." 
+                    value={newProduct.image}
+                    onChange={(e) => setNewProduct({...newProduct, image: e.target.value})}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Tanıtım Videosu URL (MP4 veya YouTube)</label>
+                  <input 
+                    type="text" 
+                    placeholder="Örn: https://www.youtube.com/watch?v=... veya yerel MP4" 
+                    value={newProduct.videoUrl}
+                    onChange={(e) => setNewProduct({...newProduct, videoUrl: e.target.value})}
+                  />
+                </div>
                 <div className="form-group flex-row checkbox-group">
                   <label>
                     <input 
@@ -373,14 +393,50 @@ export default function AdminPanel({
                         <td><img src={product.image} alt={product.name} className="table-thumb" /></td>
                         <td>
                           {isEditing ? (
-                            <input 
-                              type="text" 
-                              value={editingProduct.name}
-                              onChange={(e) => setEditingProduct({...editingProduct, name: e.target.value})}
-                              className="table-inline-input"
-                            />
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', minWidth: '220px' }}>
+                              <input 
+                                type="text" 
+                                value={editingProduct.name}
+                                onChange={(e) => setEditingProduct({...editingProduct, name: e.target.value})}
+                                className="table-inline-input"
+                                placeholder="Ürün Adı"
+                                style={{ fontWeight: 'bold' }}
+                              />
+                              <input 
+                                type="text" 
+                                value={editingProduct.description || ''}
+                                onChange={(e) => setEditingProduct({...editingProduct, description: e.target.value})}
+                                className="table-inline-input"
+                                placeholder="Açıklama"
+                                style={{ fontSize: '11px' }}
+                              />
+                              <input 
+                                type="text" 
+                                value={editingProduct.image || ''}
+                                onChange={(e) => setEditingProduct({...editingProduct, image: e.target.value})}
+                                className="table-inline-input"
+                                placeholder="Görsel URL"
+                                style={{ fontSize: '11px' }}
+                              />
+                              <input 
+                                type="text" 
+                                value={editingProduct.videoUrl || ''}
+                                onChange={(e) => setEditingProduct({...editingProduct, videoUrl: e.target.value})}
+                                className="table-inline-input"
+                                placeholder="Video URL"
+                                style={{ fontSize: '11px' }}
+                              />
+                            </div>
                           ) : (
-                            <span className="bold">{product.name}</span>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                              <span className="bold">{product.name}</span>
+                              <span style={{ fontSize: '11px', color: 'var(--color-text-muted)', lineHeight: '1.3' }}>{product.description}</span>
+                              {product.videoUrl && (
+                                <span style={{ fontSize: '10px', color: '#10b981', fontWeight: '800', display: 'inline-flex', alignItems: 'center', gap: '2px', marginTop: '4px' }}>
+                                  🎥 Tanıtım Videosu Aktif
+                                </span>
+                              )}
+                            </div>
                           )}
                         </td>
                         <td className="bold text-red">
@@ -390,13 +446,27 @@ export default function AdminPanel({
                               value={editingProduct.basePrice}
                               onChange={(e) => setEditingProduct({...editingProduct, basePrice: e.target.value})}
                               className="table-inline-input inline-price"
+                              style={{ width: '80px' }}
                             />
                           ) : (
                             <span>{product.basePrice} TL</span>
                           )}
                         </td>
                         <td>
-                          <span>{CATEGORIES.find(c => c.id === product.category)?.name || product.category}</span>
+                          {isEditing ? (
+                            <select
+                              value={editingProduct.category}
+                              onChange={(e) => setEditingProduct({...editingProduct, category: e.target.value})}
+                              className="table-inline-input"
+                              style={{ padding: '4px', fontSize: '12px' }}
+                            >
+                              {CATEGORIES.map(cat => (
+                                <option key={cat.id} value={cat.id}>{cat.name}</option>
+                              ))}
+                            </select>
+                          ) : (
+                            <span>{CATEGORIES.find(c => c.id === product.category)?.name || product.category}</span>
+                          )}
                         </td>
                         <td>
                           {isEditing ? (
@@ -405,6 +475,7 @@ export default function AdminPanel({
                               value={editingProduct.requiredPizzaSelections}
                               onChange={(e) => setEditingProduct({...editingProduct, requiredPizzaSelections: e.target.value})}
                               className="table-inline-input inline-price"
+                              style={{ width: '60px' }}
                             />
                           ) : (
                             <span>{product.requiredPizzaSelections || 'Yok'}</span>
