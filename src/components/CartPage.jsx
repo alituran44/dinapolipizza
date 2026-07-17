@@ -10,12 +10,15 @@ export default function CartPage({
   onCheckout, 
   onClose,
   deliveryMode, // 'delivery' or 'pickup'
-  selectedAddress
+  selectedAddress,
+  user,
+  onUpdateUserWallet
 }) {
   const [couponCode, setCouponCode] = useState('');
   const [couponDiscount, setCouponDiscount] = useState(0); // in TL
   const [appliedCoupon, setAppliedCoupon] = useState('');
   const [couponError, setCouponError] = useState('');
+  const [useWallet, setUseWallet] = useState(false);
 
   // Calculate items total
   const itemsSubtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -49,7 +52,17 @@ export default function CartPage({
     setAppliedCoupon('');
   };
 
-  const totalAmount = Math.max(0, itemsSubtotal - couponDiscount + deliveryFee);
+  const userWalletBalance = user ? (user.walletBalance || 0) : 0;
+  const walletDiscountApplied = useWallet ? Math.min(itemsSubtotal - couponDiscount, userWalletBalance) : 0;
+  const totalAmount = Math.max(0, itemsSubtotal - couponDiscount - walletDiscountApplied + deliveryFee);
+
+  const handleCheckoutClick = () => {
+    if (useWallet && user) {
+      const remainingBalance = userWalletBalance - walletDiscountApplied;
+      onUpdateUserWallet(user.id || 'u1', remainingBalance);
+    }
+    onCheckout();
+  };
 
   return (
     <div className="cart-page-wrapper">
@@ -207,12 +220,35 @@ export default function CartPage({
                   </div>
                 )}
 
+                {walletDiscountApplied > 0 && (
+                  <div className="summary-row discount-row" style={{ color: '#10b981' }}>
+                    <span className="discount-label" style={{ color: '#10b981' }}>Cüzdan İndirimi</span>
+                    <span style={{ color: '#10b981' }}>-{walletDiscountApplied} TL</span>
+                  </div>
+                )}
+
                 <div className="summary-divider"></div>
                 
                 <div className="summary-row total-row">
                   <span>Toplam</span>
                   <span>{totalAmount} TL</span>
                 </div>
+
+                {/* Wallet Balance Integration Checkbox */}
+                {userWalletBalance > 0 && (
+                  <div style={{ backgroundColor: '#f8fafc', padding: '10px 12px', borderRadius: '8px', border: '1px solid #e2e8f0', margin: '12px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '12px', margin: 0, fontWeight: 'bold' }}>
+                      <input 
+                        type="checkbox" 
+                        checked={useWallet} 
+                        onChange={(e) => setUseWallet(e.target.checked)} 
+                        style={{ cursor: 'pointer' }}
+                      />
+                      <span>Cüzdan Bakiyesini Kullan</span>
+                    </label>
+                    <span style={{ fontSize: '12px', fontWeight: '800', color: '#10b981' }}>{userWalletBalance} TL</span>
+                  </div>
+                )}
 
                 {/* Coupon Code Input */}
                 <form onSubmit={handleApplyCoupon} className="coupon-form">
@@ -245,7 +281,7 @@ export default function CartPage({
                   <span>İpucu: İlk siparişinize özel <strong>DINAPOLI10</strong> kupon kodunu kullanabilirsiniz!</span>
                 </div>
 
-                <button className="checkout-btn-full" onClick={onCheckout}>
+                <button className="checkout-btn-full" onClick={handleCheckoutClick}>
                   <span>Siparişi Tamamla</span>
                 </button>
               </div>

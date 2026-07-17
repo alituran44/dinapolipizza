@@ -30,6 +30,11 @@ export default function AdminPanel({
   onAddIngredient,
   onDeleteIngredient,
   onUpdateIngredient,
+
+  // Users & Wallet management
+  usersList = [],
+  onUpdateUserWallet,
+  onSendMailNotification,
   
   onClose 
 }) {
@@ -60,6 +65,10 @@ export default function AdminPanel({
 
   const [editingIngredientId, setEditingIngredientId] = useState(null);
   const [editingIngredient, setEditingIngredient] = useState(null);
+
+  // Email notification states
+  const [emailSubject, setEmailSubject] = useState('Di Napoli Fırsatları Başladı! 🍕');
+  const [emailMessage, setEmailMessage] = useState('Merhaba, Di Napoli lezzetlerinde bu haftaya özel 75 TL cüzdan indirimi fırsatını kaçırmayın!');
 
   const handleFileUpload = (e, field, isEdit = false) => {
     const file = e.target.files[0];
@@ -247,6 +256,14 @@ export default function AdminPanel({
           >
             <Database size={18} />
             <span>Ekstra Malzemeler</span>
+          </button>
+          
+          <button 
+            className={`admin-nav-item ${activeTab === 'users' ? 'active' : ''}`}
+            onClick={() => setActiveTab('users')}
+          >
+            <User size={18} />
+            <span>Kullanıcılar & Duyuru</span>
           </button>
           
           <button 
@@ -894,6 +911,105 @@ export default function AdminPanel({
                 <p>Aktif Bekleyen Siparişler: <strong>{orders.filter(o => o.status !== 'completed').length} adet</strong></p>
                 <p>Teslim Edilen Siparişler: <strong>{orders.filter(o => o.status === 'completed').length} adet</strong></p>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Tab: Users & Notifications Management */}
+        {activeTab === 'users' && (
+          <div className="admin-tab-content">
+            <h2 className="admin-tab-title">Kullanıcılar & Cüzdan Yönetimi</h2>
+            
+            <div className="deals-card" style={{ padding: '24px', marginBottom: '24px' }}>
+              <h3>Kayıtlı Kullanıcı Listesi</h3>
+              <table className="admin-table" style={{ marginTop: '16px', boxShadow: 'none' }}>
+                <thead>
+                  <tr>
+                    <th>Müşteri Adı</th>
+                    <th>E-Posta</th>
+                    <th>Telefon</th>
+                    <th>Cüzdan Bakiyesi</th>
+                    <th>Kayıt Tarihi</th>
+                    <th>Bakiye Güncelle</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {usersList.map(u => (
+                    <tr key={u.id}>
+                      <td className="bold">{u.name}</td>
+                      <td>{u.email}</td>
+                      <td>{u.phone}</td>
+                      <td className="bold text-green">{u.walletBalance} TL</td>
+                      <td>{u.joinDate}</td>
+                      <td>
+                        <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                          <input 
+                            type="number" 
+                            defaultValue={u.walletBalance}
+                            onBlur={(e) => {
+                              const val = parseFloat(e.target.value);
+                              if (!isNaN(val)) {
+                                onUpdateUserWallet(u.id, val);
+                              }
+                            }}
+                            style={{ width: '70px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '12px' }}
+                            placeholder="Miktar"
+                          />
+                          <span style={{ fontSize: '10px', color: '#64748b' }}>TL</span>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="deals-card" style={{ padding: '24px' }}>
+              <h3>Duyuru & Kampanya E-Postası Gönder</h3>
+              <form onSubmit={(e) => {
+                e.preventDefault();
+                const allEmails = usersList.map(u => u.email);
+                onSendMailNotification(allEmails, emailSubject, emailMessage);
+              }} style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '600px' }}>
+                
+                <div className="form-group" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={{ fontSize: '13px', fontWeight: 'bold' }}>Alıcılar</label>
+                  <input 
+                    type="text" 
+                    value={`Tüm Kayıtlı Kullanıcılar (${usersList.length} E-Posta adresi)`}
+                    disabled
+                    style={{ padding: '10px', border: '1px solid #cbd5e1', borderRadius: '6px', backgroundColor: '#f1f5f9', fontSize: '13px', cursor: 'not-allowed' }}
+                  />
+                </div>
+
+                <div className="form-group" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={{ fontSize: '13px', fontWeight: 'bold' }}>E-Posta Konusu</label>
+                  <input 
+                    type="text" 
+                    value={emailSubject}
+                    onChange={(e) => setEmailSubject(e.target.value)}
+                    required
+                    style={{ padding: '10px', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '13px' }}
+                    placeholder="E-Posta Başlığı"
+                  />
+                </div>
+
+                <div className="form-group" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={{ fontSize: '13px', fontWeight: 'bold' }}>Mesaj İçeriği</label>
+                  <textarea 
+                    value={emailMessage}
+                    onChange={(e) => setEmailMessage(e.target.value)}
+                    required
+                    rows="5"
+                    style={{ padding: '10px', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '13px', fontFamily: 'inherit', resize: 'vertical' }}
+                    placeholder="Duyuru mesajı içeriği..."
+                  />
+                </div>
+
+                <button type="submit" className="add-submit-btn" style={{ height: '40px', width: '200px', alignSelf: 'flex-start' }}>
+                  E-Posta Duyurusu Gönder
+                </button>
+              </form>
             </div>
           </div>
         )}

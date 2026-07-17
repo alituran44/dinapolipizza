@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import PromoWidgets from './components/PromoWidgets';
@@ -14,6 +14,8 @@ import CartPage from './components/CartPage';
 import KuryeSlipModal from './components/KuryeSlipModal';
 import AuthModal from './components/AuthModal';
 import OrdersHistoryModal from './components/OrdersHistoryModal';
+import ReferralPage from './components/ReferralPage';
+import RewardModal from './components/RewardModal';
 import { 
   INITIAL_PRODUCTS, INITIAL_DOUGHS, INITIAL_CRUSTS, INITIAL_INGREDIENTS 
 } from './data/products';
@@ -24,6 +26,7 @@ export default function App() {
   const [deliveryMode, setDeliveryMode] = useState('delivery'); // 'delivery' or 'pickup'
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
   const [isAiChefOpen, setIsAiChefOpen] = useState(false);
+  const [isRewardModalOpen, setIsRewardModalOpen] = useState(false);
   const [address, setAddress] = useState('Şair Ece Ayhan Meydanı, Saat Kulesi Karşısı');
   
   // Customization database states
@@ -36,9 +39,47 @@ export default function App() {
   const [activeCustomizeItem, setActiveCustomizeItem] = useState(null);
   
   // User Authentication & Modal States
-  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('dinapoli_user') || 'null'));
+  const [usersList, setUsersList] = useState([
+    { id: 'u1', name: 'Ali Turan', email: 'ali.turan@example.com', phone: '(543) 736 06 60', walletBalance: 75, joinDate: '2026-05-12' },
+    { id: 'u2', name: 'Şef Luigi', email: 'chef.luigi@dinapolipizza.com', phone: '(505) 726 17 17', walletBalance: 150, joinDate: '2026-01-01' },
+    { id: 'u3', name: 'Mehmet Yılmaz', email: 'mehmet@example.com', phone: '(555) 123 45 67', walletBalance: 0, joinDate: '2026-06-20' },
+  ]);
+
+  const [user, setUser] = useState(() => {
+    const saved = localStorage.getItem('dinapoli_user');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      // Admin accounts
+      if (parsed.email === 'admin@dinapolipizza.com' || parsed.email === 'chef.luigi@dinapolipizza.com') {
+        parsed.isAdmin = true;
+      }
+      return parsed;
+    }
+    return null;
+  });
+
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isOrdersHistoryOpen, setIsOrdersHistoryOpen] = useState(false);
+
+  // Sync logged in user's wallet from usersList
+  useEffect(() => {
+    if (user) {
+      const matched = usersList.find(u => u.phone === user.phone || u.email === user.email);
+      if (matched && matched.walletBalance !== user.walletBalance) {
+        const updated = { ...user, walletBalance: matched.walletBalance };
+        setUser(updated);
+        localStorage.setItem('dinapoli_user', JSON.stringify(updated));
+      }
+    }
+  }, [usersList]);
+
+  const handleUpdateUserWallet = (userId, newBalance) => {
+    setUsersList(prev => prev.map(u => u.id === userId ? { ...u, walletBalance: newBalance } : u));
+  };
+
+  const handleSendMailNotification = (emails, subject, message) => {
+    alert(`Duyuru E-Postası Başarıyla Gönderildi!\n\nAlıcılar: ${emails.join(', ')}\nKonu: ${subject}\n\nMesaj: ${message.substring(0, 100)}...`);
+  };
 
   // Cart & Order Tracking States
   const [cart, setCart] = useState([]);
@@ -218,6 +259,16 @@ export default function App() {
             onClose={() => setCurrentPage('menu')}
             deliveryMode={deliveryMode}
             selectedAddress={address}
+            user={user}
+            onUpdateUserWallet={handleUpdateUserWallet}
+          />
+        ) : currentPage === 'referral' ? (
+          /* Arkadaşına Öner Sayfası */
+          <ReferralPage 
+            user={user}
+            usersList={usersList}
+            onUpdateUserWallet={handleUpdateUserWallet}
+            onGoToMenu={() => setCurrentPage('menu')}
           />
         ) : (
           /* Default customer view */
@@ -239,6 +290,8 @@ export default function App() {
               onShowHistory={() => setIsOrdersHistoryOpen(true)}
               onAdminClick={() => setIsAdminMode(true)}
               yeKazanSlices={yeKazanSlices}
+              onGoToReferral={() => setCurrentPage('referral')}
+              onOpenRewards={() => setIsRewardModalOpen(true)}
             />
 
             {/* Header Altı Video Banner Akışı */}
@@ -364,6 +417,12 @@ export default function App() {
                 setIsOrdersHistoryOpen(false); // Close history to view slip modal
               }}
             />
+
+            {/* Reward / Sadakat Modalı */}
+            <RewardModal 
+              isOpen={isRewardModalOpen}
+              onClose={() => setIsRewardModalOpen(false)}
+            />
           </>
         )
       ) : (
@@ -391,6 +450,10 @@ export default function App() {
           onAddIngredient={handleAddIngredient}
           onDeleteIngredient={handleDeleteIngredient}
           onUpdateIngredient={handleUpdateIngredient}
+          
+          usersList={usersList}
+          onUpdateUserWallet={handleUpdateUserWallet}
+          onSendMailNotification={handleSendMailNotification}
           
           onClose={() => setIsAdminMode(false)}
         />

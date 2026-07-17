@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { ShoppingBag, User, Search, MapPin, ChevronDown, Edit2, ShieldCheck, Map } from 'lucide-react';
+import { 
+  ShoppingBag, User, Search, MapPin, ChevronDown, Edit2, ShieldCheck, Map,
+  Bell, CreditCard, Smartphone, Sparkles, Percent, ChevronRight, Gift
+} from 'lucide-react';
 
 export default function Header({ 
   deliveryMode, 
@@ -14,7 +17,9 @@ export default function Header({
   onLogout,
   onShowHistory,
   onAdminClick,
-  yeKazanSlices
+  yeKazanSlices,
+  onGoToReferral,
+  onOpenRewards
 }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
@@ -94,26 +99,107 @@ export default function Header({
               </button>
               
               {profileMenuOpen && (
-                <div className="profile-dropdown-list">
-                  <div className="profile-dropdown-header">
-                    <span className="user-email-lbl">{user.email}</span>
-                    <span className="user-slices-lbl">🍕 {yeKazanSlices} Dilim Pizzam Var</span>
+                <div className="profile-dropdown-list" style={{ width: '320px', padding: '16px', borderRadius: '16px', boxShadow: '0 10px 25px rgba(0,0,0,0.15)', background: '#F4F5F7', position: 'absolute', right: 0, top: '45px', zIndex: 9999 }}>
+                  
+                  {/* Profil Kartı */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'white', padding: '12px', borderRadius: '12px', marginBottom: '12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'rgba(235, 94, 40, 0.1)', color: 'var(--color-orange)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '16px' }}>
+                        {user.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase() : 'DN'}
+                      </div>
+                      <div style={{ textAlign: 'left' }}>
+                        <h4 style={{ margin: 0, fontSize: '14px', fontWeight: 'bold', color: 'var(--color-dark-blue)' }}>{user.name}</h4>
+                        <span style={{ fontSize: '11px', color: '#64748b' }}>{user.phone || '(543) 736 06 60'}</span>
+                      </div>
+                    </div>
+                    <button style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: '#64748b' }} onClick={() => alert('Bildirimleriniz güncel.')}>
+                      <Bell size={20} />
+                    </button>
                   </div>
-                  <div className="profile-dropdown-divider"></div>
-                  {user.isAdmin && (
-                    <>
-                      <button className="profile-dropdown-item admin-link" onClick={() => { onAdminClick(); setProfileMenuOpen(false); }} style={{ color: 'var(--color-primary-red)', fontWeight: '800' }}>
-                        🛡 Yönetici Paneli
+
+                  {/* Telefon Onay Bannerı */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#2563eb', color: 'white', padding: '10px 14px', borderRadius: '10px', fontSize: '11px', fontWeight: 'bold', cursor: 'pointer', marginBottom: '12px', textAlign: 'left' }} onClick={() => alert('Telefon numaranız doğrulanmıştır!')}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Smartphone size={16} />
+                      <span>Telefon numaranı onayla, fırsatları kaçırma!</span>
+                    </div>
+                    <ChevronRight size={14} />
+                  </div>
+
+                  {/* 3'lü Buton Grubu */}
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', marginBottom: '12px' }}>
+                    <button onClick={() => { onShowHistory(); setProfileMenuOpen(false); }} style={{ backgroundColor: 'white', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '10px 4px', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+                      <ShoppingBag size={18} color="var(--color-burgundy)" />
+                      <span style={{ fontSize: '10px', fontWeight: 'bold', color: '#475569' }}>Siparişlerim</span>
+                    </button>
+                    <button onClick={() => { onOpenMap(); setProfileMenuOpen(false); }} style={{ backgroundColor: 'white', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '10px 4px', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+                      <MapPin size={18} color="var(--color-burgundy)" />
+                      <span style={{ fontSize: '10px', fontWeight: 'bold', color: '#475569' }}>Adreslerim</span>
+                    </button>
+                    <button onClick={() => alert('Kayıtlı kart bulunmamaktadır.')} style={{ backgroundColor: 'white', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '10px 4px', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+                      <CreditCard size={18} color="var(--color-burgundy)" />
+                      <span style={{ fontSize: '10px', fontWeight: 'bold', color: '#475569' }}>Kartlarım</span>
+                    </button>
+                  </div>
+
+                  {/* Ye-Kazan Kartı */}
+                  <div onClick={() => { onOpenRewards(); setProfileMenuOpen(false); }} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'white', padding: '12px 14px', borderRadius: '12px', cursor: 'pointer', marginBottom: '8px', textAlign: 'left' }}>
+                    <div>
+                      <h4 style={{ margin: 0, fontSize: '12px', fontWeight: 'bold', color: 'var(--color-dark-blue)' }}>Di Napoli Ye-Kazan</h4>
+                      <p style={{ margin: 0, fontSize: '10px', color: '#64748b' }}>Sipariş verdikçe ödül kazan. ({yeKazanSlices} Dilim)</p>
+                    </div>
+                    <ChevronRight size={14} color="#64748b" />
+                  </div>
+
+                  {/* Cüzdan Kartı */}
+                  <div onClick={() => { onGoToReferral(); setProfileMenuOpen(false); }} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'white', padding: '12px 14px', borderRadius: '12px', cursor: 'pointer', marginBottom: '12px', textAlign: 'left' }}>
+                    <div>
+                      <h4 style={{ margin: 0, fontSize: '12px', fontWeight: 'bold', color: 'var(--color-dark-blue)' }}>Di Napoli Cüzdan</h4>
+                      <p style={{ margin: 0, fontSize: '10px', color: '#64748b' }}>Arkadaşını davet et, 75 TL cüzdan indirimi kazan.</p>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <span style={{ fontSize: '13px', fontWeight: '800', color: '#10b981' }}>{user.walletBalance || 0} TL</span>
+                      <ChevronRight size={14} color="#64748b" />
+                    </div>
+                  </div>
+
+                  {/* Fırsatlar Listesi */}
+                  <div style={{ backgroundColor: 'white', borderRadius: '12px', overflow: 'hidden', textAlign: 'left' }}>
+                    <div onClick={() => { onOpenRewards(); setProfileMenuOpen(false); }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 14px', borderBottom: '1px solid #f1f5f9', cursor: 'pointer' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <Gift size={16} color="var(--color-burgundy)" />
+                        <span style={{ fontSize: '12px', fontWeight: 'bold', color: '#475569' }}>Fırsatlar</span>
+                      </div>
+                      <ChevronRight size={14} color="#64748b" />
+                    </div>
+                    <div onClick={() => { alert('Sepette indirim kodunuzu uygulayabilirsiniz.'); setProfileMenuOpen(false); }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 14px', borderBottom: '1px solid #f1f5f9', cursor: 'pointer' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <Percent size={16} color="var(--color-burgundy)" />
+                        <span style={{ fontSize: '12px', fontWeight: 'bold', color: '#475569' }}>Promosyon Kodu</span>
+                      </div>
+                      <ChevronRight size={14} color="#64748b" />
+                    </div>
+                    <div onClick={() => { onGoToReferral(); setProfileMenuOpen(false); }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 14px', cursor: 'pointer' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <Sparkles size={16} color="var(--color-burgundy)" />
+                        <span style={{ fontSize: '12px', fontWeight: 'bold', color: '#475569' }}>Arkadaşına Öner</span>
+                      </div>
+                      <ChevronRight size={14} color="#64748b" />
+                    </div>
+                  </div>
+
+                  {/* Admin & Logout Linkleri */}
+                  <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
+                    {user.isAdmin && (
+                      <button onClick={() => { onAdminClick(); setProfileMenuOpen(false); }} style={{ flex: 1, backgroundColor: 'var(--color-burgundy)', color: 'white', border: 'none', padding: '8px', borderRadius: '8px', fontSize: '11px', fontWeight: 'bold', cursor: 'pointer' }}>
+                        Yönetici Paneli
                       </button>
-                      <div className="profile-dropdown-divider"></div>
-                    </>
-                  )}
-                  <button className="profile-dropdown-item" onClick={() => { onShowHistory(); setProfileMenuOpen(false); }}>
-                    Siparişlerim
-                  </button>
-                  <button className="profile-dropdown-item logout" onClick={() => { onLogout(); setProfileMenuOpen(false); }}>
-                    Çıkış Yap
-                  </button>
+                    )}
+                    <button onClick={() => { onLogout(); setProfileMenuOpen(false); }} style={{ flex: 1, backgroundColor: '#e2e8f0', color: '#475569', border: 'none', padding: '8px', borderRadius: '8px', fontSize: '11px', fontWeight: 'bold', cursor: 'pointer' }}>
+                      Çıkış Yap
+                    </button>
+                  </div>
+
                 </div>
               )}
             </div>
