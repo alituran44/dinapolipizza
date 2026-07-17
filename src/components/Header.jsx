@@ -12,6 +12,7 @@ export default function Header({
   user,
   onLoginClick,
   onLogout,
+  onShowHistory,
   yeKazanSlices
 }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -120,7 +121,7 @@ export default function Header({
                     <span className="user-slices-lbl">🍕 {yeKazanSlices} Dilim Pizzam Var</span>
                   </div>
                   <div className="profile-dropdown-divider"></div>
-                  <button className="profile-dropdown-item" onClick={() => { alert('Sipariş geçmişiniz hazırlanıyor sinyor!'); setProfileMenuOpen(false); }}>
+                  <button className="profile-dropdown-item" onClick={() => { onShowHistory(); setProfileMenuOpen(false); }}>
                     Siparişlerim
                   </button>
                   <button className="profile-dropdown-item logout" onClick={() => { onLogout(); setProfileMenuOpen(false); }}>

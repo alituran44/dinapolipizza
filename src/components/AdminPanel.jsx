@@ -13,6 +13,7 @@ export default function AdminPanel({
   onUpdateProduct,
   orders,
   onUpdateOrderStatus,
+  onShowSlip,
   
   // Customization controls
   doughs,
@@ -217,6 +218,7 @@ export default function AdminPanel({
                       <th>Teslimat Tipi</th>
                       <th>Toplam Tutar</th>
                       <th>Sipariş Durumu</th>
+                      <th>Aksiyon</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -247,6 +249,16 @@ export default function AdminPanel({
                             <option value="5">5. Yola Çıktı / Hazır</option>
                             <option value="completed">✔ Tamamlandı</option>
                           </select>
+                        </td>
+                        <td>
+                          <button 
+                            className="action-btn edit" 
+                            onClick={() => onShowSlip(order)}
+                            title="Kurye Fişini Yazdır"
+                            style={{ padding: '6px 12px', backgroundColor: 'var(--color-dark-blue)', color: 'white', borderRadius: '4px', border: 'none', cursor: 'pointer', fontSize: '11px', fontWeight: '800' }}
+                          >
+                            Fiş Yazdır
+                          </button>
                         </td>
                       </tr>
                     ))}

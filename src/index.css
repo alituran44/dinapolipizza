@@ -4180,6 +4180,22 @@ button {
   margin-bottom: 8px;
 }
 
+/* OVERLAY MODAL KONUMLANDIRMA DUZELTMESI */
+.cart-drawer-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 2500 !important;
+  overflow: hidden !important;
+}
+
+
 
 
 

@@ -1,0 +1,81 @@
+import React from 'react';
+import { X, Receipt, ShoppingBag } from 'lucide-react';
+
+export default function OrdersHistoryModal({ isOpen, onClose, orders, onShowSlip }) {
+  if (!isOpen) return null;
+
+  return (
+    <div className="cart-drawer-overlay" style={{ zIndex: 2200 }} onClick={onClose}>
+      <div className="auth-modal-card orders-history-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '520px' }}>
+        <button className="auth-modal-close-btn" onClick={onClose}>
+          <X size={20} />
+        </button>
+
+        <div className="orders-history-header" style={{ marginBottom: '20px', borderBottom: '1px solid #edf2f7', paddingBottom: '12px' }}>
+          <h3 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--color-dark-blue)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <ShoppingBag size={20} className="red-icon" />
+            <span>Sipariş Geçmişim</span>
+          </h3>
+          <p style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginTop: '4px' }}>
+            Di Napoli fırınlarından verdiğiniz leziz siparişlerin güncel listesi.
+          </p>
+        </div>
+
+        {orders.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '30px 10px', color: 'var(--color-text-muted)' }}>
+            <span style={{ fontSize: '32px', display: 'block', marginBottom: '10px' }}>🍕</span>
+            <p style={{ fontSize: '13px', fontWeight: 600 }}>Henüz kayıtlı bir siparişiniz bulunmuyor sinyor!</p>
+          </div>
+        ) : (
+          <div className="orders-history-list" style={{ maxHeight: '350px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {orders.map((order) => {
+              const getStatusText = (status) => {
+                switch(status) {
+                  case '1': return 'Sipariş Alındı';
+                  case '2': return 'Hazırlanıyor';
+                  case '3': return 'Fırında';
+                  case '4': return 'Paketleniyor';
+                  case '5': return 'Kurye Yolda';
+                  case '6': return 'Teslim Edildi';
+                  default: return 'Alındı';
+                }
+              };
+
+              const getStatusClass = (status) => {
+                if (status === '6') return 'status-delivered';
+                return 'status-pending';
+              };
+
+              return (
+                <div key={order.id} className="history-order-row" style={{ border: '1px solid #e2e8f0', borderRadius: 'var(--radius-sm)', padding: '12px 14px', background: '#f8fafc' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                    <span style={{ fontWeight: 800, fontSize: '13px', color: 'var(--color-dark-blue)' }}>#{order.id}</span>
+                    <span className={`status-tag ${getStatusClass(order.status)}`} style={{ fontSize: '11px', fontWeight: 800, padding: '3px 8px', borderRadius: '12px', background: order.status === '6' ? '#e6fffa' : '#feebc8', color: order.status === '6' ? '#234e52' : '#7b341e' }}>
+                      {getStatusText(order.status)}
+                    </span>
+                  </div>
+
+                  <p style={{ fontSize: '12px', color: '#4a5568', marginBottom: '8px', lineHeight: '1.4' }}>
+                    {order.itemsSummary}
+                  </p>
+
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px dashed #e2e8f0', paddingTop: '8px' }}>
+                    <span style={{ fontWeight: 800, fontSize: '14px', color: 'var(--color-primary-red)' }}>{order.total} TL</span>
+                    <button 
+                      className="btn-show-slip-action" 
+                      onClick={() => onShowSlip(order)}
+                      style={{ display: 'flex', alignItems: 'center', gap: '6px', border: '1px solid var(--color-dark-blue)', background: 'white', color: 'var(--color-dark-blue)', padding: '5px 10px', borderRadius: '4px', fontSize: '11px', fontWeight: 700, cursor: 'pointer', transition: '0.2s' }}
+                    >
+                      <Receipt size={12} />
+                      <span>Fişi Gör / Yazdır</span>
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
