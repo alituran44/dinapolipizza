@@ -19,14 +19,17 @@ export default function AdminPanel({
   doughs,
   onAddDough,
   onDeleteDough,
+  onUpdateDough,
   
   crusts,
   onAddCrust,
   onDeleteCrust,
+  onUpdateCrust,
   
   ingredients,
   onAddIngredient,
   onDeleteIngredient,
+  onUpdateIngredient,
   
   onClose 
 }) {
@@ -47,6 +50,30 @@ export default function AdminPanel({
 
   const [editingId, setEditingId] = useState(null);
   const [editingProduct, setEditingProduct] = useState(null);
+
+  // Customization edit states
+  const [editingDoughId, setEditingDoughId] = useState(null);
+  const [editingDough, setEditingDough] = useState(null);
+
+  const [editingCrustId, setEditingCrustId] = useState(null);
+  const [editingCrust, setEditingCrust] = useState(null);
+
+  const [editingIngredientId, setEditingIngredientId] = useState(null);
+  const [editingIngredient, setEditingIngredient] = useState(null);
+
+  const handleFileUpload = (e, field, isEdit = false) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      if (isEdit) {
+        setEditingProduct(prev => ({ ...prev, [field]: reader.result }));
+      } else {
+        setNewProduct(prev => ({ ...prev, [field]: reader.result }));
+      }
+    };
+    reader.readAsDataURL(file);
+  };
 
   // Form states for dough, crust, ingredients
   const [newDough, setNewDough] = useState({ name: '', price: '' });
@@ -94,6 +121,48 @@ export default function AdminPanel({
     });
     setEditingId(null);
     setEditingProduct(null);
+  };
+
+  const handleDoughEditClick = (dough) => {
+    setEditingDoughId(dough.id);
+    setEditingDough({ ...dough });
+  };
+
+  const handleDoughEditSave = () => {
+    onUpdateDough(editingDoughId, {
+      ...editingDough,
+      price: parseFloat(editingDough.price || 0)
+    });
+    setEditingDoughId(null);
+    setEditingDough(null);
+  };
+
+  const handleCrustEditClick = (crust) => {
+    setEditingCrustId(crust.id);
+    setEditingCrust({ ...crust });
+  };
+
+  const handleCrustEditSave = () => {
+    onUpdateCrust(editingCrustId, {
+      ...editingCrust,
+      price: parseFloat(editingCrust.price || 0)
+    });
+    setEditingCrustId(null);
+    setEditingCrust(null);
+  };
+
+  const handleIngredientEditClick = (ing) => {
+    setEditingIngredientId(ing.id);
+    setEditingIngredient({ ...ing });
+  };
+
+  const handleIngredientEditSave = () => {
+    onUpdateIngredient(editingIngredientId, {
+      ...editingIngredient,
+      price: parseFloat(editingIngredient.price || 0)
+    });
+    setEditingIngredientId(null);
+    setEditingIngredient(null);
   };
 
   // Add items
@@ -330,22 +399,48 @@ export default function AdminPanel({
                   />
                 </div>
                 <div className="form-group">
-                  <label>Ürün Görsel URL</label>
-                  <input 
-                    type="text" 
-                    placeholder="Resim linki veya public path..." 
-                    value={newProduct.image}
-                    onChange={(e) => setNewProduct({...newProduct, image: e.target.value})}
-                  />
+                  <label>Ürün Görsel URL / Dosya Yükle</label>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <input 
+                      type="text" 
+                      placeholder="Resim linki veya public path..." 
+                      value={newProduct.image}
+                      onChange={(e) => setNewProduct({...newProduct, image: e.target.value})}
+                      style={{ flex: 1 }}
+                    />
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      onChange={(e) => handleFileUpload(e, 'image')}
+                      style={{ display: 'none' }}
+                      id="product-image-upload"
+                    />
+                    <label htmlFor="product-image-upload" style={{ backgroundColor: 'var(--color-dark-blue)', color: 'white', padding: '8px 12px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', fontWeight: '800', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', margin: 0 }}>
+                      Dosya Seç
+                    </label>
+                  </div>
                 </div>
                 <div className="form-group">
-                  <label>Tanıtım Videosu URL (MP4 veya YouTube)</label>
-                  <input 
-                    type="text" 
-                    placeholder="Örn: https://www.youtube.com/watch?v=... veya yerel MP4" 
-                    value={newProduct.videoUrl}
-                    onChange={(e) => setNewProduct({...newProduct, videoUrl: e.target.value})}
-                  />
+                  <label>Tanıtım Videosu URL / Dosya Yükle</label>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <input 
+                      type="text" 
+                      placeholder="Örn: https://www.youtube.com/watch?v=... veya yerel MP4" 
+                      value={newProduct.videoUrl}
+                      onChange={(e) => setNewProduct({...newProduct, videoUrl: e.target.value})}
+                      style={{ flex: 1 }}
+                    />
+                    <input 
+                      type="file" 
+                      accept="video/*" 
+                      onChange={(e) => handleFileUpload(e, 'videoUrl')}
+                      style={{ display: 'none' }}
+                      id="product-video-upload"
+                    />
+                    <label htmlFor="product-video-upload" style={{ backgroundColor: 'var(--color-dark-blue)', color: 'white', padding: '8px 12px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', fontWeight: '800', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', margin: 0 }}>
+                      Dosya Seç
+                    </label>
+                  </div>
                 </div>
                 <div className="form-group flex-row checkbox-group">
                   <label>
@@ -410,22 +505,46 @@ export default function AdminPanel({
                                 placeholder="Açıklama"
                                 style={{ fontSize: '11px' }}
                               />
-                              <input 
-                                type="text" 
-                                value={editingProduct.image || ''}
-                                onChange={(e) => setEditingProduct({...editingProduct, image: e.target.value})}
-                                className="table-inline-input"
-                                placeholder="Görsel URL"
-                                style={{ fontSize: '11px' }}
-                              />
-                              <input 
-                                type="text" 
-                                value={editingProduct.videoUrl || ''}
-                                onChange={(e) => setEditingProduct({...editingProduct, videoUrl: e.target.value})}
-                                className="table-inline-input"
-                                placeholder="Video URL"
-                                style={{ fontSize: '11px' }}
-                              />
+                              <div style={{ display: 'flex', gap: '4px' }}>
+                                <input 
+                                  type="text" 
+                                  value={editingProduct.image || ''}
+                                  onChange={(e) => setEditingProduct({...editingProduct, image: e.target.value})}
+                                  className="table-inline-input"
+                                  placeholder="Görsel URL"
+                                  style={{ fontSize: '11px', flex: 1 }}
+                                />
+                                <input 
+                                  type="file" 
+                                  accept="image/*" 
+                                  onChange={(e) => handleFileUpload(e, 'image', true)}
+                                  style={{ display: 'none' }}
+                                  id={`edit-image-upload-${product.id}`}
+                                />
+                                <label htmlFor={`edit-image-upload-${product.id}`} style={{ backgroundColor: 'var(--color-dark-blue)', color: 'white', padding: '2px 6px', borderRadius: '4px', cursor: 'pointer', fontSize: '9px', fontWeight: '800', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                                  Yükle
+                                </label>
+                              </div>
+                              <div style={{ display: 'flex', gap: '4px' }}>
+                                <input 
+                                  type="text" 
+                                  value={editingProduct.videoUrl || ''}
+                                  onChange={(e) => setEditingProduct({...editingProduct, videoUrl: e.target.value})}
+                                  className="table-inline-input"
+                                  placeholder="Video URL"
+                                  style={{ fontSize: '11px', flex: 1 }}
+                                />
+                                <input 
+                                  type="file" 
+                                  accept="video/*" 
+                                  onChange={(e) => handleFileUpload(e, 'videoUrl', true)}
+                                  style={{ display: 'none' }}
+                                  id={`edit-video-upload-${product.id}`}
+                                />
+                                <label htmlFor={`edit-video-upload-${product.id}`} style={{ backgroundColor: 'var(--color-dark-blue)', color: 'white', padding: '2px 6px', borderRadius: '4px', cursor: 'pointer', fontSize: '9px', fontWeight: '800', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                                  Yükle
+                                </label>
+                              </div>
                             </div>
                           ) : (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
@@ -535,19 +654,51 @@ export default function AdminPanel({
                     <tr>
                       <th>Hamur Adı</th>
                       <th>Fiyat Farkı</th>
-                      <th>Sil</th>
+                      <th>İşlemler</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {doughs.map(d => (
-                      <tr key={d.id}>
-                        <td className="bold">{d.name}</td>
-                        <td className="text-red">+{d.price} TL</td>
-                        <td>
-                          <button className="action-btn delete" onClick={() => onDeleteDough(d.id)}><Trash2 size={14} /></button>
-                        </td>
-                      </tr>
-                    ))}
+                    {doughs.map(d => {
+                      const isEditingDough = editingDoughId === d.id;
+                      return (
+                        <tr key={d.id}>
+                          <td>
+                            {isEditingDough ? (
+                              <input 
+                                type="text" 
+                                value={editingDough.name} 
+                                onChange={(e) => setEditingDough({ ...editingDough, name: e.target.value })}
+                                style={{ border: '1px solid #cbd5e1', padding: '4px', borderRadius: '4px', fontSize: '12px' }}
+                              />
+                            ) : (
+                              <span className="bold">{d.name}</span>
+                            )}
+                          </td>
+                          <td className="text-red">
+                            {isEditingDough ? (
+                              <input 
+                                type="number" 
+                                value={editingDough.price} 
+                                onChange={(e) => setEditingDough({ ...editingDough, price: e.target.value })}
+                                style={{ border: '1px solid #cbd5e1', padding: '4px', borderRadius: '4px', width: '70px', fontSize: '12px' }}
+                              />
+                            ) : (
+                              <span>+{d.price} TL</span>
+                            )}
+                          </td>
+                          <td>
+                            <div className="table-actions" style={{ gap: '6px' }}>
+                              {isEditingDough ? (
+                                <button className="action-btn save" onClick={handleDoughEditSave}><Check size={14} /></button>
+                              ) : (
+                                <button className="action-btn edit" onClick={() => handleDoughEditClick(d)}><Edit size={14} /></button>
+                              )}
+                              <button className="action-btn delete" onClick={() => onDeleteDough(d.id)}><Trash2 size={14} /></button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -581,19 +732,51 @@ export default function AdminPanel({
                     <tr>
                       <th>Kenar Adı</th>
                       <th>Fiyat Farkı</th>
-                      <th>Sil</th>
+                      <th>İşlemler</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {crusts.map(c => (
-                      <tr key={c.id}>
-                        <td className="bold">{c.name}</td>
-                        <td className="text-red">+{c.price} TL</td>
-                        <td>
-                          <button className="action-btn delete" onClick={() => onDeleteCrust(c.id)}><Trash2 size={14} /></button>
-                        </td>
-                      </tr>
-                    ))}
+                    {crusts.map(c => {
+                      const isEditingCrust = editingCrustId === c.id;
+                      return (
+                        <tr key={c.id}>
+                          <td>
+                            {isEditingCrust ? (
+                              <input 
+                                type="text" 
+                                value={editingCrust.name} 
+                                onChange={(e) => setEditingCrust({ ...editingCrust, name: e.target.value })}
+                                style={{ border: '1px solid #cbd5e1', padding: '4px', borderRadius: '4px', fontSize: '12px' }}
+                              />
+                            ) : (
+                              <span className="bold">{c.name}</span>
+                            )}
+                          </td>
+                          <td className="text-red">
+                            {isEditingCrust ? (
+                              <input 
+                                type="number" 
+                                value={editingCrust.price} 
+                                onChange={(e) => setEditingCrust({ ...editingCrust, price: e.target.value })}
+                                style={{ border: '1px solid #cbd5e1', padding: '4px', borderRadius: '4px', width: '70px', fontSize: '12px' }}
+                              />
+                            ) : (
+                              <span>+{c.price} TL</span>
+                            )}
+                          </td>
+                          <td>
+                            <div className="table-actions" style={{ gap: '6px' }}>
+                              {isEditingCrust ? (
+                                <button className="action-btn save" onClick={handleCrustEditSave}><Check size={14} /></button>
+                              ) : (
+                                <button className="action-btn edit" onClick={() => handleCrustEditClick(c)}><Edit size={14} /></button>
+                              )}
+                              <button className="action-btn delete" onClick={() => onDeleteCrust(c.id)}><Trash2 size={14} /></button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -634,19 +817,51 @@ export default function AdminPanel({
                   <tr>
                     <th>Malzeme Adı</th>
                     <th>Fiyatı</th>
-                    <th>Sil</th>
+                    <th>İşlemler</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {ingredients.map(ing => (
-                    <tr key={ing.id}>
-                      <td className="bold">{ing.name}</td>
-                      <td className="text-red">+{ing.price} TL</td>
-                      <td>
-                        <button className="action-btn delete" onClick={() => onDeleteIngredient(ing.id)}><Trash2 size={14} /></button>
-                      </td>
-                    </tr>
-                  ))}
+                  {ingredients.map(ing => {
+                    const isEditingIng = editingIngredientId === ing.id;
+                    return (
+                      <tr key={ing.id}>
+                        <td>
+                          {isEditingIng ? (
+                            <input 
+                              type="text" 
+                              value={editingIngredient.name} 
+                              onChange={(e) => setEditingIngredient({ ...editingIngredient, name: e.target.value })}
+                              style={{ border: '1px solid #cbd5e1', padding: '4px', borderRadius: '4px', fontSize: '12px' }}
+                            />
+                          ) : (
+                            <span className="bold">{ing.name}</span>
+                          )}
+                        </td>
+                        <td className="text-red">
+                          {isEditingIng ? (
+                            <input 
+                              type="number" 
+                              value={editingIngredient.price} 
+                              onChange={(e) => setEditingIngredient({ ...editingIngredient, price: e.target.value })}
+                              style={{ border: '1px solid #cbd5e1', padding: '4px', borderRadius: '4px', width: '70px', fontSize: '12px' }}
+                            />
+                          ) : (
+                            <span>+{ing.price} TL</span>
+                          )}
+                        </td>
+                        <td>
+                          <div className="table-actions" style={{ gap: '6px' }}>
+                            {isEditingIng ? (
+                              <button className="action-btn save" onClick={handleIngredientEditSave}><Check size={14} /></button>
+                            ) : (
+                              <button className="action-btn edit" onClick={() => handleIngredientEditClick(ing)}><Edit size={14} /></button>
+                            )}
+                            <button className="action-btn delete" onClick={() => onDeleteIngredient(ing.id)}><Trash2 size={14} /></button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

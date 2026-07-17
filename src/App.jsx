@@ -65,14 +65,17 @@ export default function App() {
   // Dough modifications
   const handleAddDough = (newDough) => setDoughs([...doughs, newDough]);
   const handleDeleteDough = (id) => setDoughs(doughs.filter(d => d.id !== id));
+  const handleUpdateDough = (id, updatedDough) => setDoughs(doughs.map(d => d.id === id ? updatedDough : d));
 
   // Crust modifications
   const handleAddCrust = (newCrust) => setCrusts([...crusts, newCrust]);
   const handleDeleteCrust = (id) => setCrusts(crusts.filter(c => c.id !== id));
+  const handleUpdateCrust = (id, updatedCrust) => setCrusts(crusts.map(c => c.id === id ? updatedCrust : c));
 
   // Ingredient modifications
   const handleAddIngredient = (newIng) => setIngredients([...ingredients, newIng]);
   const handleDeleteIngredient = (id) => setIngredients(ingredients.filter(i => i.id !== id));
+  const handleUpdateIngredient = (id, updatedIng) => setIngredients(ingredients.map(i => i.id === id ? updatedIng : i));
 
   // Order status
   const handleUpdateOrderStatus = (orderId, newStatus) => {
@@ -377,14 +380,17 @@ export default function App() {
           doughs={doughs}
           onAddDough={handleAddDough}
           onDeleteDough={handleDeleteDough}
+          onUpdateDough={handleUpdateDough}
           
           crusts={crusts}
           onAddCrust={handleAddCrust}
           onDeleteCrust={handleDeleteCrust}
+          onUpdateCrust={handleUpdateCrust}
           
           ingredients={ingredients}
           onAddIngredient={handleAddIngredient}
           onDeleteIngredient={handleDeleteIngredient}
+          onUpdateIngredient={handleUpdateIngredient}
           
           onClose={() => setIsAdminMode(false)}
         />
