@@ -12,7 +12,10 @@ export default function CartPage({
   deliveryMode, // 'delivery' or 'pickup'
   selectedAddress,
   user,
-  onUpdateUserWallet
+  onUpdateUserWallet,
+  userAddresses = [],
+  onSelectAddress,
+  onOpenAddresses
 }) {
   const [couponCode, setCouponCode] = useState('');
   const [couponDiscount, setCouponDiscount] = useState(0); // in TL
@@ -183,11 +186,38 @@ export default function CartPage({
                   {deliveryMode === 'delivery' ? <Truck size={20} className="blue-icon" /> : <MapPin size={20} className="blue-icon" />}
                   <h3>Teslimat Yöntemi: {deliveryMode === 'delivery' ? 'Adrese Teslim' : 'Beklemeden Gel-Al'}</h3>
                 </div>
-                <div className="address-details-box">
+                <div className="address-details-box" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   {deliveryMode === 'delivery' ? (
-                    <p>{selectedAddress || 'Kayıtlı teslimat adresi bulunamadı. Lütfen anasayfada adresinizi seçin.'}</p>
+                    <>
+                      <p style={{ margin: 0, fontSize: '13px', color: '#475569' }}>
+                        <strong>Aktif Adres:</strong> {selectedAddress || 'Adres seçilmedi.'}
+                      </p>
+                      
+                      {userAddresses.length > 0 && (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '4px' }}>
+                          <label style={{ fontSize: '11px', fontWeight: 'bold', color: '#64748b' }}>Farklı Bir Kayıtlı Adres Seçin:</label>
+                          <select 
+                            value={selectedAddress}
+                            onChange={(e) => onSelectAddress(e.target.value)}
+                            style={{ padding: '8px 12px', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '12px', color: '#1e293b', outline: 'none' }}
+                          >
+                            {userAddresses.map(addr => (
+                              <option key={addr.id} value={addr.text}>{addr.title} - {addr.text.substring(0, 45)}...</option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
+                      
+                      <button 
+                        onClick={onOpenAddresses}
+                        style={{ alignSelf: 'flex-start', border: 'none', background: 'none', color: 'var(--color-burgundy)', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center', gap: '4px', marginTop: '4px' }}
+                      >
+                        <Plus size={14} />
+                        <span>Yeni Adres Ekle / Düzenle</span>
+                      </button>
+                    </>
                   ) : (
-                    <p><strong>Saat Kulesi Karşısı, Merkez/Çanakkale</strong> şubemizden beklemeden teslim alacaksınız.</p>
+                    <p style={{ margin: 0 }}><strong>Saat Kulesi Karşısı, Merkez/Çanakkale</strong> şubemizden beklemeden teslim alacaksınız.</p>
                   )}
                 </div>
               </div>

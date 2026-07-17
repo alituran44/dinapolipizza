@@ -19,7 +19,8 @@ export default function Header({
   onAdminClick,
   yeKazanSlices,
   onGoToReferral,
-  onOpenRewards
+  onOpenRewards,
+  onOpenAddresses
 }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
@@ -72,11 +73,15 @@ export default function Header({
               <ChevronDown size={14} className="dropdown-arrow" />
             </div>
             
-            <div className="address-details" style={{ pointerEvents: 'none' }}>
+            <div 
+              className="address-details" 
+              onClick={() => onOpenAddresses()}
+              style={{ cursor: 'pointer' }}
+            >
               <MapPin size={14} className="pin-icon" />
               <span className="address-text">{address}</span>
-              <button className="address-edit-btn" aria-label="Haritayı Aç">
-                <Map size={12} />
+              <button className="address-edit-btn" aria-label="Adreslerim">
+                <Edit2 size={12} />
               </button>
             </div>
           </div>
@@ -132,7 +137,7 @@ export default function Header({
                       <ShoppingBag size={18} color="var(--color-burgundy)" />
                       <span style={{ fontSize: '10px', fontWeight: 'bold', color: '#475569' }}>Siparişlerim</span>
                     </button>
-                    <button onClick={() => { onOpenMap(); setProfileMenuOpen(false); }} style={{ backgroundColor: 'white', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '10px 4px', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+                    <button onClick={() => { onOpenAddresses(); setProfileMenuOpen(false); }} style={{ backgroundColor: 'white', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '10px 4px', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
                       <MapPin size={18} color="var(--color-burgundy)" />
                       <span style={{ fontSize: '10px', fontWeight: 'bold', color: '#475569' }}>Adreslerim</span>
                     </button>

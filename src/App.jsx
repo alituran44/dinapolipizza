@@ -16,6 +16,7 @@ import AuthModal from './components/AuthModal';
 import OrdersHistoryModal from './components/OrdersHistoryModal';
 import ReferralPage from './components/ReferralPage';
 import RewardModal from './components/RewardModal';
+import AddressesModal from './components/AddressesModal';
 import { 
   INITIAL_PRODUCTS, INITIAL_DOUGHS, INITIAL_CRUSTS, INITIAL_INGREDIENTS 
 } from './data/products';
@@ -27,7 +28,14 @@ export default function App() {
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
   const [isAiChefOpen, setIsAiChefOpen] = useState(false);
   const [isRewardModalOpen, setIsRewardModalOpen] = useState(false);
+  const [isAddressesModalOpen, setIsAddressesModalOpen] = useState(false);
   const [address, setAddress] = useState('Şair Ece Ayhan Meydanı, Saat Kulesi Karşısı');
+  
+  // Custom user addresses list
+  const [userAddresses, setUserAddresses] = useState([
+    { id: 'addr-1', title: 'Saat Kulesi (İş)', text: 'Şair Ece Ayhan Meydanı, Saat Kulesi Karşısı, Çanakkale / Merkez' },
+    { id: 'addr-2', title: 'Ev', text: 'İsmetpaşa Mahallesi, Atikhisar Caddesi, No: 42, Çanakkale / Merkez' }
+  ]);
   
   // Customization database states
   const [products, setProducts] = useState(INITIAL_PRODUCTS);
@@ -141,6 +149,18 @@ export default function App() {
 
   const handleSendMailNotification = (emails, subject, message) => {
     alert(`Duyuru E-Postası Başarıyla Gönderildi!\n\nAlıcılar: ${emails.join(', ')}\nKonu: ${subject}\n\nMesaj: ${message.substring(0, 100)}...`);
+  };
+
+  const handleAddAddress = (newAddr) => {
+    setUserAddresses(prev => [...prev, newAddr]);
+  };
+
+  const handleDeleteAddress = (addrId) => {
+    setUserAddresses(prev => prev.filter(a => a.id !== addrId));
+  };
+
+  const handleUpdateAddress = (addrId, updatedFields) => {
+    setUserAddresses(prev => prev.map(a => a.id === addrId ? { ...a, ...updatedFields } : a));
   };
 
   // Cart & Order Tracking States
@@ -328,6 +348,9 @@ export default function App() {
             selectedAddress={address}
             user={user}
             onUpdateUserWallet={handleUpdateUserWallet}
+            userAddresses={userAddresses}
+            onSelectAddress={(addrText) => setAddress(addrText)}
+            onOpenAddresses={() => setIsAddressesModalOpen(true)}
           />
         ) : currentPage === 'referral' ? (
           /* Arkadaşına Öner Sayfası */
@@ -362,6 +385,7 @@ export default function App() {
               yeKazanSlices={yeKazanSlices}
               onGoToReferral={() => setCurrentPage('referral')}
               onOpenRewards={() => setIsRewardModalOpen(true)}
+              onOpenAddresses={() => setIsAddressesModalOpen(true)}
             />
 
             {/* Header Altı Video Banner Akışı */}
@@ -492,6 +516,21 @@ export default function App() {
             <RewardModal 
               isOpen={isRewardModalOpen}
               onClose={() => setIsRewardModalOpen(false)}
+            />
+
+            {/* Addresses / Adreslerim Modalı */}
+            <AddressesModal 
+              isOpen={isAddressesModalOpen}
+              onClose={() => setIsAddressesModalOpen(false)}
+              userAddresses={userAddresses}
+              activeAddress={address}
+              onSelectAddress={(addrText) => {
+                setAddress(addrText);
+                setDeliveryMode('delivery');
+              }}
+              onAddAddress={handleAddAddress}
+              onDeleteAddress={handleDeleteAddress}
+              onUpdateAddress={handleUpdateAddress}
             />
           </>
         )
