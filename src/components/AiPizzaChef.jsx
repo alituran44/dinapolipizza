@@ -14,7 +14,7 @@ export default function AiPizzaChef({
   const [messages, setMessages] = useState([
     {
       sender: 'chef',
-      text: 'Selamlar sinyor! Ben Di Napoli fırınının usta İtalyan şefi Luigi. 🧑‍🍳 Bugün canın nasıl bir pizza çekiyor? Malzemeleri, hamur kalınlığını, acı seviyesini bana anlat, senin için usta ellerimle özel bir pizza açayım!'
+      text: 'Selamlar sinyor! Ben Di Napoli fırınının usta İtalyan şefi Luigi. 🧑‍🍳 Bugün canın nasıl bir pizza çekiyor? Malzemeleri, hamur kalınlığını veya acı seviyesini bana anlat, senin için usta ellerimle özel bir pizza açayım! Üstelik Di Napoli Ye-Kazan programı ile her siparişinde bedava pizzaya bir adım daha yaklaşırsın! 🍕'
     }
   ]);
   
@@ -113,7 +113,7 @@ export default function AiPizzaChef({
     let chefResponse = '';
 
     if (isFinalize) {
-      chefResponse = 'Mamma mia! Pizzan tam istediğin kıvamda odun ateşine girdi. 1 saniye içinde sepetine ekliyorum, afiyet olsun sinyor!';
+      chefResponse = 'Mamma mia! Pizzan tam istediğin kıvamda odun ateşine girdi. 1 saniye içinde sepetine ekliyorum. Di Napoli Ye-Kazan dilimin de sepetine yansıyacak sinyor, afiyet olsun!';
       setMessages([...currentMessages, { sender: 'chef', text: chefResponse }]);
       setTimeout(() => {
         // Directly trigger cart insertion
@@ -180,6 +180,7 @@ export default function AiPizzaChef({
           "Anladım sinyor! Pizzanda sucuk, sosis, mantar, zeytin, mısır veya köz biber gibi usta malzemeler olsun mu? Yoksa sadece peynirli mi istersin?",
           "Şef Luigi fırını hazırladı! Pizzana dana salam, sosis veya acı sos eklememi ister misin? Canın şu an hangisini çekiyor?",
           "Hamur kalınlığını (ince/klasik) veya kenar tipini (sarımsaklı/peynirli) de değiştirebilirim. Canın ne çekiyor, bana söyle sinyor!",
+          "Di Napoli Ye-Kazan sadakat programıyla vereceğin her siparişte dilim kazandığını biliyor muydun sinyor? 10 dilim biriktirince bedava pizza seni bekliyor! Pizzana başka malzeme ekleyelim mi?",
           "Eğer pizzan hazırsa 'sepete ekle' veya 'fırına at' yazarak siparişe geçebiliriz. Fırına verelim mi?"
         ];
         // Select random fallback

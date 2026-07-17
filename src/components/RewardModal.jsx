@@ -108,9 +108,9 @@ export default function RewardModal({ isOpen, onClose }) {
                 <div className="reward-timeline-line"></div>
               </div>
               <div className="reward-timeline-text">
-                <h3>Domino's Ye-Kazan'a Üye Ol</h3>
+                <h3>Di Napoli Ye-Kazan'a Üye Ol</h3>
                 <p>
-                  Domino's Ye-Kazan programı Domino's'un sadakat programıdır. Bu programda üyeler sipariş verdikçe daha çok kazanırlar.
+                  Di Napoli Ye-Kazan programı Di Napoli'nin sadakat programıdır. Bu programda üyeler sipariş verdikçe daha çok kazanırlar.
                 </p>
               </div>
             </div>
@@ -143,7 +143,7 @@ export default function RewardModal({ isOpen, onClose }) {
               <div className="reward-timeline-text">
                 <h3>Sipariş Ver</h3>
                 <p>
-                  Domino's kanallarından üye girişi yaparak vereceğin her Adrese Teslim ya da Beklemeden Gel-Al siparişinde 1 dilim kazan.
+                  Di Napoli kanallarından üye girişi yaparak veya Şef Luigi üzerinden vereceğin her Adrese Teslim ya da Beklemeden Gel-Al siparişinde dilim kazan.
                 </p>
               </div>
             </div>
@@ -175,7 +175,7 @@ export default function RewardModal({ isOpen, onClose }) {
               <div className="reward-timeline-text">
                 <h3>Dilimlerini Biriktir</h3>
                 <p>
-                  Kazandığın dilimleri ödüle çevirmek için biriktir. 2 dilimden itibaren ödül kazanmaya başla. 6 dilimi biriktir, büyük finalde 1 adet seçili orta boy pizzanı kazan.
+                  Kazandığın dilimleri ödüle çevirmek için biriktir. 10 dilimi tamamla, büyük finalde 1 adet seçili orta boy gurme Margherita pizzanı anında bedava kazan.
                 </p>
               </div>
             </div>
