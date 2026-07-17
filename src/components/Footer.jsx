@@ -4,7 +4,7 @@ import {
   Instagram, Facebook, Youtube 
 } from 'lucide-react';
 
-export default function Footer({ onGoToAbout }) {
+export default function Footer({ onGoToAbout, onGoToContact }) {
   return (
     <footer className="site-footer" style={{ position: 'relative', overflow: 'hidden', zIndex: 1 }}>
       {/* Video Background (Google Drive Custom Video) */}
@@ -108,6 +108,14 @@ export default function Footer({ onGoToAbout }) {
                   <Mail size={14} style={{ display: 'inline', marginRight: '6px' }} />
                   dinapolipizza1997@gmail.com
                 </a>
+              </li>
+              <li>
+                <button 
+                  onClick={onGoToContact}
+                  style={{ border: 'none', background: 'none', color: '#ffb703', fontWeight: 'bold', fontSize: '12px', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center', gap: '4px', marginTop: '8px' }}
+                >
+                  <span>✉ Bize Mesaj Gönderin &rarr;</span>
+                </button>
               </li>
             </ul>
           </div>

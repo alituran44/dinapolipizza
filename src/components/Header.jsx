@@ -21,7 +21,8 @@ export default function Header({
   onGoToReferral,
   onOpenRewards,
   onOpenAddresses,
-  onGoToAbout
+  onGoToAbout,
+  onGoToContact
 }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
@@ -54,6 +55,7 @@ export default function Header({
             <a href="#menu" className="nav-link-white">Tüm Pizzalar</a>
             <a href="#menu" className="nav-link-white">Yan Ürünler</a>
             <a href="#about" className="nav-link-white" onClick={(e) => { e.preventDefault(); onGoToAbout(); }}>Hakkımızda</a>
+            <a href="#contact" className="nav-link-white" onClick={(e) => { e.preventDefault(); onGoToContact(); }}>İletişim</a>
           </nav>
         </div>
 

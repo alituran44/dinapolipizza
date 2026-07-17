@@ -1,14 +1,9 @@
 import React from 'react';
 import { Phone, ArrowLeft, Heart, Sparkles, MapPin } from 'lucide-react';
 
-export default function AboutPage({ onGoToMenu }) {
+export default function AboutPage({ onGoToMenu, onGoToContact }) {
   const handleContactClick = () => {
-    const footerElement = document.querySelector('.site-footer');
-    if (footerElement) {
-      footerElement.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      alert('İletişim Bilgileri:\n\nTelefon: 0286 217 00 17\nAdres: Şair Ece Ayhan Meydanı, Saat Kulesi Karşısı, Çanakkale / Merkez');
-    }
+    onGoToContact();
   };
 
   return (
@@ -94,17 +89,24 @@ export default function AboutPage({ onGoToMenu }) {
               style={{
                 backgroundColor: 'var(--color-burgundy)',
                 color: 'white',
-                border: 'none',
-                padding: '14px 36px',
+                border: '1px solid var(--color-gold)',
+                padding: '14px 38px',
                 borderRadius: '8px',
-                fontWeight: 'bold',
-                fontSize: '13px',
+                fontWeight: '900',
+                fontSize: '14px',
+                letterSpacing: '1px',
                 cursor: 'pointer',
-                boxShadow: '0 10px 15px -3px rgba(136, 12, 12, 0.3)',
-                transition: 'all 0.2s ease-in-out'
+                boxShadow: '0 8px 16px -3px rgba(136, 12, 12, 0.4)',
+                transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
               }}
-              onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-2px)'}
-              onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
+              onMouseEnter={e => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.backgroundColor = 'var(--color-orange)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.backgroundColor = 'var(--color-burgundy)';
+              }}
             >
               İLETİŞİME GEÇ
             </button>
