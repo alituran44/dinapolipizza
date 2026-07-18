@@ -153,9 +153,9 @@ export default function BranchMapModal({
               fontWeight: 'bold',
               fontSize: '13px',
               cursor: 'pointer',
-              border: '1px solid #2563eb',
-              backgroundColor: activeTab === 'delivery' ? '#2563eb' : 'white',
-              color: activeTab === 'delivery' ? 'white' : '#2563eb',
+              border: '1px solid #2B0505',
+              backgroundColor: activeTab === 'delivery' ? '#2B0505' : 'white',
+              color: activeTab === 'delivery' ? 'white' : '#2B0505',
               transition: 'all 0.2s'
             }}
           >
@@ -169,9 +169,9 @@ export default function BranchMapModal({
               fontWeight: 'bold',
               fontSize: '13px',
               cursor: 'pointer',
-              border: '1px solid #2563eb',
-              backgroundColor: activeTab === 'pickup' ? '#2563eb' : 'white',
-              color: activeTab === 'pickup' ? 'white' : '#2563eb',
+              border: '1px solid #2B0505',
+              backgroundColor: activeTab === 'pickup' ? '#2B0505' : 'white',
+              color: activeTab === 'pickup' ? 'white' : '#2B0505',
               transition: 'all 0.2s'
             }}
           >
@@ -223,9 +223,9 @@ export default function BranchMapModal({
             <button style={{
               padding: '9px 14px',
               borderRadius: '12px',
-              border: '1px solid #2563eb',
+              border: '1px solid #2B0505',
               backgroundColor: 'white',
-              color: '#2563eb',
+              color: '#2B0505',
               fontWeight: 'bold',
               fontSize: '12px',
               whiteSpace: 'nowrap',
@@ -316,7 +316,7 @@ export default function BranchMapModal({
             padding: '8px 16px',
             fontWeight: 'bold',
             fontSize: '12px',
-            color: '#2563eb',
+            color: '#2B0505',
             display: 'flex',
             alignItems: 'center',
             gap: '6px',
@@ -349,7 +349,7 @@ export default function BranchMapModal({
                   border: '1px solid #e2e8f0'
                 }}
               >
-                <ChevronLeft size={18} color="#2563eb" />
+                <ChevronLeft size={18} color="#2B0505" />
               </button>
               <button 
                 onClick={() => setBranchIndex(prev => prev === filteredBranches.length - 1 ? 0 : prev + 1)}
@@ -370,7 +370,7 @@ export default function BranchMapModal({
                   border: '1px solid #e2e8f0'
                 }}
               >
-                <ChevronRight size={18} color="#2563eb" />
+                <ChevronRight size={18} color="#2B0505" />
               </button>
             </>
           )}
@@ -398,7 +398,7 @@ export default function BranchMapModal({
                     padding: '16px',
                     minWidth: '240px',
                     flex: '1 0 calc(50% - 6px)',
-                    border: selectedBranchId === br.id ? '2.5px solid #2563eb' : '1px solid #cbd5e1',
+                    border: selectedBranchId === br.id ? '2.5px solid #2B0505' : '1px solid #cbd5e1',
                     cursor: 'pointer',
                     boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
                     display: 'flex',
@@ -476,7 +476,7 @@ export default function BranchMapModal({
                 onClick={handleAddressSubmit}
                 style={{
                   width: '100%',
-                  backgroundColor: '#10b981',
+                  backgroundColor: '#2B0505',
                   color: 'white',
                   border: 'none',
                   padding: '14px',
@@ -484,7 +484,7 @@ export default function BranchMapModal({
                   fontWeight: '800',
                   fontSize: '14px',
                   cursor: 'pointer',
-                  boxShadow: '0 4px 6px -1px rgba(16, 185, 129, 0.2)'
+                  boxShadow: '0 4px 6px -1px rgba(43, 5, 5, 0.2)'
                 }}
               >
                 Bu Adresle Devam Et
@@ -495,14 +495,15 @@ export default function BranchMapModal({
               onClick={handleBranchSubmit}
               style={{
                 width: '100%',
-                backgroundColor: '#d1fae5',
-                color: '#065f46',
+                backgroundColor: '#2B0505',
+                color: 'white',
                 border: 'none',
                 padding: '14px',
                 borderRadius: '12px',
                 fontWeight: '800',
                 fontSize: '14px',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                boxShadow: '0 4px 6px -1px rgba(43, 5, 5, 0.2)'
               }}
             >
               Seçili şube ile devam et
