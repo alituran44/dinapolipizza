@@ -28,6 +28,20 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState('menu'); // 'menu' or 'cart'
   const [deliveryMode, setDeliveryMode] = useState('delivery'); // 'delivery' or 'pickup'
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
+  const [whatsAppNumber, setWhatsAppNumber] = useState(() => {
+    try {
+      return localStorage.getItem('dinapoli_wa_number') || '905437360660';
+    } catch (e) {
+      return '905437360660';
+    }
+  });
+  const [whatsAppTemplate, setWhatsAppTemplate] = useState(() => {
+    try {
+      return localStorage.getItem('dinapoli_wa_template') || 'Merhaba Di Napoli! Aşağıdaki siparişi oluşturmak istiyorum:\n\n*Sipariş Detayları:* {sepet_detayi}\n*Teslimat Yöntemi:* {teslimat_tipi}\n*Adresim:* {adres_detayi}\n*Toplam Tutar:* {toplam_tutar} TL';
+    } catch (e) {
+      return 'Merhaba Di Napoli! Aşağıdaki siparişi oluşturmak istiyorum:\n\n*Sipariş Detayları:* {sepet_detayi}\n*Teslimat Yöntemi:* {teslimat_tipi}\n*Adresim:* {adres_detayi}\n*Toplam Tutar:* {toplam_tutar} TL';
+    }
+  });
   const [announcementText, setAnnouncementText] = useState(() => {
     try {
       return localStorage.getItem('dinapoli_announcement') || "🍕 Haftanın Kampanyası: 3 Al 2 Öde! • 🎁 Arkadaşını Davet Et, 75 TL Cüzdan Ödülü Kazan! • 🚀 Şef Luigi ile Kendi Pizzanı Tasarla!";
@@ -376,6 +390,8 @@ export default function App() {
             userAddresses={userAddresses}
             onSelectAddress={(addrText) => setAddress(addrText)}
             onOpenAddresses={() => setIsAddressesModalOpen(true)}
+            whatsAppNumber={whatsAppNumber}
+            whatsAppTemplate={whatsAppTemplate}
           />
         ) : (
           /* Default customer view with persistent Header and Footer */
@@ -517,6 +533,9 @@ export default function App() {
               yeKazanSlices={yeKazanSlices}
               onPlaceOrder={handlePlaceOrder}
               onGoToCartPage={() => setCurrentPage('cart')}
+              whatsAppNumber={whatsAppNumber}
+              whatsAppTemplate={whatsAppTemplate}
+              address={address}
             />
 
 
@@ -632,6 +651,16 @@ export default function App() {
           onUpdateAnnouncement={(txt) => {
             setAnnouncementText(txt);
             localStorage.setItem('dinapoli_announcement', txt);
+          }}
+          whatsAppNumber={whatsAppNumber}
+          onUpdateWhatsAppNumber={(num) => {
+            setWhatsAppNumber(num);
+            localStorage.setItem('dinapoli_wa_number', num);
+          }}
+          whatsAppTemplate={whatsAppTemplate}
+          onUpdateWhatsAppTemplate={(tpl) => {
+            setWhatsAppTemplate(tpl);
+            localStorage.setItem('dinapoli_wa_template', tpl);
           }}
           onClose={() => setIsAdminMode(false)}
         />

@@ -38,6 +38,10 @@ export default function AdminPanel({
   referralTransactions = [],
   announcementText = '',
   onUpdateAnnouncement,
+  whatsAppNumber = '',
+  onUpdateWhatsAppNumber,
+  whatsAppTemplate = '',
+  onUpdateWhatsAppTemplate,
   
   onClose 
 }) {
@@ -74,6 +78,9 @@ export default function AdminPanel({
   const [emailMessage, setEmailMessage] = useState('Merhaba, Di Napoli lezzetlerinde bu haftaya özel 75 TL cüzdan indirimi fırsatını kaçırmayın!');
   const [announcementInput, setAnnouncementInput] = useState(announcementText);
   const [showAnnouncementSaved, setShowAnnouncementSaved] = useState(false);
+  const [whatsAppNumberInput, setWhatsAppNumberInput] = useState(whatsAppNumber);
+  const [whatsAppTemplateInput, setWhatsAppTemplateInput] = useState(whatsAppTemplate);
+  const [showWhatsAppSaved, setShowWhatsAppSaved] = useState(false);
 
   const handleFileUpload = (e, field, isEdit = false) => {
     const file = e.target.files[0];
@@ -1041,6 +1048,59 @@ export default function AdminPanel({
                   {showAnnouncementSaved && (
                     <span style={{ color: '#10b981', fontSize: '13px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px' }}>
                       ✓ Başarıyla Kaydedildi!
+                    </span>
+                  )}
+                </div>
+              </form>
+            </div>
+
+            <div className="deals-card" style={{ padding: '24px', marginBottom: '24px' }}>
+              <h3>WhatsApp Sipariş Ayarları</h3>
+              <p style={{ fontSize: '12px', color: '#64748b', margin: '4px 0 16px 0' }}>
+                Müşterilerin sepette "WhatsApp ile Sipariş Ver" seçeneğini kullandıklarında yönlendirilecekleri telefon numarasını ve otomatik mesaj şablonunu buradan yönetebilirsiniz.
+              </p>
+              
+              <form onSubmit={(e) => {
+                e.preventDefault();
+                onUpdateWhatsAppNumber(whatsAppNumberInput);
+                onUpdateWhatsAppTemplate(whatsAppTemplateInput);
+                setShowWhatsAppSaved(true);
+                setTimeout(() => setShowWhatsAppSaved(false), 3000);
+              }} style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '600px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={{ fontSize: '13px', fontWeight: 'bold' }}>WhatsApp Telefon Numarası (Ülke kodlu, boşluksuz)</label>
+                  <input 
+                    type="text" 
+                    value={whatsAppNumberInput}
+                    onChange={(e) => setWhatsAppNumberInput(e.target.value)}
+                    required
+                    placeholder="Örn: 905437360660"
+                    style={{ padding: '10px', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '13px' }}
+                  />
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={{ fontSize: '13px', fontWeight: 'bold' }}>Otomatik Mesaj Şablonu</label>
+                  <textarea 
+                    value={whatsAppTemplateInput}
+                    onChange={(e) => setWhatsAppTemplateInput(e.target.value)}
+                    required
+                    rows="6"
+                    style={{ padding: '10px', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '13px', fontFamily: 'inherit', resize: 'vertical' }}
+                    placeholder="Sipariş metin şablonu..."
+                  />
+                  <span style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>
+                    Kullanabileceğiniz etiketler: <strong>{`{sepet_detayi}`}</strong>, <strong>{`{teslimat_tipi}`}</strong>, <strong>{`{adres_detayi}`}</strong>, <strong>{`{toplam_tutar}`}</strong>
+                  </span>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <button type="submit" className="add-submit-btn" style={{ height: '40px', width: '220px' }}>
+                    WhatsApp Ayarlarını Güncelle
+                  </button>
+                  {showWhatsAppSaved && (
+                    <span style={{ color: '#10b981', fontSize: '13px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      ✓ WhatsApp Ayarları Kaydedildi!
                     </span>
                   )}
                 </div>

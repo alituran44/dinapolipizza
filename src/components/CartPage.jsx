@@ -15,7 +15,9 @@ export default function CartPage({
   onUpdateUserWallet,
   userAddresses = [],
   onSelectAddress,
-  onOpenAddresses
+  onOpenAddresses,
+  whatsAppNumber = '',
+  whatsAppTemplate = ''
 }) {
   const [couponCode, setCouponCode] = useState('');
   const [couponDiscount, setCouponDiscount] = useState(0); // in TL
@@ -65,6 +67,34 @@ export default function CartPage({
       onUpdateUserWallet(user.id || 'u1', remainingBalance);
     }
     onCheckout();
+  };
+
+  const handleWhatsAppCheckout = () => {
+    if (cart.length === 0) return;
+
+    const itemsSummary = cart.map(item => {
+      let customStr = '';
+      if (item.customInfo && item.customInfo.selectedPizzas) {
+        customStr = ' [' + item.customInfo.selectedPizzas.map((pizza, pIdx) => {
+          const removedStr = pizza.removedIngredients.length > 0 ? ` (Çıkan: ${pizza.removedIngredients.join(', ')})` : '';
+          const extrasStr = pizza.extras.length > 0 ? ` (Ekstra: ${pizza.extras.map(e => e.name).join(', ')})` : '';
+          return `${pIdx + 1}. ${pizza.name} (${pizza.selectedDough.name}, ${pizza.selectedCrust.name}${removedStr}${extrasStr})`;
+        }).join(' | ') + ']';
+      }
+      return `${item.quantity}x ${item.name}${customStr}`;
+    }).join(', ');
+
+    const deliveryMethodText = deliveryMode === 'delivery' ? 'Adrese Teslim 🚀' : 'Gel-Al (Şubeden) 🛍️';
+    
+    let messageText = whatsAppTemplate
+      .replace('{sepet_detayi}', itemsSummary)
+      .replace('{teslimat_tipi}', deliveryMethodText)
+      .replace('{adres_detayi}', selectedAddress || 'Saat Kulesi Karşısı Merkez Şube')
+      .replace('{toplam_tutar}', totalAmount);
+
+    const waUrl = `https://api.whatsapp.com/send?phone=${whatsAppNumber}&text=${encodeURIComponent(messageText)}`;
+    window.open(waUrl, '_blank');
+    handleCheckoutClick();
   };
 
   return (
@@ -313,6 +343,17 @@ export default function CartPage({
 
                 <button className="checkout-btn-full" onClick={handleCheckoutClick}>
                   <span>Siparişi Tamamla</span>
+                </button>
+
+                <button 
+                  className="checkout-btn-full" 
+                  style={{ backgroundColor: '#25D366', marginTop: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }} 
+                  onClick={handleWhatsAppCheckout}
+                >
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.262 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.458L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.859-4.407 9.862-9.837.001-2.63-1.024-5.101-2.883-6.958-1.859-1.858-4.333-2.88-6.967-2.881-5.442 0-9.866 4.41-9.869 9.839-.001 1.77.46 3.5 1.335 5.021l-.99 3.616 3.687-.968zm14.42-7.581c-.269-.134-1.597-.787-1.845-.878-.247-.09-.427-.134-.607.134-.18.269-.696.878-.853 1.057-.157.18-.314.202-.583.067-.27-.134-1.14-.422-2.173-1.341-.803-.715-1.346-1.6-1.503-1.869-.157-.269-.017-.414.118-.548.121-.12.269-.314.404-.471.134-.157.18-.27.27-.449.09-.18.045-.337-.022-.471-.068-.134-.607-1.459-.831-2l-.584-1.4c-.16-.388-.344-.38-.475-.38h-.405c-.269 0-.706.1-1.077.505-.37.404-1.413 1.381-1.413 3.366 0 1.985 1.443 3.902 1.644 4.171.202.269 2.842 4.341 6.886 6.088 1 .432 1.778.69 2.387.882.852.27 1.63.233 2.245.141.685-.102 1.597-.652 1.821-1.28.225-.629.225-1.168.157-1.28-.068-.113-.247-.18-.517-.315z" />
+                  </svg>
+                  <span>WhatsApp ile Sipariş Ver</span>
                 </button>
               </div>
             </div>
