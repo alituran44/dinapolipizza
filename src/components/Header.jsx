@@ -27,6 +27,7 @@ export default function Header({
 }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const [sidesDropdownOpen, setSidesDropdownOpen] = useState(false);
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   const handleSelectMode = (mode) => {
@@ -60,22 +61,128 @@ export default function Header({
                 if (element) element.scrollIntoView({ behavior: 'smooth' });
               }, 120);
             }}>Tüm Kampanyalar</a>
+            
             <a href="#menu" className="nav-link-white" onClick={(e) => { 
               e.preventDefault(); 
               onGoToMenu();
               setTimeout(() => {
-                const element = document.getElementById('pizzalar');
+                const element = document.getElementById('sec-pizzalar');
                 if (element) element.scrollIntoView({ behavior: 'smooth' });
               }, 120);
             }}>Tüm Pizzalar</a>
-            <a href="#menu" className="nav-link-white" onClick={(e) => { 
-              e.preventDefault(); 
-              onGoToMenu();
-              setTimeout(() => {
-                const element = document.getElementById('yan-urunler') || document.getElementById('icecekler') || document.getElementById('tatlilar');
-                if (element) element.scrollIntoView({ behavior: 'smooth' });
-              }, 120);
-            }}>Yan Ürünler</a>
+
+            <div 
+              className="dropdown-container"
+              style={{ position: 'relative', display: 'inline-block' }}
+              onMouseEnter={() => setSidesDropdownOpen(true)}
+              onMouseLeave={() => setSidesDropdownOpen(false)}
+            >
+              <a 
+                href="#menu" 
+                className="nav-link-white" 
+                style={{ display: 'flex', alignItems: 'center', gap: '4px' }}
+                onClick={(e) => { 
+                  e.preventDefault(); 
+                  onGoToMenu();
+                  setTimeout(() => {
+                    const element = document.getElementById('sec-fastfood');
+                    if (element) element.scrollIntoView({ behavior: 'smooth' });
+                  }, 120);
+                }}
+              >
+                <span>Yan Ürünler</span>
+                <ChevronDown size={14} />
+              </a>
+              {sidesDropdownOpen && (
+                <div style={{
+                  position: 'absolute',
+                  top: '100%',
+                  left: 0,
+                  backgroundColor: 'var(--color-dark-blue)',
+                  border: '2px solid var(--color-primary-blue)',
+                  borderRadius: '8px',
+                  padding: '8px 0',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  minWidth: '220px',
+                  boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
+                  zIndex: 1500,
+                  marginTop: '4px'
+                }}>
+                  <a href="#menu" style={{ color: 'white', padding: '8px 16px', fontSize: '13px', fontWeight: 'bold', display: 'block', textAlign: 'left', transition: 'all 0.2s' }}
+                     onMouseEnter={e => e.currentTarget.style.color = 'var(--color-primary-blue)'}
+                     onMouseLeave={e => e.currentTarget.style.color = 'white'}
+                     onClick={(e) => {
+                       e.preventDefault();
+                       setSidesDropdownOpen(false);
+                       onGoToMenu();
+                       setTimeout(() => {
+                         const element = document.getElementById('sec-fastfood');
+                         if (element) element.scrollIntoView({ behavior: 'smooth' });
+                       }, 120);
+                     }}>
+                    🍟 Patates & Yan Lezzetler
+                  </a>
+                  <a href="#menu" style={{ color: 'white', padding: '8px 16px', fontSize: '13px', fontWeight: 'bold', display: 'block', textAlign: 'left', transition: 'all 0.2s' }}
+                     onMouseEnter={e => e.currentTarget.style.color = 'var(--color-primary-blue)'}
+                     onMouseLeave={e => e.currentTarget.style.color = 'white'}
+                     onClick={(e) => {
+                       e.preventDefault();
+                       setSidesDropdownOpen(false);
+                       onGoToMenu();
+                       setTimeout(() => {
+                         const element = document.getElementById('sec-salatalar');
+                         if (element) element.scrollIntoView({ behavior: 'smooth' });
+                       }, 120);
+                     }}>
+                    🥗 Taze Salatalar
+                  </a>
+                  <a href="#menu" style={{ color: 'white', padding: '8px 16px', fontSize: '13px', fontWeight: 'bold', display: 'block', textAlign: 'left', transition: 'all 0.2s' }}
+                     onMouseEnter={e => e.currentTarget.style.color = 'var(--color-primary-blue)'}
+                     onMouseLeave={e => e.currentTarget.style.color = 'white'}
+                     onClick={(e) => {
+                       e.preventDefault();
+                       setSidesDropdownOpen(false);
+                       onGoToMenu();
+                       setTimeout(() => {
+                         const element = document.getElementById('sec-tatlilar');
+                         if (element) element.scrollIntoView({ behavior: 'smooth' });
+                       }, 120);
+                     }}>
+                    🍰 Nefis Tatlılar
+                  </a>
+                  <a href="#menu" style={{ color: 'white', padding: '8px 16px', fontSize: '13px', fontWeight: 'bold', display: 'block', textAlign: 'left', transition: 'all 0.2s' }}
+                     onMouseEnter={e => e.currentTarget.style.color = 'var(--color-primary-blue)'}
+                     onMouseLeave={e => e.currentTarget.style.color = 'white'}
+                     onClick={(e) => {
+                       e.preventDefault();
+                       setSidesDropdownOpen(false);
+                       onGoToMenu();
+                       setTimeout(() => {
+                         const element = document.getElementById('sec-icecekler');
+                         if (element) element.scrollIntoView({ behavior: 'smooth' });
+                       }, 120);
+                     }}>
+                    🥤 Soğuk İçecekler
+                  </a>
+                  <a href="#menu" style={{ color: 'white', padding: '8px 16px', fontSize: '13px', fontWeight: 'bold', display: 'block', textAlign: 'left', transition: 'all 0.2s' }}
+                     onMouseEnter={e => e.currentTarget.style.color = 'var(--color-primary-blue)'}
+                     onMouseLeave={e => e.currentTarget.style.color = 'white'}
+                     onClick={(e) => {
+                       e.preventDefault();
+                       setSidesDropdownOpen(false);
+                       onGoToMenu();
+                       setTimeout(() => {
+                         const element = document.getElementById('sec-soslar');
+                         if (element) element.scrollIntoView({ behavior: 'smooth' });
+                       }, 120);
+                     }}>
+                    🍯 Di Napoli Özel Sosları
+                  </a>
+                </div>
+              )}
+            </div>
+
             <a href="#about" className="nav-link-white" onClick={(e) => { e.preventDefault(); onGoToAbout(); }}>Hakkımızda</a>
             <a href="#contact" className="nav-link-white" onClick={(e) => { e.preventDefault(); onGoToContact(); }}>İletişim</a>
           </nav>
