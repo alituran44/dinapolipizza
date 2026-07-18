@@ -26,25 +26,29 @@ export default function CustomizeWizard({
   
   // Track selected pizzas for each required slot
   const [pizzaSlots, setPizzaSlots] = useState(() => {
+    const defaultDough = (doughOptions && doughOptions.length > 0) ? doughOptions[0] : { id: 'ince', name: 'İnce Hamur', price: 0 };
+    const defaultCrust = (crustOptions && crustOptions.length > 0) ? crustOptions[0] : { id: 'klasik', name: 'Klasik Kenar', price: 0 };
     if (isSinglePizza) {
       return [{
         ...product,
-        selectedDough: doughOptions[0],
-        selectedCrust: crustOptions[0],
+        selectedDough: defaultDough,
+        selectedCrust: defaultCrust,
         removedIngredients: [],
         extras: []
       }];
     }
-    return Array(product.requiredPizzaSelections).fill(null);
+    return Array(product.requiredPizzaSelections ? product.requiredPizzaSelections : 1).fill(null);
   });
 
   // Temporary pizza selection being customized
   const [tempCustomization, setTempCustomization] = useState(() => {
+    const defaultDough = (doughOptions && doughOptions.length > 0) ? doughOptions[0] : { id: 'ince', name: 'İnce Hamur', price: 0 };
+    const defaultCrust = (crustOptions && crustOptions.length > 0) ? crustOptions[0] : { id: 'klasik', name: 'Klasik Kenar', price: 0 };
     if (isSinglePizza) {
       return {
         ...product,
-        selectedDough: doughOptions[0],
-        selectedCrust: crustOptions[0],
+        selectedDough: defaultDough,
+        selectedCrust: defaultCrust,
         removedIngredients: [],
         extras: []
       };
@@ -59,11 +63,19 @@ export default function CustomizeWizard({
   const calculateSinglePizzaPrice = (pizza) => {
     if (!pizza) return product.basePrice;
     let price = product.basePrice;
-    price += (pizza.selectedDough.price || 0);
-    price += (pizza.selectedCrust.price || 0);
-    pizza.extras.forEach(extra => {
-      price += (extra.price || 0);
-    });
+    if (pizza.selectedDough) {
+      price += (pizza.selectedDough.price || 0);
+    }
+    if (pizza.selectedCrust) {
+      price += (pizza.selectedCrust.price || 0);
+    }
+    if (Array.isArray(pizza.extras)) {
+      pizza.extras.forEach(extra => {
+        if (extra) {
+          price += (extra.price || 0);
+        }
+      });
+    }
     return price;
   };
 
@@ -78,11 +90,19 @@ export default function CustomizeWizard({
     // Add up any extra ingredients or premium dough/crust options selected in slots
     pizzaSlots.forEach(slot => {
       if (slot) {
-        price += (slot.selectedDough.price || 0);
-        price += (slot.selectedCrust.price || 0);
-        slot.extras.forEach(extra => {
-          price += (extra.price || 0);
-        });
+        if (slot.selectedDough) {
+          price += (slot.selectedDough.price || 0);
+        }
+        if (slot.selectedCrust) {
+          price += (slot.selectedCrust.price || 0);
+        }
+        if (Array.isArray(slot.extras)) {
+          slot.extras.forEach(extra => {
+            if (extra) {
+              price += (extra.price || 0);
+            }
+          });
+        }
       }
     });
 
@@ -415,7 +435,7 @@ export default function CustomizeWizard({
                   <h4 className="option-group-title">Hamur Tipi</h4>
                   <div className="custom-horizontal-options">
                     {doughOptions.map((dough) => {
-                      const isSelected = tempCustomization.selectedDough.id === dough.id;
+                      const isSelected = tempCustomization?.selectedDough?.id === dough.id;
                       return (
                         <button
                           key={dough.id}
@@ -429,13 +449,13 @@ export default function CustomizeWizard({
                     })}
                   </div>
                 </div>
-
+ 
                 {/* 2. Crust Selection */}
                 <div className="custom-option-group">
                   <h4 className="option-group-title">Kenar Tipi</h4>
                   <div className="custom-horizontal-options">
                     {crustOptions.map((crust) => {
-                      const isSelected = tempCustomization.selectedCrust.id === crust.id;
+                      const isSelected = tempCustomization?.selectedCrust?.id === crust.id;
                       return (
                         <button
                           key={crust.id}
@@ -449,14 +469,14 @@ export default function CustomizeWizard({
                     })}
                   </div>
                 </div>
-
+ 
                 {/* 3. Standard Ingredients Removal */}
-                {tempCustomization.ingredients && (
+                {tempCustomization?.ingredients && (
                   <div className="custom-option-group">
                     <h4 className="option-group-title">Standart Malzemeler (Çıkarabilirsiniz)</h4>
                     <div className="ingredients-tags-row">
                       {tempCustomization.ingredients.map((ing) => {
-                        const isRemoved = tempCustomization.removedIngredients.includes(ing);
+                        const isRemoved = tempCustomization?.removedIngredients?.includes(ing);
                         return (
                           <button
                             key={ing}
@@ -471,13 +491,13 @@ export default function CustomizeWizard({
                     </div>
                   </div>
                 )}
-
+ 
                 {/* 4. Extra Ingredients addition grid */}
                 <div className="custom-option-group">
                   <h4 className="option-group-title">Ekstra Malzemeler Ekle</h4>
                   <div className="extras-selection-grid">
                     {ingredientOptions.map((ingredient) => {
-                      const isSelected = tempCustomization.extras.some(e => e.id === ingredient.id);
+                      const isSelected = tempCustomization?.extras?.some(e => e.id === ingredient.id);
                       return (
                         <button
                           key={ingredient.id}
