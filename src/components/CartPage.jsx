@@ -105,11 +105,20 @@ export default function CartPage({
   const totalAmount = Math.max(0, itemsSubtotal - couponDiscount - walletDiscountApplied + deliveryFee);
 
   const handleCheckoutClick = () => {
-    if (useWallet && user) {
-      const remainingBalance = userWalletBalance - walletDiscountApplied;
-      onUpdateUserWallet(user.id || 'u1', remainingBalance);
+    try {
+      if (useWallet && user) {
+        const remainingBalance = userWalletBalance - walletDiscountApplied;
+        if (typeof onUpdateUserWallet === 'function') {
+          onUpdateUserWallet(user.id || 'u1', remainingBalance);
+        }
+      }
+      if (typeof onCheckout === 'function') {
+        onCheckout();
+      }
+    } catch (err) {
+      alert("Sipariş verilirken sepet sayfasında hata oluştu: " + err.message);
+      console.error(err);
     }
-    onCheckout();
   };
 
   const handleWhatsAppCheckout = () => {

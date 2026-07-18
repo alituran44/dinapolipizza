@@ -313,55 +313,60 @@ export default function App() {
 
   // Place order
   const handlePlaceOrder = (summary) => {
-    const orderId = `DN-${Math.floor(100000 + Math.random() * 900000)}`;
-    
-    // Create text summary of items including pizza selection and dough/crust custom options
-    const itemsSummary = cart.map(item => {
-      let customStr = '';
-      if (item.customInfo && item.customInfo.selectedPizzas) {
-        customStr = ' [' + item.customInfo.selectedPizzas.map((pizza, pIdx) => {
-          const removedIngredients = pizza.removedIngredients || [];
-          const extras = pizza.extras || [];
-          const selectedDough = pizza.selectedDough || { name: 'Standart Hamur' };
-          const selectedCrust = pizza.selectedCrust || { name: 'Standart Kenar' };
-          const removedStr = removedIngredients.length > 0 ? ` (Çıkan: ${removedIngredients.join(', ')})` : '';
-          const extrasStr = extras.length > 0 ? ` (Ekstra: ${extras.map(e => e.name).join(', ')})` : '';
-          return `${pIdx + 1}. ${pizza.name} (${selectedDough.name}, ${selectedCrust.name}${removedStr}${extrasStr})`;
-        }).join(' | ') + ']';
+    try {
+      const orderId = `DN-${Math.floor(100000 + Math.random() * 900000)}`;
+      
+      // Create text summary of items including pizza selection and dough/crust custom options
+      const itemsSummary = cart.map(item => {
+        let customStr = '';
+        if (item.customInfo && item.customInfo.selectedPizzas) {
+          customStr = ' [' + item.customInfo.selectedPizzas.map((pizza, pIdx) => {
+            const removedIngredients = pizza.removedIngredients || [];
+            const extras = pizza.extras || [];
+            const selectedDough = pizza.selectedDough || { name: 'Standart Hamur' };
+            const selectedCrust = pizza.selectedCrust || { name: 'Standart Kenar' };
+            const removedStr = removedIngredients.length > 0 ? ` (Çıkan: ${removedIngredients.join(', ')})` : '';
+            const extrasStr = extras.length > 0 ? ` (Ekstra: ${extras.map(e => e.name).join(', ')})` : '';
+            return `${pIdx + 1}. ${pizza.name} (${selectedDough.name}, ${selectedCrust.name}${removedStr}${extrasStr})`;
+          }).join(' | ') + ']';
+        }
+        return `${item.quantity}x ${item.name}${customStr}`;
+      }).join(', ');
+
+      const newOrder = {
+        id: orderId,
+        itemsSummary,
+        items: [...cart], // Sepetin o anki kopyasını siparişe ekle!
+        deliveryMode,
+        total: summary.total,
+        slicesGained: summary.slicesGained,
+        status: '1' // Initial status: 'Sipariş Alındı'
+      };
+
+      setOrders([...orders, newOrder]);
+      setActiveOrder(newOrder);
+      setActiveOrderSlip(newOrder); // Sipariş verildiğinde fiş modalını doğrudan aç!
+      
+      // Complete referral transaction if user phone matches any invite
+      if (user && user.phone) {
+        handleCompleteReferralSale(user.phone);
       }
-      return `${item.quantity}x ${item.name}${customStr}`;
-    }).join(', ');
+      
+      let newSlices = yeKazanSlices + summary.slicesGained;
+      if (newSlices < 0) newSlices = 0;
+      setYeKazanSlices(newSlices);
 
-    const newOrder = {
-      id: orderId,
-      itemsSummary,
-      items: [...cart], // Sepetin o anki kopyasını siparişe ekle!
-      deliveryMode,
-      total: summary.total,
-      slicesGained: summary.slicesGained,
-      status: '1' // Initial status: 'Sipariş Alındı'
-    };
-
-    setOrders([...orders, newOrder]);
-    setActiveOrder(newOrder);
-    setActiveOrderSlip(newOrder); // Sipariş verildiğinde fiş modalını doğrudan aç!
-    
-    // Complete referral transaction if user phone matches any invite
-    if (user && user.phone) {
-      handleCompleteReferralSale(user.phone);
-    }
-    
-    let newSlices = yeKazanSlices + summary.slicesGained;
-    if (newSlices < 0) newSlices = 0;
-    setYeKazanSlices(newSlices);
-
-    setCartOpen(false);
-    
-    if (!user) {
-      setIsAuthModalOpen(true);
-      setShowTracker(false);
-    } else {
-      setShowTracker(false);
+      setCartOpen(false);
+      
+      if (!user) {
+        setIsAuthModalOpen(true);
+        setShowTracker(false);
+      } else {
+        setShowTracker(false);
+      }
+    } catch (err) {
+      alert("Sipariş oluşturulurken ana uygulamada hata oluştu: " + err.message);
+      console.error(err);
     }
   };
 
@@ -610,13 +615,18 @@ export default function App() {
                   onRemoveItem={(index) => handleRemoveItem(index)}
                   onAddToCart={handleAddToCart}
                   onCheckout={() => {
-                    const itemsSubtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                    const deliveryFee = deliveryMode === 'delivery' ? 15 : 0;
-                    handlePlaceOrder({
-                      total: itemsSubtotal + deliveryFee,
-                      slicesGained: cart.reduce((sum, item) => sum + ((item.yeKazanSlice || 0) * item.quantity), 0)
-                    });
-                    setCurrentPage('menu');
+                    try {
+                      const itemsSubtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                      const deliveryFee = deliveryMode === 'delivery' ? 15 : 0;
+                      handlePlaceOrder({
+                        total: itemsSubtotal + deliveryFee,
+                        slicesGained: cart.reduce((sum, item) => sum + ((item.yeKazanSlice || 0) * item.quantity), 0)
+                      });
+                      setCurrentPage('menu');
+                    } catch (err) {
+                      alert("App.jsx onCheckout hatası: " + err.message);
+                      console.error(err);
+                    }
                   }}
                   onClose={() => setCurrentPage('menu')}
                   deliveryMode={deliveryMode}
