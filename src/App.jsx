@@ -320,9 +320,13 @@ export default function App() {
       let customStr = '';
       if (item.customInfo && item.customInfo.selectedPizzas) {
         customStr = ' [' + item.customInfo.selectedPizzas.map((pizza, pIdx) => {
-          const removedStr = pizza.removedIngredients.length > 0 ? ` (Çıkan: ${pizza.removedIngredients.join(', ')})` : '';
-          const extrasStr = pizza.extras.length > 0 ? ` (Ekstra: ${pizza.extras.map(e => e.name).join(', ')})` : '';
-          return `${pIdx + 1}. ${pizza.name} (${pizza.selectedDough.name}, ${pizza.selectedCrust.name}${removedStr}${extrasStr})`;
+          const removedIngredients = pizza.removedIngredients || [];
+          const extras = pizza.extras || [];
+          const selectedDough = pizza.selectedDough || { name: 'Standart Hamur' };
+          const selectedCrust = pizza.selectedCrust || { name: 'Standart Kenar' };
+          const removedStr = removedIngredients.length > 0 ? ` (Çıkan: ${removedIngredients.join(', ')})` : '';
+          const extrasStr = extras.length > 0 ? ` (Ekstra: ${extras.map(e => e.name).join(', ')})` : '';
+          return `${pIdx + 1}. ${pizza.name} (${selectedDough.name}, ${selectedCrust.name}${removedStr}${extrasStr})`;
         }).join(' | ') + ']';
       }
       return `${item.quantity}x ${item.name}${customStr}`;

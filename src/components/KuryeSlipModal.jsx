@@ -12,9 +12,13 @@ export default function KuryeSlipModal({ order, cart, onClose, deliveryMode, add
     let details = '';
     if (item.customInfo && item.customInfo.selectedPizzas) {
       details = ' (' + item.customInfo.selectedPizzas.map((p, idx) => {
-        const ext = p.extras.length > 0 ? ` + ${p.extras.map(e => e.name).join(', ')}` : '';
-        const rem = p.removedIngredients.length > 0 ? ` - ${p.removedIngredients.join(', ')}` : '';
-        return `${idx + 1}. ${p.name} [${p.selectedDough.name}, ${p.selectedCrust.name}${ext}${rem}]`;
+        const extList = p.extras || [];
+        const remList = p.removedIngredients || [];
+        const dName = p.selectedDough ? p.selectedDough.name : 'Standart Hamur';
+        const cName = p.selectedCrust ? p.selectedCrust.name : 'Standart Kenar';
+        const ext = extList.length > 0 ? ` + ${extList.map(e => e.name).join(', ')}` : '';
+        const rem = remList.length > 0 ? ` - ${remList.join(', ')}` : '';
+        return `${idx + 1}. ${p.name} [${dName}, ${cName}${ext}${rem}]`;
       }).join(' | ') + ')';
     }
     return `• ${item.quantity}x ${item.name}${details} - ${item.price * item.quantity} TL`;
@@ -101,13 +105,19 @@ _Bu sipariş kurye bilgilendirme fişidir._`;
                   </div>
                   {isCustomized && (
                     <div className="receipt-sub-options">
-                      {item.customInfo.selectedPizzas.map((p, pIdx) => (
-                        <p key={pIdx}>
-                          • {p.name} ({p.selectedDough.name}, {p.selectedCrust.name}
-                          {p.extras.length > 0 ? `, Ekstra: ${p.extras.map(e => e.name).join('+')}` : ''}
-                          {p.removedIngredients.length > 0 ? `, Çıkan: ${p.removedIngredients.join('-')}` : ''})
-                        </p>
-                      ))}
+                      {item.customInfo.selectedPizzas.map((p, pIdx) => {
+                        const extList = p.extras || [];
+                        const remList = p.removedIngredients || [];
+                        const dName = p.selectedDough ? p.selectedDough.name : 'Standart Hamur';
+                        const cName = p.selectedCrust ? p.selectedCrust.name : 'Standart Kenar';
+                        return (
+                          <p key={pIdx}>
+                            • {p.name} ({dName}, {cName}
+                            {extList.length > 0 ? `, Ekstra: ${extList.map(e => e.name).join('+')}` : ''}
+                            {remList.length > 0 ? `, Çıkan: ${remList.join('-')}` : ''})
+                          </p>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
