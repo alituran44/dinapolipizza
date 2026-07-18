@@ -59,6 +59,67 @@ export default function OrdersHistoryModal({ isOpen, onClose, orders, onShowSlip
                     {order.itemsSummary}
                   </p>
 
+                  {/* Canlı Takip İlerleme Çubuğu */}
+                  {order.status !== '6' && (
+                    <div style={{ 
+                      marginTop: '12px', 
+                      marginBottom: '12px',
+                      padding: '12px 10px', 
+                      backgroundColor: '#FDFBF7', 
+                      borderRadius: '8px', 
+                      border: '1px solid #edf2f7',
+                      boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.02)'
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '10px' }}>
+                        <span style={{ fontSize: '11px', fontWeight: '900', color: 'var(--color-primary-red)', letterSpacing: '0.5px' }}>🍕 FIRINDAN CANLI SICAK TAKİP</span>
+                      </div>
+                      
+                      {/* Timeline Nodes */}
+                      <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', marginTop: '6px', padding: '0 5px' }}>
+                        {/* Arka plan çizgi */}
+                        <div style={{ position: 'absolute', top: '10px', left: '15px', right: '15px', height: '3px', backgroundColor: '#e2e8f0', zIndex: 1 }} />
+                        {/* Aktif çizgi */}
+                        <div style={{ 
+                          position: 'absolute', 
+                          top: '10px', 
+                          left: '15px', 
+                          width: `${((parseInt(order.status) - 1) / 4) * 100}%`, 
+                          height: '3px', 
+                          backgroundColor: 'var(--color-primary-red)', 
+                          zIndex: 2,
+                          transition: 'width 0.5s ease-in-out'
+                        }} />
+
+                        {['Alındı', 'Hazırlık', 'Fırın', 'Paket', 'Kurye'].map((step, sIdx) => {
+                          const stepNum = sIdx + 1;
+                          const isActive = parseInt(order.status) >= stepNum;
+                          return (
+                            <div key={step} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 3, position: 'relative' }}>
+                              <div style={{
+                                width: '22px',
+                                height: '22px',
+                                borderRadius: '50%',
+                                backgroundColor: isActive ? 'var(--color-primary-red)' : 'white',
+                                border: `2.5px solid ${isActive ? 'var(--color-primary-red)' : '#cbd5e1'}`,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                color: isActive ? 'white' : '#64748b',
+                                fontSize: '10px',
+                                fontWeight: '900'
+                              }}>
+                                {stepNum}
+                              </div>
+                              <span style={{ fontSize: '9px', fontWeight: '900', color: isActive ? 'var(--color-primary-red)' : '#64748b', marginTop: '4px' }}>
+                                {step}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px dashed #e2e8f0', paddingTop: '8px' }}>
                     <span style={{ fontWeight: 800, fontSize: '14px', color: 'var(--color-primary-red)' }}>{order.total} TL</span>
                     <button 

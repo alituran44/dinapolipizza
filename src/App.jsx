@@ -314,7 +314,14 @@ export default function App() {
     setYeKazanSlices(newSlices);
 
     setCartOpen(false);
-    setShowTracker(true);
+    
+    if (!user) {
+      setIsAuthModalOpen(true);
+      setShowTracker(false);
+    } else {
+      setIsOrdersHistoryOpen(true);
+      setShowTracker(false);
+    }
   };
 
   // Reset
@@ -512,13 +519,7 @@ export default function App() {
               onGoToCartPage={() => setCurrentPage('cart')}
             />
 
-            {/* Live Order Tracker */}
-            {showTracker && activeOrder && (
-              <Tracker 
-                orderDetails={activeOrder}
-                onReset={handleResetOrder}
-              />
-            )}
+
 
             {/* Kurye Sipariş Fişi Modalı */}
             {activeOrderSlip && (
