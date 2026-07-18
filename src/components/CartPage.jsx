@@ -76,9 +76,13 @@ export default function CartPage({
       let customStr = '';
       if (item.customInfo && item.customInfo.selectedPizzas) {
         customStr = ' [' + item.customInfo.selectedPizzas.map((pizza, pIdx) => {
-          const removedStr = pizza.removedIngredients.length > 0 ? ` (Çıkan: ${pizza.removedIngredients.join(', ')})` : '';
-          const extrasStr = pizza.extras.length > 0 ? ` (Ekstra: ${pizza.extras.map(e => e.name).join(', ')})` : '';
-          return `${pIdx + 1}. ${pizza.name} (${pizza.selectedDough.name}, ${pizza.selectedCrust.name}${removedStr}${extrasStr})`;
+          const removedIngredients = pizza.removedIngredients || [];
+          const extras = pizza.extras || [];
+          const removedStr = removedIngredients.length > 0 ? ` (Çıkan: ${removedIngredients.join(', ')})` : '';
+          const extrasStr = extras.length > 0 ? ` (Ekstra: ${extras.map(e => e.name).join(', ')})` : '';
+          const doughName = pizza.selectedDough ? pizza.selectedDough.name : 'Standart Hamur';
+          const crustName = pizza.selectedCrust ? pizza.selectedCrust.name : 'Standart Kenar';
+          return `${pIdx + 1}. ${pizza.name} (${doughName}, ${crustName}${removedStr}${extrasStr})`;
         }).join(' | ') + ']';
       }
       return `${item.quantity}x ${item.name}${customStr}`;
@@ -152,28 +156,33 @@ export default function CartPage({
                         <div className="cart-item-details">
                           <h4 className="item-title">{item.name}</h4>
                           
-                          {/* Customization sub-details */}
-                          {isCustomized ? (
+                                             {isCustomized ? (
                             <div className="item-customizations-desc">
-                              {item.customInfo.selectedPizzas.map((pizza, idx) => (
-                                <div key={idx} className="sub-pizza-desc">
-                                  <span className="pizza-order-label">
-                                    {item.customInfo.isCampaignWizard ? `${idx + 1}. Pizza: ` : ''}
-                                  </span>
-                                  <strong>{pizza.name}</strong>
-                                  <span> ({pizza.selectedDough.name}, {pizza.selectedCrust.name})</span>
-                                  {pizza.extras.length > 0 && (
-                                    <span className="pizza-extras">
-                                      {' '}+ {pizza.extras.map(e => e.name).join(', ')}
+                              {item.customInfo.selectedPizzas.map((pizza, idx) => {
+                                const doughName = pizza.selectedDough ? pizza.selectedDough.name : 'Standart Hamur';
+                                const crustName = pizza.selectedCrust ? pizza.selectedCrust.name : 'Standart Kenar';
+                                const extras = pizza.extras || [];
+                                const removedIngredients = pizza.removedIngredients || [];
+                                return (
+                                  <div key={idx} className="sub-pizza-desc">
+                                    <span className="pizza-order-label">
+                                      {item.customInfo.isCampaignWizard ? `${idx + 1}. Pizza: ` : ''}
                                     </span>
-                                  )}
-                                  {pizza.removedIngredients.length > 0 && (
-                                    <span className="pizza-removed">
-                                      {' '}- {pizza.removedIngredients.join(', ')} çıkarıldı
-                                    </span>
-                                  )}
-                                </div>
-                              ))}
+                                    <strong>{pizza.name}</strong>
+                                    <span> ({doughName}, {crustName})</span>
+                                    {extras.length > 0 && (
+                                      <span className="pizza-extras">
+                                        {' '}+ {extras.map(e => e.name).join(', ')}
+                                      </span>
+                                    )}
+                                    {removedIngredients.length > 0 && (
+                                      <span className="pizza-removed">
+                                        {' '}- {removedIngredients.join(', ')} çıkarıldı
+                                      </span>
+                                    )}
+                                  </div>
+                                );
+                              })}
                             </div>
                           ) : (
                             <p className="item-description">{item.description}</p>

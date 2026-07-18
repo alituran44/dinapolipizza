@@ -67,9 +67,13 @@ export default function CartDrawer({
       let customStr = '';
       if (item.customInfo && item.customInfo.selectedPizzas) {
         customStr = ' [' + item.customInfo.selectedPizzas.map((pizza, pIdx) => {
-          const removedStr = pizza.removedIngredients.length > 0 ? ` (Çıkan: ${pizza.removedIngredients.join(', ')})` : '';
-          const extrasStr = pizza.extras.length > 0 ? ` (Ekstra: ${pizza.extras.map(e => e.name).join(', ')})` : '';
-          return `${pIdx + 1}. ${pizza.name} (${pizza.selectedDough.name}, ${pizza.selectedCrust.name}${removedStr}${extrasStr})`;
+          const removedIngredients = pizza.removedIngredients || [];
+          const extras = pizza.extras || [];
+          const removedStr = removedIngredients.length > 0 ? ` (Çıkan: ${removedIngredients.join(', ')})` : '';
+          const extrasStr = extras.length > 0 ? ` (Ekstra: ${extras.map(e => e.name).join(', ')})` : '';
+          const doughName = pizza.selectedDough ? pizza.selectedDough.name : 'Standart Hamur';
+          const crustName = pizza.selectedCrust ? pizza.selectedCrust.name : 'Standart Kenar';
+          return `${pIdx + 1}. ${pizza.name} (${doughName}, ${crustName}${removedStr}${extrasStr})`;
         }).join(' | ') + ']';
       }
       return `${item.quantity}x ${item.name}${customStr}`;
@@ -127,20 +131,24 @@ export default function CartDrawer({
                     
                     <div className="cart-item-details">
                       <h4 className="cart-item-name">{item.name}</h4>
-                      {item.customInfo && item.customInfo.isCampaignWizard && item.customInfo.selectedPizzas && (
+                      {item.customInfo && item.customInfo.selectedPizzas && (
                         <div className="cart-item-campaign-details" style={{ marginTop: '4px' }}>
                           {item.customInfo.selectedPizzas.map((pizza, pIdx) => {
-                            const removedStr = pizza.removedIngredients.length > 0 ? ` (Çıkan: ${pizza.removedIngredients.join(', ')})` : '';
-                            const extrasStr = pizza.extras.length > 0 ? ` (Ekstra: ${pizza.extras.map(e => e.name).join(', ')})` : '';
+                            const removedIngredients = pizza.removedIngredients || [];
+                            const extras = pizza.extras || [];
+                            const removedStr = removedIngredients.length > 0 ? ` (Çıkan: ${removedIngredients.join(', ')})` : '';
+                            const extrasStr = extras.length > 0 ? ` (Ekstra: ${extras.map(e => e.name).join(', ')})` : '';
+                            const doughName = pizza.selectedDough ? pizza.selectedDough.name : 'Standart';
+                            const crustName = pizza.selectedCrust ? pizza.selectedCrust.name : 'Standart';
                             return (
                               <p key={pIdx} className="cart-item-custom-label" style={{ fontSize: '11px', color: 'var(--color-primary-red)', margin: '2px 0' }}>
-                                • {pizza.name} ({pizza.selectedDough.name}, {pizza.selectedCrust.name}{removedStr}{extrasStr})
+                                • {pizza.name} ({doughName}, {crustName}{removedStr}{extrasStr})
                               </p>
                             );
                           })}
                         </div>
                       )}
-                      {item.customInfo && !item.customInfo.isCampaignWizard && (
+                      {item.customInfo && !item.customInfo.selectedPizzas && item.customInfo.size && item.customInfo.crust && (
                         <p className="cart-item-custom-label">
                           {item.customInfo.size.name} Boy, {item.customInfo.crust.name}
                         </p>
