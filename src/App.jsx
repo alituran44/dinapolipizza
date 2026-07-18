@@ -220,6 +220,7 @@ export default function App() {
   const [cartOpen, setCartOpen] = useState(false);
   const [yeKazanSlices, setYeKazanSlices] = useState(4); 
   const [orders, setOrders] = useState([]); 
+  const [activeOrder, setActiveOrder] = useState(null); // Eksik olan activeOrder state'i tanımlandı!
   const [activeOrderSlip, setActiveOrderSlip] = useState(null);
   const [isSlipFromAdmin, setIsSlipFromAdmin] = useState(false);
   const [showTracker, setShowTracker] = useState(false);
