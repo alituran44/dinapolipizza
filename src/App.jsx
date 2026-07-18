@@ -477,7 +477,7 @@ export default function App() {
                       {/* Left: Text & Brand Highlights */}
                       <div className="hero-left-col" style={{ textAlign: 'left' }}>
                         <span className="banner-badge-gold">1997'DEN BERİ TAŞ FIRIN LEZZETİ</span>
-                        <h2 style={{ fontSize: '48px', marginBottom: '8px', lineHeight: '1.1' }}>Pizzada Usta Eller</h2>
+                        <h1 style={{ fontSize: '48px', marginBottom: '8px', lineHeight: '1.1', color: 'white', fontWeight: '800' }}>Pizzada Usta Eller</h1>
                         <div className="banner-tagline-highlight" style={{
                           fontSize: '20px',
                           fontWeight: '900',

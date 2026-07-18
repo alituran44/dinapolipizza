@@ -127,7 +127,7 @@ export default function CartDrawer({
               <div className="cart-items-list">
                 {cart.map((item, index) => (
                   <div className="cart-item" key={`${item.id}-${index}`}>
-                    <img src={item.image} alt={item.name} className="cart-item-img" />
+                    <img src={item.image} alt={item.name} className="cart-item-img" loading="lazy" decoding="async" />
                     
                     <div className="cart-item-details">
                       <h4 className="cart-item-name">{item.name}</h4>
@@ -200,7 +200,10 @@ export default function CartDrawer({
               <form className="coupon-form" onSubmit={handleApplyCoupon}>
                 <div className="coupon-input-wrapper">
                   <Tag size={16} className="coupon-icon" />
+                  <label htmlFor="cart-drawer-coupon-input" style={{ display: 'none' }}>Kupon Kodu</label>
                   <input 
+                    id="cart-drawer-coupon-input"
+                    aria-label="Kupon Kodu"
                     type="text" 
                     placeholder="Kupon veya Promosyon Kodu"
                     value={couponCode}

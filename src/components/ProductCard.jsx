@@ -48,7 +48,7 @@ export default function ProductCard({ product, onAddToCart }) {
       <div className="product-card">
         {/* Image & Badge */}
         <div className="product-card-media" style={{ position: 'relative' }}>
-          <img src={product.image} alt={product.name} className="product-card-img" />
+          <img src={product.image} alt={product.name} className="product-card-img" loading="lazy" decoding="async" />
           {product.popular && <span className="badge-popular">Çok Satan</span>}
           {product.yeKazanSlice > 0 && (
             <span className="badge-ye-kazan">+{product.yeKazanSlice} Dilim</span>
@@ -90,8 +90,10 @@ export default function ProductCard({ product, onAddToCart }) {
           
           {(product.category === 'pizzalar' || product.category === 'doyuran-menuler') && (
             <div className="group-selection-box" style={{ marginTop: 'auto', marginBottom: '12px', textAlign: 'left' }}>
-              <label style={{ fontSize: '11px', fontWeight: '800', color: 'var(--color-text-muted)', display: 'block', marginBottom: '4px' }}>Porsiyon / Kişilik Seçimi:</label>
+              <label htmlFor={`group-select-${product.id}`} style={{ fontSize: '11px', fontWeight: '800', color: 'var(--color-text-muted)', display: 'block', marginBottom: '4px' }}>Porsiyon / Kişilik Seçimi:</label>
               <select 
+                id={`group-select-${product.id}`}
+                aria-label={`${product.name} Porsiyon ve Kişilik Seçimi`}
                 value={selectedGroup} 
                 onChange={(e) => setSelectedGroup(e.target.value)}
                 style={{ 

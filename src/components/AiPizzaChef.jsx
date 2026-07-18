@@ -270,7 +270,10 @@ export default function AiPizzaChef({
             </div>
 
             <div className="chat-input-bar">
+              <label htmlFor="ai-chef-chat-input" style={{ display: 'none' }}>Şef Luigi ile Mesajlaş</label>
               <input 
+                id="ai-chef-chat-input"
+                aria-label="Şef Luigi ile Mesajlaş"
                 type="text" 
                 placeholder="Örn: İnce hamurlu, bol sucuklu, zeytinli bir pizza istiyorum..." 
                 value={inputText}

@@ -231,6 +231,8 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
                   <div className="auth-input-group">
                     <Mail className="input-icon" size={16} />
                     <input 
+                      id="login-email-input"
+                      aria-label="Giriş E-posta Adresi"
                       type="email" 
                       name="email"
                       placeholder="E-posta Adresi"
@@ -243,6 +245,8 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
                   <div className="auth-input-group">
                     <Lock className="input-icon" size={16} />
                     <input 
+                      id="login-password-input"
+                      aria-label="Giriş Şifresi"
                       type="password" 
                       name="password"
                       placeholder="Şifre"
@@ -289,6 +293,8 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
                           <div className="auth-input-group">
                             <Phone className="input-icon" size={16} />
                             <input 
+                              id="register-phone-input"
+                              aria-label="Kayıt Telefon Numarası"
                               type="tel" 
                               name="phone"
                               placeholder="0543736066"
@@ -305,6 +311,8 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
                           <label>Ad</label>
                           <div className="auth-input-group">
                             <input 
+                              id="register-firstname-input"
+                              aria-label="Adınız"
                               type="text" 
                               name="firstName"
                               placeholder="Ali"
@@ -319,6 +327,8 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
                           <label>Soyad</label>
                           <div className="auth-input-group">
                             <input 
+                              id="register-lastname-input"
+                              aria-label="Soyadınız"
                               type="text" 
                               name="lastName"
                               placeholder="Turan"
@@ -339,6 +349,8 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
                           <div className="auth-input-group">
                             <Mail className="input-icon" size={16} />
                             <input 
+                              id="register-email-input"
+                              aria-label="Kayıt E-posta Adresi"
                               type="email" 
                               name="email"
                               placeholder="alituran44@gmail.com"
@@ -358,6 +370,8 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
                       <div className="consent-checkbox-row">
                         <label className="checkbox-container">
                           <input 
+                            id="register-consent1-checkbox"
+                            aria-label="Açık Rıza Metni İzni"
                             type="checkbox" 
                             name="consent1" 
                             checked={formData.consent1}
@@ -373,6 +387,8 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
                       <div className="consent-checkbox-row">
                         <label className="checkbox-container">
                           <input 
+                            id="register-consent2-checkbox"
+                            aria-label="Sadakat Programı Üyelik Koşulları İzni"
                             type="checkbox" 
                             name="consent2" 
                             checked={formData.consent2}

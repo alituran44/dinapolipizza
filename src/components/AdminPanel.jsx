@@ -428,9 +428,11 @@ export default function AdminPanel({
                   />
                 </div>
                 <div className="form-group">
-                  <label>Ürün Görsel URL / Dosya Yükle</label>
+                  <label htmlFor="new-product-image">Ürün Görsel URL / Dosya Yükle</label>
                   <div style={{ display: 'flex', gap: '8px' }}>
                     <input 
+                      id="new-product-image"
+                      aria-label="Ürün Görsel URL"
                       type="text" 
                       placeholder="Resim linki veya public path..." 
                       value={newProduct.image}
@@ -438,6 +440,7 @@ export default function AdminPanel({
                       style={{ flex: 1 }}
                     />
                     <input 
+                      aria-label="Ürün Görsel Dosyası Yükle"
                       type="file" 
                       accept="image/*" 
                       onChange={(e) => handleFileUpload(e, 'image')}
@@ -450,9 +453,11 @@ export default function AdminPanel({
                   </div>
                 </div>
                 <div className="form-group">
-                  <label>Tanıtım Videosu URL / Dosya Yükle</label>
+                  <label htmlFor="new-product-video">Tanıtım Videosu URL / Dosya Yükle</label>
                   <div style={{ display: 'flex', gap: '8px' }}>
                     <input 
+                      id="new-product-video"
+                      aria-label="Tanıtım Videosu URL"
                       type="text" 
                       placeholder="Örn: https://www.youtube.com/watch?v=... veya yerel MP4" 
                       value={newProduct.videoUrl}
@@ -460,6 +465,7 @@ export default function AdminPanel({
                       style={{ flex: 1 }}
                     />
                     <input 
+                      aria-label="Tanıtım Videosu Dosyası Yükle"
                       type="file" 
                       accept="video/*" 
                       onChange={(e) => handleFileUpload(e, 'videoUrl')}
@@ -472,16 +478,20 @@ export default function AdminPanel({
                   </div>
                 </div>
                 <div className="form-group flex-row checkbox-group">
-                  <label>
+                  <label htmlFor="new-product-popular-chk">
                     <input 
+                      id="new-product-popular-chk"
+                      aria-label="Çok Satan / Popüler"
                       type="checkbox" 
                       checked={newProduct.popular}
                       onChange={(e) => setNewProduct({...newProduct, popular: e.target.checked})}
                     />
                     <span>Çok Satan / Popüler</span>
                   </label>
-                  <label>
+                  <label htmlFor="new-product-customizable-chk">
                     <input 
+                      id="new-product-customizable-chk"
+                      aria-label="Sihirbaz Özelleştirmesi Aktif"
                       type="checkbox" 
                       checked={newProduct.customizable}
                       onChange={(e) => setNewProduct({...newProduct, customizable: e.target.checked})}
@@ -519,6 +529,7 @@ export default function AdminPanel({
                           {isEditing ? (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', minWidth: '220px' }}>
                               <input 
+                                aria-label="Düzenlenen Ürün Adı"
                                 type="text" 
                                 value={editingProduct.name}
                                 onChange={(e) => setEditingProduct({...editingProduct, name: e.target.value})}
@@ -527,6 +538,7 @@ export default function AdminPanel({
                                 style={{ fontWeight: 'bold' }}
                               />
                               <input 
+                                aria-label="Düzenlenen Ürün Açıklaması"
                                 type="text" 
                                 value={editingProduct.description || ''}
                                 onChange={(e) => setEditingProduct({...editingProduct, description: e.target.value})}
@@ -536,6 +548,7 @@ export default function AdminPanel({
                               />
                               <div style={{ display: 'flex', gap: '4px' }}>
                                 <input 
+                                  aria-label="Düzenlenen Ürün Görsel URL"
                                   type="text" 
                                   value={editingProduct.image || ''}
                                   onChange={(e) => setEditingProduct({...editingProduct, image: e.target.value})}
@@ -544,6 +557,7 @@ export default function AdminPanel({
                                   style={{ fontSize: '11px', flex: 1 }}
                                 />
                                 <input 
+                                  aria-label="Düzenlenen Ürün Görseli Yükle"
                                   type="file" 
                                   accept="image/*" 
                                   onChange={(e) => handleFileUpload(e, 'image', true)}
@@ -556,6 +570,7 @@ export default function AdminPanel({
                               </div>
                               <div style={{ display: 'flex', gap: '4px' }}>
                                 <input 
+                                  aria-label="Düzenlenen Video URL"
                                   type="text" 
                                   value={editingProduct.videoUrl || ''}
                                   onChange={(e) => setEditingProduct({...editingProduct, videoUrl: e.target.value})}
@@ -564,6 +579,7 @@ export default function AdminPanel({
                                   style={{ fontSize: '11px', flex: 1 }}
                                 />
                                 <input 
+                                  aria-label="Düzenlenen Video Yükle"
                                   type="file" 
                                   accept="video/*" 
                                   onChange={(e) => handleFileUpload(e, 'videoUrl', true)}
@@ -590,6 +606,7 @@ export default function AdminPanel({
                         <td className="bold text-red">
                           {isEditing ? (
                             <input 
+                              aria-label="Düzenlenen Fiyat"
                               type="number" 
                               value={editingProduct.basePrice}
                               onChange={(e) => setEditingProduct({...editingProduct, basePrice: e.target.value})}
@@ -603,6 +620,7 @@ export default function AdminPanel({
                         <td>
                           {isEditing ? (
                             <select
+                              aria-label="Düzenlenen Ürün Kategorisi"
                               value={editingProduct.category}
                               onChange={(e) => setEditingProduct({...editingProduct, category: e.target.value})}
                               className="table-inline-input"
@@ -619,6 +637,7 @@ export default function AdminPanel({
                         <td>
                           {isEditing ? (
                             <input 
+                              aria-label="Düzenlenen Pizza Seçim Adeti"
                               type="number" 
                               value={editingProduct.requiredPizzaSelections}
                               onChange={(e) => setEditingProduct({...editingProduct, requiredPizzaSelections: e.target.value})}
@@ -659,6 +678,7 @@ export default function AdminPanel({
                 <h3>Kayıtlı Hamur Seçenekleri</h3>
                 <form className="add-product-form" onSubmit={handleAddDoughSubmit} style={{ gridTemplateColumns: '1fr 1fr', marginTop: '16px' }}>
                   <input 
+                    aria-label="Hamur Adı"
                     type="text" 
                     placeholder="Örn: Klasik Kalın Hamur" 
                     value={newDough.name}
@@ -667,6 +687,7 @@ export default function AdminPanel({
                     style={{ border: '1px solid #EFEAE2', padding: '8px', borderRadius: '4px' }}
                   />
                   <input 
+                    aria-label="Hamur Ek Fiyatı"
                     type="number" 
                     placeholder="Ek Fiyat (TL)" 
                     value={newDough.price}
@@ -694,6 +715,7 @@ export default function AdminPanel({
                           <td>
                             {isEditingDough ? (
                               <input 
+                                aria-label="Düzenlenen Hamur Adı"
                                 type="text" 
                                 value={editingDough.name} 
                                 onChange={(e) => setEditingDough({ ...editingDough, name: e.target.value })}
@@ -706,6 +728,7 @@ export default function AdminPanel({
                           <td className="text-red">
                             {isEditingDough ? (
                               <input 
+                                aria-label="Düzenlenen Hamur Fiyatı"
                                 type="number" 
                                 value={editingDough.price} 
                                 onChange={(e) => setEditingDough({ ...editingDough, price: e.target.value })}
@@ -737,6 +760,7 @@ export default function AdminPanel({
                 <h3>Kayıtlı Kenar Seçenekleri</h3>
                 <form className="add-product-form" onSubmit={handleAddCrustSubmit} style={{ gridTemplateColumns: '1fr 1fr', marginTop: '16px' }}>
                   <input 
+                    aria-label="Kenar Adı"
                     type="text" 
                     placeholder="Örn: Sarımsaklı Kenar" 
                     value={newCrust.name}
@@ -745,6 +769,7 @@ export default function AdminPanel({
                     style={{ border: '1px solid #EFEAE2', padding: '8px', borderRadius: '4px' }}
                   />
                   <input 
+                    aria-label="Kenar Ek Fiyatı"
                     type="number" 
                     placeholder="Ek Fiyat (TL)" 
                     value={newCrust.price}
@@ -772,6 +797,7 @@ export default function AdminPanel({
                           <td>
                             {isEditingCrust ? (
                               <input 
+                                aria-label="Düzenlenen Kenar Adı"
                                 type="text" 
                                 value={editingCrust.name} 
                                 onChange={(e) => setEditingCrust({ ...editingCrust, name: e.target.value })}
@@ -784,6 +810,7 @@ export default function AdminPanel({
                           <td className="text-red">
                             {isEditingCrust ? (
                               <input 
+                                aria-label="Düzenlenen Kenar Fiyatı"
                                 type="number" 
                                 value={editingCrust.price} 
                                 onChange={(e) => setEditingCrust({ ...editingCrust, price: e.target.value })}
@@ -822,6 +849,7 @@ export default function AdminPanel({
               <h3>Yeni Ekstra Malzeme Ekle</h3>
               <form className="add-product-form" onSubmit={handleAddIngredientSubmit} style={{ gridTemplateColumns: '1.2fr 1fr', marginTop: '16px', gap: '12px' }}>
                 <input 
+                  aria-label="Malzeme Adı"
                   type="text" 
                   placeholder="Örn: Dilim Ananas" 
                   value={newIngredient.name}
@@ -830,6 +858,7 @@ export default function AdminPanel({
                   style={{ border: '1px solid #EFEAE2', padding: '10px', borderRadius: '4px' }}
                 />
                 <input 
+                  aria-label="Malzeme Fiyatı"
                   type="number" 
                   placeholder="Fiyat (TL)" 
                   value={newIngredient.price}
@@ -857,6 +886,7 @@ export default function AdminPanel({
                         <td>
                           {isEditingIng ? (
                             <input 
+                              aria-label="Düzenlenen Malzeme Adı"
                               type="text" 
                               value={editingIngredient.name} 
                               onChange={(e) => setEditingIngredient({ ...editingIngredient, name: e.target.value })}
@@ -869,6 +899,7 @@ export default function AdminPanel({
                         <td className="text-red">
                           {isEditingIng ? (
                             <input 
+                              aria-label="Düzenlenen Malzeme Fiyatı"
                               type="number" 
                               value={editingIngredient.price} 
                               onChange={(e) => setEditingIngredient({ ...editingIngredient, price: e.target.value })}
@@ -956,6 +987,7 @@ export default function AdminPanel({
                       <td>
                         <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
                           <input 
+                            aria-label={`${u.name} Cüzdan Bakiyesi Güncelle`}
                             type="number" 
                             defaultValue={u.walletBalance}
                             onBlur={(e) => {
@@ -1030,8 +1062,10 @@ export default function AdminPanel({
                 setTimeout(() => setShowAnnouncementSaved(false), 3000);
               }} style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '600px' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '13px', fontWeight: 'bold' }}>Duyuru Metni</label>
+                  <label htmlFor="announcement-text-input" style={{ fontSize: '13px', fontWeight: 'bold' }}>Duyuru Metni</label>
                   <input 
+                    id="announcement-text-input"
+                    aria-label="Kayan Yazı Duyuru Metni"
                     type="text" 
                     value={announcementInput}
                     onChange={(e) => setAnnouncementInput(e.target.value)}
@@ -1068,8 +1102,10 @@ export default function AdminPanel({
                 setTimeout(() => setShowWhatsAppSaved(false), 3000);
               }} style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '600px' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '13px', fontWeight: 'bold' }}>WhatsApp Telefon Numarası (Ülke kodlu, boşluksuz)</label>
+                  <label htmlFor="whatsapp-number-input" style={{ fontSize: '13px', fontWeight: 'bold' }}>WhatsApp Telefon Numarası (Ülke kodlu, boşluksuz)</label>
                   <input 
+                    id="whatsapp-number-input"
+                    aria-label="WhatsApp Sipariş Telefon Numarası"
                     type="text" 
                     value={whatsAppNumberInput}
                     onChange={(e) => setWhatsAppNumberInput(e.target.value)}
@@ -1080,8 +1116,10 @@ export default function AdminPanel({
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '13px', fontWeight: 'bold' }}>Otomatik Mesaj Şablonu</label>
+                  <label htmlFor="whatsapp-template-input" style={{ fontSize: '13px', fontWeight: 'bold' }}>Otomatik Mesaj Şablonu</label>
                   <textarea 
+                    id="whatsapp-template-input"
+                    aria-label="WhatsApp Sipariş Mesaj Şablonu"
                     value={whatsAppTemplateInput}
                     onChange={(e) => setWhatsAppTemplateInput(e.target.value)}
                     required
@@ -1116,8 +1154,10 @@ export default function AdminPanel({
               }} style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '600px' }}>
                 
                 <div className="form-group" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '13px', fontWeight: 'bold' }}>Alıcılar</label>
+                  <label htmlFor="email-recipients-input" style={{ fontSize: '13px', fontWeight: 'bold' }}>Alıcılar</label>
                   <input 
+                    id="email-recipients-input"
+                    aria-label="Kampanya Alıcıları Listesi"
                     type="text" 
                     value={`Tüm Kayıtlı Kullanıcılar (${usersList.length} E-Posta adresi)`}
                     disabled
@@ -1126,8 +1166,10 @@ export default function AdminPanel({
                 </div>
 
                 <div className="form-group" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '13px', fontWeight: 'bold' }}>E-Posta Konusu</label>
+                  <label htmlFor="email-subject-input" style={{ fontSize: '13px', fontWeight: 'bold' }}>E-Posta Konusu</label>
                   <input 
+                    id="email-subject-input"
+                    aria-label="Kampanya E-Posta Konusu"
                     type="text" 
                     value={emailSubject}
                     onChange={(e) => setEmailSubject(e.target.value)}
@@ -1138,8 +1180,10 @@ export default function AdminPanel({
                 </div>
 
                 <div className="form-group" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '13px', fontWeight: 'bold' }}>Mesaj İçeriği</label>
+                  <label htmlFor="email-message-textarea" style={{ fontSize: '13px', fontWeight: 'bold' }}>Mesaj İçeriği</label>
                   <textarea 
+                    id="email-message-textarea"
+                    aria-label="Kampanya E-Posta Mesajı İçeriği"
                     value={emailMessage}
                     onChange={(e) => setEmailMessage(e.target.value)}
                     required

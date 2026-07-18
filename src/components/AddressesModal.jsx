@@ -125,8 +125,10 @@ export default function AddressesModal({
               </h3>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                <label style={{ fontSize: '11px', fontWeight: 'bold', color: '#64748b' }}>Adres Başlığı (Örn: Ev, İş, Okul)</label>
+                <label htmlFor="address-title-input" style={{ fontSize: '11px', fontWeight: 'bold', color: '#64748b' }}>Adres Başlığı (Örn: Ev, İş, Okul)</label>
                 <input 
+                  id="address-title-input"
+                  aria-label="Adres Başlığı"
                   type="text"
                   required
                   placeholder="Başlık girin..."
@@ -137,8 +139,10 @@ export default function AddressesModal({
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                <label style={{ fontSize: '11px', fontWeight: 'bold', color: '#64748b' }}>Sokak, Cadde, Mahalle</label>
+                <label htmlFor="address-street-input" style={{ fontSize: '11px', fontWeight: 'bold', color: '#64748b' }}>Sokak, Cadde, Mahalle</label>
                 <input 
+                  id="address-street-input"
+                  aria-label="Sokak, Cadde, Mahalle Bilgisi"
                   type="text"
                   required
                   placeholder="Mahalle, Sokak ismi girin..."
@@ -150,8 +154,10 @@ export default function AddressesModal({
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                  <label style={{ fontSize: '11px', fontWeight: 'bold', color: '#64748b' }}>Bina No</label>
+                  <label htmlFor="address-bina-input" style={{ fontSize: '11px', fontWeight: 'bold', color: '#64748b' }}>Bina No</label>
                   <input 
+                    id="address-bina-input"
+                    aria-label="Bina Numarası"
                     type="text"
                     placeholder="No"
                     value={form.binaNo}
@@ -160,8 +166,10 @@ export default function AddressesModal({
                   />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                  <label style={{ fontSize: '11px', fontWeight: 'bold', color: '#64748b' }}>Kat</label>
+                  <label htmlFor="address-kat-input" style={{ fontSize: '11px', fontWeight: 'bold', color: '#64748b' }}>Kat</label>
                   <input 
+                    id="address-kat-input"
+                    aria-label="Kat Numarası"
                     type="text"
                     placeholder="Kat"
                     value={form.katNo}
@@ -170,8 +178,10 @@ export default function AddressesModal({
                   />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                  <label style={{ fontSize: '11px', fontWeight: 'bold', color: '#64748b' }}>Daire No</label>
+                  <label htmlFor="address-daire-input" style={{ fontSize: '11px', fontWeight: 'bold', color: '#64748b' }}>Daire No</label>
                   <input 
+                    id="address-daire-input"
+                    aria-label="Daire Numarası"
                     type="text"
                     placeholder="Daire"
                     value={form.daireNo}
@@ -182,8 +192,10 @@ export default function AddressesModal({
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                <label style={{ fontSize: '11px', fontWeight: 'bold', color: '#64748b' }}>Adres Tarifi / Ekstra Not (İsteğe Bağlı)</label>
+                <label htmlFor="address-desc-input" style={{ fontSize: '11px', fontWeight: 'bold', color: '#64748b' }}>Adres Tarifi / Ekstra Not (İsteğe Bağlı)</label>
                 <input 
+                  id="address-desc-input"
+                  aria-label="Adres Tarifi veya Ekstra Not"
                   type="text"
                   placeholder="Zile basmayın vb..."
                   value={form.description}

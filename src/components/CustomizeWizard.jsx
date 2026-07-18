@@ -335,8 +335,10 @@ export default function CustomizeWizard({
 
           {(product.category === 'pizzalar' || product.category === 'doyuran-menuler') && (
             <div className="group-selection-box" style={{ marginTop: '16px', marginBottom: '16px', textAlign: 'left', background: 'white', padding: '16px', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', boxShadow: 'var(--shadow-sm)' }}>
-              <label style={{ fontSize: '13px', fontWeight: '800', color: 'var(--color-dark-blue)', display: 'block', marginBottom: '8px' }}>Porsiyon / Kişilik Seçimi:</label>
+              <label htmlFor="wizard-group-select" style={{ fontSize: '13px', fontWeight: '800', color: 'var(--color-dark-blue)', display: 'block', marginBottom: '8px' }}>Porsiyon / Kişilik Seçimi:</label>
               <select 
+                id="wizard-group-select"
+                aria-label="Kampanya Porsiyon ve Kişilik Seçimi"
                 value={selectedGroup} 
                 onChange={(e) => setSelectedGroup(e.target.value)}
                 style={{ 

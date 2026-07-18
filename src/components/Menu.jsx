@@ -114,7 +114,10 @@ export default function Menu({ onAddToCart, products = INITIAL_PRODUCTS }) {
           
           <div className="search-wrapper-tr">
             <Search size={18} className="search-icon-tr" />
+            <label htmlFor="menu-search-input" style={{ display: 'none' }}>Menüde Ara</label>
             <input 
+              id="menu-search-input"
+              aria-label="Menü İçi Arama"
               type="text" 
               placeholder="Canın hangi lezzeti çekiyor?.." 
               className="search-input-tr"

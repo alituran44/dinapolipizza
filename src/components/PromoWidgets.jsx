@@ -79,7 +79,7 @@ export default function PromoWidgets({ yeKazanSlices }) {
               e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
             }}
             >
-              <img src={deal.image} alt={deal.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src={deal.image} alt={deal.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" decoding="async" />
               <div className="deal-slide-overlay" style={{ 
                 position: 'absolute', 
                 top: 0, 

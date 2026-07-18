@@ -192,7 +192,7 @@ export default function CartPage({
                       <div key={item.id} className="cart-item-row">
                         {/* Image */}
                         <div className="cart-item-thumb">
-                          <img src={item.image} alt={item.name} />
+                          <img src={item.image} alt={item.name} loading="lazy" decoding="async" />
                         </div>
 
                         {/* Details */}
@@ -277,8 +277,10 @@ export default function CartPage({
                       
                       {userAddresses.length > 0 && (
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '4px' }}>
-                          <label style={{ fontSize: '11px', fontWeight: 'bold', color: '#64748b' }}>Farklı Bir Kayıtlı Adres Seçin:</label>
+                          <label htmlFor="cart-address-select" style={{ fontSize: '11px', fontWeight: 'bold', color: '#64748b' }}>Farklı Bir Kayıtlı Adres Seçin:</label>
                           <select 
+                            id="cart-address-select"
+                            aria-label="Kayıtlı Adres Seçimi"
                             value={selectedAddress}
                             onChange={(e) => onSelectAddress(e.target.value)}
                             style={{ padding: '8px 12px', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '12px', color: '#1e293b', outline: 'none' }}
@@ -330,7 +332,7 @@ export default function CartPage({
                     textAlign: 'center',
                     boxShadow: 'var(--shadow-sm)'
                   }}>
-                    <img src={item.image} alt={item.name} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', marginBottom: '8px' }} />
+                    <img src={item.image} alt={item.name} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', marginBottom: '8px' }} loading="lazy" decoding="async" />
                     <h4 style={{ fontSize: '13px', fontWeight: '800', color: 'var(--color-dark-blue)', marginBottom: '4px', height: '36px', overflow: 'hidden' }}>{item.name}</h4>
                     <span style={{ fontSize: '13px', fontWeight: '800', color: 'var(--color-ye-kazan-green)', marginBottom: '8px' }}>{item.price} TL</span>
                     <button 
@@ -403,6 +405,8 @@ export default function CartPage({
                   <div style={{ backgroundColor: '#f8fafc', padding: '10px 12px', borderRadius: '8px', border: '1px solid #e2e8f0', margin: '12px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '12px', margin: 0, fontWeight: 'bold' }}>
                       <input 
+                        id="wallet-use-checkbox"
+                        aria-label="Cüzdan Bakiyesini Kullan"
                         type="checkbox" 
                         checked={useWallet} 
                         onChange={(e) => setUseWallet(e.target.checked)} 
@@ -417,7 +421,10 @@ export default function CartPage({
                 {/* Coupon Code Input */}
                 <form onSubmit={handleApplyCoupon} className="coupon-form">
                   <div className="coupon-input-group">
+                    <label htmlFor="cart-coupon-input" style={{ display: 'none' }}>Kupon Kodu</label>
                     <input 
+                      id="cart-coupon-input"
+                      aria-label="Kupon Kodu"
                       type="text" 
                       placeholder="KUPON KODU GİRİN" 
                       value={couponCode} 
