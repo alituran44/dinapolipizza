@@ -473,7 +473,7 @@ export default function App() {
                     <div className="container">
                       <span className="banner-badge-gold">1997'DEN BERİ TAŞ FIRIN LEZZETİ</span>
                       <h2>Pizzada Usta Eller</h2>
-                      <p className="banner-subtitle">Odun ateşinde pişen, el yapımı nefis İtalyan pizzaları ve doyuran menülerimizle hizmetinizdeyiz.</p>
+                      <p className="banner-subtitle">27 Yıldır Aynı yerde Aynı adreste; odun ateşinde pişen, el yapımı nefis İtalyan pizzaları ve doyuran menülerimizle hizmetinizdeyiz.</p>
                       <a href="#menu" className="banner-action-btn" style={{ marginTop: '16px', display: 'inline-block' }}>
                         Lezzetleri Keşfet
                       </a>
