@@ -201,6 +201,80 @@ export default function ContactPage({ onGoToMenu }) {
         </div>
 
       </div>
+
+      {/* İnteraktif Çalışma & Sipariş Yoğunluk Takvimi */}
+      <div style={{
+        marginTop: '48px',
+        padding: '24px',
+        backgroundColor: 'white',
+        borderRadius: '16px',
+        border: '1px solid #e2e8f0',
+        boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.05)',
+        textAlign: 'left'
+      }}>
+        <h3 style={{ fontSize: '20px', fontWeight: '800', marginBottom: '8px', color: 'var(--color-primary-red)' }}>📅 Haftalık Çalışma & Sipariş Takvimi</h3>
+        <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '20px' }}>
+          Di Napoli Pizza Saat Kulesi şubemizin haftalık sipariş kabul takvimi ve anlık mutfak yoğunluk durumları. Sipariş vermeden önce yoğunluk kontrolü yapabilirsiniz.
+        </p>
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
+          gap: '12px'
+        }}>
+          {[
+            { day: 'Pazartesi', hours: '11:00 - 02:00', status: 'Sakin', color: '#10b981' },
+            { day: 'Salı', hours: '11:00 - 02:00', status: 'Normal', color: '#3b82f6' },
+            { day: 'Çarşamba', hours: '11:00 - 02:00', status: 'Yoğun', color: '#f59e0b' },
+            { day: 'Perşembe', hours: '11:00 - 02:00', status: 'Normal', color: '#3b82f6' },
+            { day: 'Cuma', hours: '11:00 - 03:00', status: 'Çok Yoğun', color: '#ef4444' },
+            { day: 'Cumartesi', hours: '11:00 - 03:00', status: 'Çok Yoğun', color: '#ef4444' },
+            { day: 'Pazar', hours: '11:00 - 03:00', status: 'Normal', color: '#3b82f6' }
+          ].map((item, idx) => {
+            const isToday = new Date().getDay() === (idx === 6 ? 0 : idx + 1);
+            return (
+              <div 
+                key={item.day}
+                style={{
+                  padding: '16px',
+                  borderRadius: '12px',
+                  border: isToday ? '2px solid var(--color-primary-red)' : '1px solid #e2e8f0',
+                  backgroundColor: isToday ? 'rgba(122, 12, 12, 0.03)' : '#f8fafc',
+                  textAlign: 'center',
+                  position: 'relative'
+                }}
+              >
+                {isToday && (
+                  <span style={{
+                    position: 'absolute',
+                    top: '-10px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    backgroundColor: 'var(--color-primary-red)',
+                    color: 'white',
+                    fontSize: '9px',
+                    fontWeight: '900',
+                    padding: '2px 8px',
+                    borderRadius: '10px',
+                    textTransform: 'uppercase'
+                  }}>Bugün</span>
+                )}
+                <div style={{ fontWeight: 'bold', fontSize: '14px', marginBottom: '4px', color: 'var(--color-dark-blue)' }}>{item.day}</div>
+                <div style={{ fontSize: '11px', color: '#64748b', marginBottom: '10px' }}>{item.hours}</div>
+                <span style={{
+                  fontSize: '11px',
+                  fontWeight: 'bold',
+                  color: 'white',
+                  backgroundColor: item.color,
+                  padding: '3px 8px',
+                  borderRadius: '20px'
+                }}>{item.status}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
     </div>
   );
 }

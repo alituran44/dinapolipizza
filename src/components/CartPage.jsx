@@ -25,7 +25,7 @@ export default function CartPage({
       id: 'hamburgers-mini',
       name: 'Mini Hamburger',
       price: 180,
-      image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=300&q=80',
+      image: '/hamburger_temiz_1784311377803.png',
       description: 'Nefis di Napoli köftesi ve taze hamburger ekmeği.',
       category: 'fastfood'
     },
@@ -33,7 +33,7 @@ export default function CartPage({
       id: 'tatlilar-sufle',
       name: 'Çikolatalı Sufle',
       price: 130,
-      image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=300&q=80',
+      image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=300&q=80',
       description: 'İçi akışkan sıcak çikolatalı nefis İtalyan suflesi.',
       category: 'tatlilar'
     },
@@ -41,7 +41,7 @@ export default function CartPage({
       id: 'yanlezzetler-patates',
       name: 'Baharatlı Patates',
       price: 100,
-      image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=300&q=80',
+      image: '/patates_temiz_1784311399634.png',
       description: 'Özel baharatlı çıtır İtalyan elma dilim patates.',
       category: 'yanlezzetler'
     },
@@ -49,7 +49,7 @@ export default function CartPage({
       id: 'yanlezzetler-sogan',
       name: 'Soğan Kroket (8\'li)',
       price: 80,
-      image: 'https://images.unsplash.com/photo-1639024471283-2bc7b3c6a267?auto=format&fit=crop&w=300&q=80',
+      image: '/sogan_kroket_temiz_1784311410670.png',
       description: 'Altın sarısı çıtır kaplamalı soğan halkaları.',
       category: 'yanlezzetler'
     }
@@ -145,22 +145,7 @@ export default function CartPage({
   };
 
   return (
-    <div className="cart-page-wrapper">
-      {/* Header */}
-      <header className="site-header-blue">
-        <div className="container header-inner-blue">
-          <div className="header-left-group">
-            <button className="nav-link-white" onClick={onClose} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <ArrowLeft size={20} />
-              <span>Menüye Dön</span>
-            </button>
-          </div>
-          <div className="header-right-group">
-            <img src="/logo.png" alt="logo" style={{ height: '48px', objectFit: 'contain' }} />
-          </div>
-        </div>
-      </header>
-
+    <div className="cart-page-wrapper" style={{ background: 'transparent', padding: '24px 0' }}>
       <div className="container cart-page-body">
         <div className="cart-grid">
           {/* Left Column: Items List */}

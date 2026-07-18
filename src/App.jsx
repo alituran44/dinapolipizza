@@ -389,33 +389,6 @@ export default function App() {
             onAddToCart={handleAddToCart}
             onClose={() => setActiveCustomizeItem(null)}
           />
-        ) : currentPage === 'cart' ? (
-          /* Tam Ekran Sepet Sayfası */
-          <CartPage 
-            cart={cart}
-            onUpdateQuantity={(index, q) => handleUpdateQuantity(index, q)}
-            onRemoveItem={(index) => handleRemoveItem(index)}
-            onAddToCart={handleAddToCart}
-            onCheckout={() => {
-              const itemsSubtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-              const deliveryFee = deliveryMode === 'delivery' ? 15 : 0;
-              handlePlaceOrder({
-                total: itemsSubtotal + deliveryFee,
-                slicesGained: cart.reduce((sum, item) => sum + ((item.yeKazanSlice || 0) * item.quantity), 0)
-              });
-              setCurrentPage('menu');
-            }}
-            onClose={() => setCurrentPage('menu')}
-            deliveryMode={deliveryMode}
-            selectedAddress={address}
-            user={user}
-            onUpdateUserWallet={handleUpdateUserWallet}
-            userAddresses={userAddresses}
-            onSelectAddress={(addrText) => setAddress(addrText)}
-            onOpenAddresses={() => setIsAddressesModalOpen(true)}
-            whatsAppNumber={whatsAppNumber}
-            whatsAppTemplate={whatsAppTemplate}
-          />
         ) : (
           /* Default customer view with persistent Header and Footer */
           <>
@@ -623,6 +596,34 @@ export default function App() {
                   
                   <Menu onAddToCart={handleAddToCart} products={products} />
                 </>
+              )}
+
+              {currentPage === 'cart' && (
+                <CartPage 
+                  cart={cart}
+                  onUpdateQuantity={(index, q) => handleUpdateQuantity(index, q)}
+                  onRemoveItem={(index) => handleRemoveItem(index)}
+                  onAddToCart={handleAddToCart}
+                  onCheckout={() => {
+                    const itemsSubtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    const deliveryFee = deliveryMode === 'delivery' ? 15 : 0;
+                    handlePlaceOrder({
+                      total: itemsSubtotal + deliveryFee,
+                      slicesGained: cart.reduce((sum, item) => sum + ((item.yeKazanSlice || 0) * item.quantity), 0)
+                    });
+                    setCurrentPage('menu');
+                  }}
+                  onClose={() => setCurrentPage('menu')}
+                  deliveryMode={deliveryMode}
+                  selectedAddress={address}
+                  user={user}
+                  onUpdateUserWallet={handleUpdateUserWallet}
+                  userAddresses={userAddresses}
+                  onSelectAddress={(addrText) => setAddress(addrText)}
+                  onOpenAddresses={() => setIsAddressesModalOpen(true)}
+                  whatsAppNumber={whatsAppNumber}
+                  whatsAppTemplate={whatsAppTemplate}
+                />
               )}
 
               {currentPage === 'referral' && (
