@@ -1,7 +1,7 @@
 import React from 'react';
 import { Printer, MessageSquare, X, CheckCircle } from 'lucide-react';
 
-export default function KuryeSlipModal({ order, cart, onClose, deliveryMode, address }) {
+export default function KuryeSlipModal({ order, cart, onClose, deliveryMode, address, showPrint }) {
   if (!order) return null;
 
   const orderDate = new Date().toLocaleString('tr-TR');
@@ -132,10 +132,12 @@ _Bu sipariş kurye bilgilendirme fişidir._`;
 
         {/* Modal Controls */}
         <div className="slip-modal-actions">
-          <button className="slip-action-btn print-btn" onClick={handlePrint}>
-            <Printer size={18} />
-            <span>Fiziksel Fişi Yazdır (Kurye)</span>
-          </button>
+          {showPrint && (
+            <button className="slip-action-btn print-btn" onClick={handlePrint}>
+              <Printer size={18} />
+              <span>Fiziksel Fişi Yazdır (Kurye)</span>
+            </button>
+          )}
           
           <a 
             href={whatsappUrl} 

@@ -210,8 +210,8 @@ export default function App() {
   const [cartOpen, setCartOpen] = useState(false);
   const [yeKazanSlices, setYeKazanSlices] = useState(4); 
   const [orders, setOrders] = useState([]); 
-  const [activeOrder, setActiveOrder] = useState(null); 
   const [activeOrderSlip, setActiveOrderSlip] = useState(null);
+  const [isSlipFromAdmin, setIsSlipFromAdmin] = useState(false);
   const [showTracker, setShowTracker] = useState(false);
 
   // --- ADMIN ACTIONS FOR DATABASE ---
@@ -385,6 +385,7 @@ export default function App() {
             cart={cart}
             onUpdateQuantity={(index, q) => handleUpdateQuantity(index, q)}
             onRemoveItem={(index) => handleRemoveItem(index)}
+            onAddToCart={handleAddToCart}
             onCheckout={() => {
               const itemsSubtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
               const deliveryFee = deliveryMode === 'delivery' ? 15 : 0;
@@ -650,6 +651,7 @@ export default function App() {
               <KuryeSlipModal 
                 order={activeOrderSlip}
                 cart={cart}
+                showPrint={isSlipFromAdmin}
                 onClose={() => {
                   setActiveOrderSlip(null);
                   setCart([]); // Sipariş onaylandıktan sonra sepeti sıfırla
@@ -695,6 +697,7 @@ export default function App() {
               onClose={() => setIsOrdersHistoryOpen(false)}
               orders={orders}
               onShowSlip={(order) => {
+                setIsSlipFromAdmin(false);
                 setActiveOrderSlip(order);
                 setIsOrdersHistoryOpen(false); // Close history to view slip modal
               }}
@@ -749,7 +752,10 @@ export default function App() {
           onUpdateProduct={handleUpdateProduct}
           orders={orders}
           onUpdateOrderStatus={handleUpdateOrderStatus}
-          onShowSlip={(order) => setActiveOrderSlip(order)}
+          onShowSlip={(order) => {
+            setIsSlipFromAdmin(true);
+            setActiveOrderSlip(order);
+          }}
           
           doughs={doughs}
           onAddDough={handleAddDough}

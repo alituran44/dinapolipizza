@@ -3067,7 +3067,8 @@ button {
 
 /* --- CART PAGE STYLES --- */
 .cart-page-wrapper {
-  background-color: #f7fafc;
+  background-color: rgba(247, 250, 252, 0.88);
+  backdrop-filter: blur(1px);
   min-height: 100vh;
   padding-bottom: 64px;
 }

@@ -7,6 +7,7 @@ export default function CartPage({
   cart, 
   onUpdateQuantity, 
   onRemoveItem, 
+  onAddToCart,
   onCheckout, 
   onClose,
   deliveryMode, // 'delivery' or 'pickup'
@@ -19,6 +20,48 @@ export default function CartPage({
   whatsAppNumber = '',
   whatsAppTemplate = ''
 }) {
+  const recommendedItems = [
+    {
+      id: 'hamburgers-mini',
+      name: 'Mini Hamburger',
+      price: 180,
+      image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=300&q=80',
+      description: 'Nefis di Napoli köftesi ve taze hamburger ekmeği.',
+      category: 'fastfood'
+    },
+    {
+      id: 'tatlilar-sufle',
+      name: 'Çikolatalı Sufle',
+      price: 130,
+      image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=300&q=80',
+      description: 'İçi akışkan sıcak çikolatalı nefis İtalyan suflesi.',
+      category: 'tatlilar'
+    },
+    {
+      id: 'yanlezzetler-patates',
+      name: 'Baharatlı Patates',
+      price: 100,
+      image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=300&q=80',
+      description: 'Özel baharatlı çıtır İtalyan elma dilim patates.',
+      category: 'yanlezzetler'
+    },
+    {
+      id: 'yanlezzetler-sogan',
+      name: 'Soğan Kroket (8\'li)',
+      price: 80,
+      image: 'https://images.unsplash.com/photo-1639024471283-2bc7b3c6a267?auto=format&fit=crop&w=300&q=80',
+      description: 'Altın sarısı çıtır kaplamalı soğan halkaları.',
+      category: 'yanlezzetler'
+    }
+  ];
+
+  const handleAddRecommended = (item) => {
+    onAddToCart({
+      ...item,
+      quantity: 1
+    });
+  };
+
   const [couponCode, setCouponCode] = useState('');
   const [couponDiscount, setCouponDiscount] = useState(0); // in TL
   const [appliedCoupon, setAppliedCoupon] = useState('');
@@ -261,6 +304,58 @@ export default function CartPage({
                 </div>
               </div>
             )}
+
+            {/* Önerilen Lezzetler Paneli */}
+            <div className="cart-card-panel" style={{ marginTop: '24px' }}>
+              <div className="panel-header" style={{ marginBottom: '16px', borderBottom: '1px solid var(--color-border)', paddingBottom: '10px' }}>
+                <h3 style={{ fontSize: '18px', fontWeight: '850', color: 'var(--color-dark-blue)' }}>Bunları da Eklemek İster Misiniz?</h3>
+              </div>
+              <div className="recommended-scroll-band" style={{ 
+                display: 'flex', 
+                gap: '16px', 
+                overflowX: 'auto', 
+                paddingBottom: '12px',
+                scrollbarWidth: 'thin'
+              }}>
+                {recommendedItems.map((item) => (
+                  <div key={item.id} className="rec-item-card" style={{ 
+                    flex: '0 0 160px', 
+                    background: '#f8fafc', 
+                    borderRadius: 'var(--radius-sm)', 
+                    border: '1px solid var(--color-border)', 
+                    padding: '12px', 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    alignItems: 'center', 
+                    textAlign: 'center',
+                    boxShadow: 'var(--shadow-sm)'
+                  }}>
+                    <img src={item.image} alt={item.name} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', marginBottom: '8px' }} />
+                    <h4 style={{ fontSize: '13px', fontWeight: '800', color: 'var(--color-dark-blue)', marginBottom: '4px', height: '36px', overflow: 'hidden' }}>{item.name}</h4>
+                    <span style={{ fontSize: '13px', fontWeight: '800', color: 'var(--color-ye-kazan-green)', marginBottom: '8px' }}>{item.price} TL</span>
+                    <button 
+                      onClick={() => handleAddRecommended(item)}
+                      style={{ 
+                        width: '100%', 
+                        backgroundColor: 'var(--color-primary-blue)', 
+                        color: 'var(--color-dark-blue)', 
+                        border: 'none', 
+                        padding: '6px 12px', 
+                        borderRadius: '16px', 
+                        fontSize: '11px', 
+                        fontWeight: '800', 
+                        cursor: 'pointer',
+                        transition: '0.2s'
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#E2BF4D'}
+                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--color-primary-blue)'}
+                    >
+                      Ekle +
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Right Column: Order Summary */}
