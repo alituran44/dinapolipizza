@@ -40,19 +40,27 @@ export default function PromoWidgets({ yeKazanSlices }) {
   ];
 
   return (
-    <section className="promo-widgets-section" style={{ padding: '32px 0' }}>
+    <section className="promo-widgets-section" style={{ padding: '32px 0', overflow: 'hidden' }}>
       <div className="container">
         <h3 style={{ fontSize: '20px', fontWeight: '850', color: 'var(--color-dark-blue)', marginBottom: '20px', textAlign: 'left' }}>
           Özel Kampanyalar
         </h3>
         
-        <div className="deals-grid-layout" style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', 
-          gap: '20px' 
+        <div className="deals-scroll-layout" style={{ 
+          display: 'flex',
+          gap: '20px',
+          overflowX: 'auto',
+          paddingBottom: '16px',
+          paddingTop: '4px',
+          scrollSnapType: 'x mandatory',
+          WebkitOverflowScrolling: 'touch',
+          scrollbarWidth: 'thin',
+          scrollbarColor: 'var(--color-primary-blue) transparent'
         }}>
           {deals.map((deal, idx) => (
             <div key={idx} className="deal-card-item" style={{ 
+              flex: '0 0 300px',
+              scrollSnapAlign: 'start',
               position: 'relative', 
               borderRadius: 'var(--radius-md)', 
               overflow: 'hidden', 
