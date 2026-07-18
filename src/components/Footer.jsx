@@ -78,6 +78,9 @@ export default function Footer({ onGoToAbout, onGoToContact }) {
             <p className="brand-desc">
               1997'den beri Çanakkale'nin en sevilen pizzacısı! Di Napoli Pizza, günlük taze hamur, bol malzeme ve usta ellerden çıkan lezzetlerle Saat Kulesi karşısında hizmetinizde.
             </p>
+            <p className="brand-desc-nlp" style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.65)', lineHeight: '1.4', marginTop: '8px' }}>
+              Di Napoli Pizza; Çanakkale Merkez, Saat Kulesi karşısı, Kemalpaşa Mahallesi, Kordon boyu, Şair Ece Ayhan Meydanı, Çanakkale Onsekiz Mart Üniversitesi (ÇOMÜ) Terzioğlu ve Kepez yerleşkeleri dahil tüm yakın bölgelere 30 dakikada sıcak paket servis ulaştırmaktadır. Şef Luigi liderliğinde İtalyan pizzaları (Margarita, Romano, Fungi, Tonno, Mista), yerel Karadeniz pideleri, kapalı bohça Kalzone, çıtır tavuklu pizza ve gurme burgerler odun ateşinde taş fırında taze olarak pişirilmektedir. Her gün 11:00 ile 23:00 saatleri arasında gel-al ve hızlı eve teslimat sipariş imkanı sunulmaktadır.
+            </p>
             <button 
               onClick={onGoToAbout}
               style={{ border: 'none', background: 'none', color: '#ffb703', fontWeight: 'bold', fontSize: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', padding: 0, marginTop: '10px' }}

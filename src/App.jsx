@@ -25,6 +25,16 @@ import {
 } from './data/products';
 
 export default function App() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const [isAdminMode, setIsAdminMode] = useState(false);
   const [currentPage, setCurrentPage] = useState('menu'); // 'menu' or 'cart'
   const [deliveryMode, setDeliveryMode] = useState('delivery'); // 'delivery' or 'pickup'
@@ -411,27 +421,33 @@ export default function App() {
           <>
             {/* Scrolling Announcement Marquee */}
             <div style={{
-              backgroundColor: '#D4AF37',
-              color: '#2B0505',
-              padding: '8px 0',
+              backgroundColor: 'var(--color-primary-red)',
+              color: 'var(--color-primary-blue)',
+              padding: '6px 0',
               overflow: 'hidden',
               whiteSpace: 'nowrap',
               position: 'relative',
               display: 'flex',
               alignItems: 'center',
-              borderBottom: '1px solid rgba(43, 5, 5, 0.1)',
+              borderBottom: '1px solid rgba(43, 5, 5, 0.15)',
               zIndex: 1010,
-              height: '32px'
+              height: '36px'
             }}>
-              <div className="marquee-content" style={{
-                display: 'inline-block',
-                paddingLeft: '100%',
-                fontSize: '11px',
-                fontWeight: '900',
-                letterSpacing: '0.8px'
-              }}>
+              <marquee 
+                behavior="scroll" 
+                direction="left" 
+                scrollamount="6" 
+                onMouseEnter={(e) => e.currentTarget.stop()} 
+                onMouseLeave={(e) => e.currentTarget.start()} 
+                style={{
+                  fontSize: '13px',
+                  fontWeight: '800',
+                  letterSpacing: '0.8px',
+                  cursor: 'pointer'
+                }}
+              >
                 {announcementText}
-              </div>
+              </marquee>
             </div>
 
             <Header 
@@ -462,16 +478,26 @@ export default function App() {
             {currentPage === 'menu' && (
               <>
                 {/* Header Altı Video Banner Akışı */}
-                <div className="header-video-banner" style={{ position: 'relative', overflow: 'hidden' }}>
-                  <video 
-                    src="/header-video.mp4" 
-                    autoPlay 
-                    loop 
-                    muted 
-                    playsInline 
-                    className="banner-video-element"
-                  />
-                  <div className="banner-video-overlay-tint" style={{ padding: '40px 0' }}>
+                <div className="header-video-banner" style={{ 
+                  position: 'relative', 
+                  overflow: 'hidden',
+                  backgroundImage: isMobile ? 'url("/about_clocktower_pizza.png")' : 'none',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+                }}>
+                  {!isMobile && (
+                    <video 
+                      src="/header-video.mp4" 
+                      autoPlay 
+                      loop 
+                      muted 
+                      playsInline 
+                      preload="none"
+                      poster="/about_clocktower_pizza.png"
+                      className="banner-video-element"
+                    />
+                  )}
+                  <div className="banner-video-overlay-tint" style={{ padding: '40px 0', backgroundColor: isMobile ? 'rgba(43, 5, 5, 0.85)' : 'rgba(43, 5, 5, 0.65)' }}>
                     <div className="container" style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '40px', alignItems: 'center', minHeight: '340px' }}>
                       
                       {/* Left: Text & Brand Highlights */}

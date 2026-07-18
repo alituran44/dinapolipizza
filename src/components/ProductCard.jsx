@@ -85,7 +85,7 @@ export default function ProductCard({ product, onAddToCart }) {
 
         {/* Info */}
         <div className="product-card-body">
-          <h3 className="product-card-title">{product.name}</h3>
+          <div className="product-card-title" style={{ fontSize: '16px', fontWeight: '800', color: 'var(--color-dark-blue)', marginBottom: '8px' }}>{product.name}</div>
           <p className="product-card-description">{product.description}</p>
           
           {(product.category === 'pizzalar' || product.category === 'doyuran-menuler') && (
