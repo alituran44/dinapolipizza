@@ -506,6 +506,9 @@ export default function App() {
             <BranchMapModal 
               isOpen={isMapModalOpen}
               onClose={() => setIsMapModalOpen(false)}
+              deliveryMode={deliveryMode}
+              onChangeDeliveryMode={(mode) => setDeliveryMode(mode)}
+              onSelectAddress={(addrText) => setAddress(addrText)}
               onSelectBranch={(branchAddr) => {
                 setAddress(branchAddr);
                 setDeliveryMode('pickup');
