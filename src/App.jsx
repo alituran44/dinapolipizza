@@ -28,6 +28,9 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState('menu'); // 'menu' or 'cart'
   const [deliveryMode, setDeliveryMode] = useState('delivery'); // 'delivery' or 'pickup'
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
+  const [announcementText, setAnnouncementText] = useState(() => {
+    return localStorage.getItem('dinapoli_announcement') || "🍕 Haftanın Kampanyası: 3 Al 2 Öde! • 🎁 Arkadaşını Davet Et, 75 TL Cüzdan Ödülü Kazan! • 🚀 Şef Luigi ile Kendi Pizzanı Tasarla!";
+  });
   const [isAiChefOpen, setIsAiChefOpen] = useState(false);
   const [isRewardModalOpen, setIsRewardModalOpen] = useState(false);
   const [isAddressesModalOpen, setIsAddressesModalOpen] = useState(false);
@@ -357,6 +360,31 @@ export default function App() {
         ) : (
           /* Default customer view with persistent Header and Footer */
           <>
+            {/* Scrolling Announcement Marquee */}
+            <div style={{
+              backgroundColor: '#D4AF37',
+              color: '#2B0505',
+              padding: '8px 0',
+              overflow: 'hidden',
+              whiteSpace: 'nowrap',
+              position: 'relative',
+              display: 'flex',
+              alignItems: 'center',
+              borderBottom: '1px solid rgba(43, 5, 5, 0.1)',
+              zIndex: 1010,
+              height: '32px'
+            }}>
+              <div className="marquee-content" style={{
+                display: 'inline-block',
+                paddingLeft: '100%',
+                fontSize: '11px',
+                fontWeight: '900',
+                letterSpacing: '0.8px'
+              }}>
+                {announcementText}
+              </div>
+            </div>
+
             <Header 
               deliveryMode={deliveryMode} 
               setDeliveryMode={setDeliveryMode}
@@ -403,15 +431,6 @@ export default function App() {
                         Lezzetleri Keşfet
                       </a>
                     </div>
-                  </div>
-                </div>
-                
-                <div className="admin-entry-bar">
-                  <div className="container flex justify-between align-center">
-                    <span>🔧 Sistem Yönetim Paneline erişmek ister misiniz?</span>
-                    <button className="admin-toggle-btn" onClick={() => setIsAdminMode(true)}>
-                      Yönetim Paneli (Admin)
-                    </button>
                   </div>
                 </div>
               </>
@@ -595,7 +614,11 @@ export default function App() {
           onUpdateUserWallet={handleUpdateUserWallet}
           onSendMailNotification={handleSendMailNotification}
           referralTransactions={referralTransactions}
-          
+          announcementText={announcementText}
+          onUpdateAnnouncement={(txt) => {
+            setAnnouncementText(txt);
+            localStorage.setItem('dinapoli_announcement', txt);
+          }}
           onClose={() => setIsAdminMode(false)}
         />
       )}

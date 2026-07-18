@@ -136,50 +136,48 @@ export default function BranchMapModal({
           </h2>
         </div>
 
-        {/* Tab Selection Area for Pickup Mode */}
-        {activeTab === 'pickup' && (
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '8px',
-            padding: '12px 16px',
-            backgroundColor: 'white',
-            borderBottom: '1px solid #e2e8f0'
-          }}>
-            <button
-              onClick={() => handleTabChange('delivery')}
-              style={{
-                padding: '10px',
-                borderRadius: '8px',
-                fontWeight: 'bold',
-                fontSize: '13px',
-                cursor: 'pointer',
-                border: '1px solid #2563eb',
-                backgroundColor: 'white',
-                color: '#2563eb',
-                transition: 'all 0.2s'
-              }}
-            >
-              Adrese Teslim
-            </button>
-            <button
-              onClick={() => handleTabChange('pickup')}
-              style={{
-                padding: '10px',
-                borderRadius: '8px',
-                fontWeight: 'bold',
-                fontSize: '13px',
-                cursor: 'pointer',
-                border: '1px solid #2563eb',
-                backgroundColor: '#2563eb',
-                color: 'white',
-                transition: 'all 0.2s'
-              }}
-            >
-              Beklemeden Gel-Al
-            </button>
-          </div>
-        )}
+        {/* Tab Selection Area always visible */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '8px',
+          padding: '12px 16px',
+          backgroundColor: 'white',
+          borderBottom: '1px solid #e2e8f0'
+        }}>
+          <button
+            onClick={() => handleTabChange('delivery')}
+            style={{
+              padding: '10px',
+              borderRadius: '8px',
+              fontWeight: 'bold',
+              fontSize: '13px',
+              cursor: 'pointer',
+              border: '1px solid #2563eb',
+              backgroundColor: activeTab === 'delivery' ? '#2563eb' : 'white',
+              color: activeTab === 'delivery' ? 'white' : '#2563eb',
+              transition: 'all 0.2s'
+            }}
+          >
+            Adrese Teslim
+          </button>
+          <button
+            onClick={() => handleTabChange('pickup')}
+            style={{
+              padding: '10px',
+              borderRadius: '8px',
+              fontWeight: 'bold',
+              fontSize: '13px',
+              cursor: 'pointer',
+              border: '1px solid #2563eb',
+              backgroundColor: activeTab === 'pickup' ? '#2563eb' : 'white',
+              color: activeTab === 'pickup' ? 'white' : '#2563eb',
+              transition: 'all 0.2s'
+            }}
+          >
+            Beklemeden Gel-Al
+          </button>
+        </div>
 
         {/* Address Search Field */}
         <div style={{

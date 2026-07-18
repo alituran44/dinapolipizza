@@ -36,10 +36,12 @@ export default function AdminPanel({
   onUpdateUserWallet,
   onSendMailNotification,
   referralTransactions = [],
+  announcementText = '',
+  onUpdateAnnouncement,
   
   onClose 
 }) {
-  const [activeTab, setActiveTab] = useState('orders'); // 'orders', 'products', 'dough-crust', 'ingredients', 'dashboard'
+  const [activeTab, setActiveTab] = useState('orders'); // 'orders', 'products', 'dough-crust', 'ingredients', 'dashboard', 'announcement'
   
   // Form states for new product
   const [newProduct, setNewProduct] = useState({
@@ -70,6 +72,8 @@ export default function AdminPanel({
   // Email notification states
   const [emailSubject, setEmailSubject] = useState('Di Napoli Fırsatları Başladı! 🍕');
   const [emailMessage, setEmailMessage] = useState('Merhaba, Di Napoli lezzetlerinde bu haftaya özel 75 TL cüzdan indirimi fırsatını kaçırmayın!');
+  const [announcementInput, setAnnouncementInput] = useState(announcementText);
+  const [showAnnouncementSaved, setShowAnnouncementSaved] = useState(false);
 
   const handleFileUpload = (e, field, isEdit = false) => {
     const file = e.target.files[0];
@@ -1004,6 +1008,43 @@ export default function AdminPanel({
                   ))}
                 </tbody>
               </table>
+            </div>
+
+            <div className="deals-card" style={{ padding: '24px', marginBottom: '24px' }}>
+              <h3>Üst Kayan Yazı Kampanya Duyurusu</h3>
+              <p style={{ fontSize: '12px', color: '#64748b', margin: '4px 0 16px 0' }}>
+                Web sitesinin en üstünde tüm sayfalarda dönen duyuru bandının içeriğini buradan değiştirebilirsiniz.
+              </p>
+              
+              <form onSubmit={(e) => {
+                e.preventDefault();
+                onUpdateAnnouncement(announcementInput);
+                setShowAnnouncementSaved(true);
+                setTimeout(() => setShowAnnouncementSaved(false), 3000);
+              }} style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '600px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={{ fontSize: '13px', fontWeight: 'bold' }}>Duyuru Metni</label>
+                  <input 
+                    type="text" 
+                    value={announcementInput}
+                    onChange={(e) => setAnnouncementInput(e.target.value)}
+                    required
+                    placeholder="Örn: 🍕 Salı - Perşembe Günlerine Özel 2 Orta Boy Pizza Sadece 299 TL!"
+                    style={{ padding: '10px', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '13px' }}
+                  />
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <button type="submit" className="add-submit-btn" style={{ height: '40px', width: '160px' }}>
+                    Duyuruyu Güncelle
+                  </button>
+                  {showAnnouncementSaved && (
+                    <span style={{ color: '#10b981', fontSize: '13px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      ✓ Başarıyla Kaydedildi!
+                    </span>
+                  )}
+                </div>
+              </form>
             </div>
 
             <div className="deals-card" style={{ padding: '24px' }}>

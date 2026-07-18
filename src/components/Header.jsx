@@ -197,13 +197,54 @@ export default function Header({
 
           {/* Location / Address Picker Dropdown */}
           {/* Location / Address Picker Directly Triggers Map */}
-          <div className="address-picker-widget" onClick={onOpenMap} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
-            <div className="delivery-type-pill" style={{ pointerEvents: 'none' }}>
-              <span className="delivery-dot"></span>
-              <span className="delivery-mode-text">
-                {deliveryMode === 'delivery' ? 'Adrese Teslim' : 'Gel-Al'}
-              </span>
-              <ChevronDown size={14} className="dropdown-arrow" />
+          <div className="address-picker-widget" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div className="delivery-toggle-container" style={{
+              display: 'flex',
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              borderRadius: '30px',
+              padding: '2px',
+              border: '1px solid rgba(255, 255, 255, 0.2)'
+            }}>
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setDeliveryMode('delivery');
+                  onOpenMap();
+                }}
+                style={{
+                  padding: '6px 12px',
+                  borderRadius: '30px',
+                  border: 'none',
+                  fontSize: '11px',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  backgroundColor: deliveryMode === 'delivery' ? 'var(--color-primary-blue)' : 'transparent',
+                  color: deliveryMode === 'delivery' ? 'white' : 'rgba(255, 255, 255, 0.7)',
+                  transition: 'all 0.2s'
+                }}
+              >
+                Adrese Teslim
+              </button>
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setDeliveryMode('pickup');
+                  onOpenMap();
+                }}
+                style={{
+                  padding: '6px 12px',
+                  borderRadius: '30px',
+                  border: 'none',
+                  fontSize: '11px',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  backgroundColor: deliveryMode === 'pickup' ? 'var(--color-primary-blue)' : 'transparent',
+                  color: deliveryMode === 'pickup' ? 'white' : 'rgba(255, 255, 255, 0.7)',
+                  transition: 'all 0.2s'
+                }}
+              >
+                Gel-Al
+              </button>
             </div>
             
             <div 
@@ -213,7 +254,7 @@ export default function Header({
             >
               <MapPin size={14} className="pin-icon" />
               <span className="address-text">{address}</span>
-              <button className="address-edit-btn" aria-label="Adreslerim">
+              <button className="address-edit-btn" aria-label="Adreslerim" onClick={(e) => { e.stopPropagation(); onOpenAddresses(); }}>
                 <Edit2 size={12} />
               </button>
             </div>
