@@ -30,9 +30,9 @@ export default function App() {
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
   const [whatsAppNumber, setWhatsAppNumber] = useState(() => {
     try {
-      return localStorage.getItem('dinapoli_wa_number') || '905437360660';
+      return localStorage.getItem('dinapoli_wa_number') || '905057261717';
     } catch (e) {
-      return '905437360660';
+      return '905057261717';
     }
   });
   const [whatsAppTemplate, setWhatsAppTemplate] = useState(() => {
@@ -120,6 +120,17 @@ export default function App() {
       }
     }
   }, [usersList]);
+
+  // Migration effect to update legacy WhatsApp numbers
+  useEffect(() => {
+    try {
+      const savedNum = localStorage.getItem('dinapoli_wa_number');
+      if (!savedNum || savedNum === '905437360660') {
+        localStorage.setItem('dinapoli_wa_number', '905057261717');
+        setWhatsAppNumber('905057261717');
+      }
+    } catch (e) {}
+  }, []);
 
   const handleUpdateUserWallet = (userId, newBalance) => {
     setUsersList(prev => prev.map(u => u.id === userId ? { ...u, walletBalance: newBalance } : u));
