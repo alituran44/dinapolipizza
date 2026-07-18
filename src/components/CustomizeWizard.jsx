@@ -13,6 +13,7 @@ export default function CustomizeWizard({
   onClose 
 }) {
   const isSinglePizza = !product.requiredPizzaSelections || product.requiredPizzaSelections <= 1;
+  const [selectedGroup, setSelectedGroup] = useState('1');
   const [linkCopied, setLinkCopied] = useState(false);
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -60,6 +61,13 @@ export default function CustomizeWizard({
   const [quantity, setQuantity] = useState(1);
 
   // Calculate single pizza price
+  const getGroupModifierPrice = () => {
+    if (selectedGroup === '2') return 729;
+    if (selectedGroup === '4') return 999;
+    if (selectedGroup === '6') return 1249;
+    return 0;
+  };
+
   const calculateSinglePizzaPrice = (pizza) => {
     if (!pizza) return product.basePrice;
     let price = product.basePrice;
@@ -81,6 +89,11 @@ export default function CustomizeWizard({
 
   // Calculate customized price
   const calculateTotalPrice = () => {
+    const groupPrice = getGroupModifierPrice();
+    if (groupPrice > 0) {
+      return groupPrice * quantity;
+    }
+
     if (isSinglePizza) {
       return calculateSinglePizzaPrice(tempCustomization || pizzaSlots[0]) * quantity;
     }
@@ -182,6 +195,27 @@ export default function CustomizeWizard({
   };
 
   const handleAddToCartClick = () => {
+    const groupPrice = getGroupModifierPrice();
+    if (groupPrice > 0) {
+      const groupName = selectedGroup === '2' ? '2 Kişilik (Grup)' : selectedGroup === '4' ? '4 Kişilik (Aile)' : '6 Kişilik (Dev)';
+      onAddToCart({
+        ...product,
+        price: groupPrice,
+        quantity: quantity,
+        customInfo: {
+          isCampaignWizard: false,
+          selectedPizzas: [{
+            ...product,
+            selectedDough: { name: 'Standart Hamur' },
+            selectedCrust: { name: 'Standart Kenar' },
+            selectedSize: { id: selectedGroup, name: groupName }
+          }]
+        }
+      });
+      onClose();
+      return;
+    }
+
     if (isSinglePizza) {
       const targetPizza = tempCustomization || pizzaSlots[0];
       const finalPrice = calculateSinglePizzaPrice(targetPizza);
@@ -298,6 +332,33 @@ export default function CustomizeWizard({
               className="wizard-main-img" 
             />
           </div>
+
+          {(product.category === 'pizzalar' || product.category === 'doyuran-menuler') && (
+            <div className="group-selection-box" style={{ marginTop: '16px', marginBottom: '16px', textAlign: 'left', background: 'white', padding: '16px', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', boxShadow: 'var(--shadow-sm)' }}>
+              <label style={{ fontSize: '13px', fontWeight: '800', color: 'var(--color-dark-blue)', display: 'block', marginBottom: '8px' }}>Porsiyon / Kişilik Seçimi:</label>
+              <select 
+                value={selectedGroup} 
+                onChange={(e) => setSelectedGroup(e.target.value)}
+                style={{ 
+                  width: '100%', 
+                  padding: '10px 14px', 
+                  borderRadius: 'var(--radius-sm)', 
+                  border: '1px solid var(--color-border)', 
+                  fontSize: '13px', 
+                  fontWeight: '700', 
+                  color: 'var(--color-dark-blue)', 
+                  backgroundColor: '#f8fafc',
+                  outline: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                <option value="1">1 Kişilik (Standart)</option>
+                <option value="2">2 Kişilik (Grup Fırsatı) - 729 TL</option>
+                <option value="4">4 Kişilik (Aile Fırsatı) - 999 TL</option>
+                <option value="6">6 Kişilik (Dev Fırsat) - 1249 TL</option>
+              </select>
+            </div>
+          )}
 
           {/* Şef Luigi AI Gurme Açıklama Kutusu */}
           <div className="luigi-ai-box">

@@ -3,12 +3,31 @@ import { Plus, Play, X } from 'lucide-react';
 
 export default function ProductCard({ product, onAddToCart }) {
   const [showVideoModal, setShowVideoModal] = useState(false);
+  const [selectedGroup, setSelectedGroup] = useState('1');
+
+  const getPrice = () => {
+    if (product.category === 'pizzalar' || product.category === 'doyuran-menuler') {
+      if (selectedGroup === '2') return 729;
+      if (selectedGroup === '4') return 999;
+      if (selectedGroup === '6') return 1249;
+    }
+    return product.basePrice;
+  };
+
+  const getGroupName = () => {
+    if (selectedGroup === '2') return '2 Kişilik (Grup)';
+    if (selectedGroup === '4') return '4 Kişilik (Aile)';
+    if (selectedGroup === '6') return '6 Kişilik (Dev)';
+    return '1 Kişilik';
+  };
 
   const handleAddClick = () => {
+    const finalPrice = getPrice();
+    const groupName = getGroupName();
     onAddToCart({
       ...product,
-      price: product.basePrice,
-      customInfo: null
+      price: finalPrice,
+      customInfo: selectedGroup !== '1' ? { size: { name: groupName }, crust: { name: 'Grup Menüsü' } } : null
     });
   };
 
@@ -69,15 +88,42 @@ export default function ProductCard({ product, onAddToCart }) {
           <h3 className="product-card-title">{product.name}</h3>
           <p className="product-card-description">{product.description}</p>
           
-          <div className="product-card-footer">
+          {(product.category === 'pizzalar' || product.category === 'doyuran-menuler') && (
+            <div className="group-selection-box" style={{ marginTop: 'auto', marginBottom: '12px', textAlign: 'left' }}>
+              <label style={{ fontSize: '11px', fontWeight: '800', color: 'var(--color-text-muted)', display: 'block', marginBottom: '4px' }}>Porsiyon / Kişilik Seçimi:</label>
+              <select 
+                value={selectedGroup} 
+                onChange={(e) => setSelectedGroup(e.target.value)}
+                style={{ 
+                  width: '100%', 
+                  padding: '8px 12px', 
+                  borderRadius: 'var(--radius-sm)', 
+                  border: '1px solid var(--color-border)', 
+                  fontSize: '12px', 
+                  fontWeight: '700', 
+                  color: 'var(--color-dark-blue)', 
+                  backgroundColor: '#f8fafc',
+                  outline: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                <option value="1">1 Kişilik (Standart)</option>
+                <option value="2">2 Kişilik (Grup Fırsatı) - 729 TL</option>
+                <option value="4">4 Kişilik (Aile Fırsatı) - 999 TL</option>
+                <option value="6">6 Kişilik (Dev Fırsat) - 1249 TL</option>
+              </select>
+            </div>
+          )}
+
+          <div className="product-card-footer" style={{ marginTop: (product.category === 'pizzalar' || product.category === 'doyuran-menuler') ? '0' : 'auto' }}>
             <div className="price-info">
-              <span className="price-label">Başlayan fiyatlar</span>
-              <span className="price-value">{product.basePrice} TL</span>
+              <span className="price-label">{selectedGroup !== '1' ? 'Seçilen Tutar' : 'Başlayan fiyatlar'}</span>
+              <span className="price-value">{getPrice()} TL</span>
             </div>
             
             <button className="add-to-cart-btn" onClick={handleAddClick}>
               <Plus size={18} />
-              <span>{product.customizable ? 'Seç' : 'Ekle'}</span>
+              <span>{product.customizable && selectedGroup === '1' ? 'Seç' : 'Ekle'}</span>
             </button>
           </div>
         </div>

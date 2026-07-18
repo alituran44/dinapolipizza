@@ -19,6 +19,7 @@ import RewardModal from './components/RewardModal';
 import AddressesModal from './components/AddressesModal';
 import AboutPage from './components/AboutPage';
 import ContactPage from './components/ContactPage';
+import { Award, Gift } from 'lucide-react';
 import { 
   INITIAL_PRODUCTS, INITIAL_DOUGHS, INITIAL_CRUSTS, INITIAL_INGREDIENTS 
 } from './data/products';
@@ -460,7 +461,7 @@ export default function App() {
             {currentPage === 'menu' && (
               <>
                 {/* Header Altı Video Banner Akışı */}
-                <div className="header-video-banner">
+                <div className="header-video-banner" style={{ position: 'relative', overflow: 'hidden' }}>
                   <video 
                     src="/header-video.mp4" 
                     autoPlay 
@@ -469,14 +470,107 @@ export default function App() {
                     playsInline 
                     className="banner-video-element"
                   />
-                  <div className="banner-video-overlay-tint">
-                    <div className="container">
-                      <span className="banner-badge-gold">1997'DEN BERİ TAŞ FIRIN LEZZETİ</span>
-                      <h2>Pizzada Usta Eller</h2>
-                      <p className="banner-subtitle">27 Yıldır Aynı yerde Aynı adreste; odun ateşinde pişen, el yapımı nefis İtalyan pizzaları ve doyuran menülerimizle hizmetinizdeyiz.</p>
-                      <a href="#menu" className="banner-action-btn" style={{ marginTop: '16px', display: 'inline-block' }}>
-                        Lezzetleri Keşfet
-                      </a>
+                  <div className="banner-video-overlay-tint" style={{ padding: '40px 0' }}>
+                    <div className="container" style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '40px', alignItems: 'center', minHeight: '340px' }}>
+                      
+                      {/* Left: Text & Brand Highlights */}
+                      <div className="hero-left-col" style={{ textAlign: 'left' }}>
+                        <span className="banner-badge-gold">1997'DEN BERİ TAŞ FIRIN LEZZETİ</span>
+                        <h2 style={{ fontSize: '48px', marginBottom: '8px', lineHeight: '1.1' }}>Pizzada Usta Eller</h2>
+                        <div className="banner-tagline-highlight" style={{
+                          fontSize: '20px',
+                          fontWeight: '900',
+                          color: 'var(--color-primary-blue)',
+                          textTransform: 'uppercase',
+                          letterSpacing: '1.2px',
+                          textShadow: '0 2px 8px rgba(0,0,0,0.7)',
+                          marginBottom: '16px',
+                          fontFamily: 'var(--font-display)'
+                        }}>
+                          27 Yıldır Aynı Yerde Aynı Adreste
+                        </div>
+                        <p className="banner-subtitle" style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.9)', maxWidth: '580px', textShadow: '0 1px 4px rgba(0,0,0,0.5)', marginBottom: '20px' }}>
+                          Odun ateşinde pişen, el yapımı nefis İtalyan pizzaları ve doyuran menülerimizle hizmetinizdeyiz.
+                        </p>
+                        <a href="#menu" className="banner-action-btn" style={{ display: 'inline-block' }}>
+                          Lezzetleri Keşfet
+                        </a>
+                      </div>
+
+                      {/* Right: Ye-Kazan Loyalty Card */}
+                      <div className="hero-right-col" style={{ zIndex: 10 }}>
+                        <div className="ye-kazan-loyalty-card" style={{ background: 'white', color: 'var(--color-text-main)', borderRadius: 'var(--radius-md)', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.35)', border: 'none' }}>
+                          <div className="loyalty-header" style={{ padding: '14px 20px', background: 'var(--color-primary-red)', color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <h3 style={{ fontSize: '15px', fontWeight: '800', color: 'white', margin: 0 }}>Di Napoli Ye-Kazan</h3>
+                            <button onClick={() => setIsRewardModalOpen(true)} className="loyalty-details-link" style={{ background: 'none', border: 'none', color: '#ffeb3b', fontWeight: 'bold', fontSize: '12px', cursor: 'pointer' }}>Detayı Gör &gt;</button>
+                          </div>
+                          
+                          <div className="loyalty-body" style={{ padding: '20px' }}>
+                            <div className="loyalty-info-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                              <div className="loyalty-sub-text" style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-text-muted)', fontSize: '13px' }}>
+                                <Award size={18} className="loyalty-award-icon" style={{ color: 'var(--color-primary-red)' }} />
+                                <span>Sipariş ver, Napoli dilimi kazan!</span>
+                              </div>
+                              <button className="loyalty-join-btn" onClick={() => setIsRewardModalOpen(true)} style={{ background: 'var(--color-primary-red)', color: 'white', border: 'none', padding: '6px 14px', borderRadius: '20px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer', transition: '0.2s' }}>Ustalara Katıl</button>
+                            </div>
+
+                            {/* Slices progression */}
+                            <div className="slices-timeline-container" style={{ margin: '24px 0' }}>
+                              <div className="slices-timeline-line" style={{ height: '4px', background: '#e2e8f0', position: 'relative', borderRadius: '2px' }}>
+                                <div 
+                                  className="slices-timeline-fill" 
+                                  style={{ width: `${Math.min((yeKazanSlices / 6) * 100, 100)}%`, height: '100%', background: 'var(--color-success)', borderRadius: '2px' }}
+                                ></div>
+                              </div>
+                              
+                              <div className="slices-timeline-nodes" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '-12px', position: 'relative' }}>
+                                {[1, 2, 3, 4, 5, 6].map((slice) => {
+                                  const isCompleted = yeKazanSlices >= slice;
+                                  const isGiftNode = slice === 6;
+                                  
+                                  return (
+                                    <div 
+                                      key={slice} 
+                                      className={`slice-node ${isCompleted ? 'completed' : ''} ${isGiftNode ? 'gift-node' : ''}`}
+                                      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '24px' }}
+                                    >
+                                      <div className="node-circle-icon" style={{ 
+                                        width: '24px', 
+                                        height: '24px', 
+                                        borderRadius: '50%', 
+                                        background: isCompleted ? 'var(--color-success)' : 'white', 
+                                        border: `2px solid ${isCompleted ? 'var(--color-success)' : '#cbd5e1'}`,
+                                        color: isCompleted ? 'white' : '#64748b',
+                                        display: 'flex', 
+                                        alignItems: 'center', 
+                                        justifyContent: 'center',
+                                        fontSize: '11px',
+                                        fontWeight: 'bold',
+                                        boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+                                      }}>
+                                        {isGiftNode ? (
+                                          <Gift size={12} style={{ color: isCompleted ? 'white' : '#64748b' }} />
+                                        ) : (
+                                          <span className="slice-number">{slice}</span>
+                                        )}
+                                      </div>
+                                      <span className="node-label" style={{ fontSize: '10px', color: '#64748b', marginTop: '4px', whiteSpace: 'nowrap' }}>
+                                        {slice === 6 ? 'Bedava' : `${slice} Dilim`}
+                                      </span>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+
+                            <div className="loyalty-footer-tip" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #f1f5f9', paddingTop: '12px', marginTop: '12px', fontSize: '11px', color: 'var(--color-text-muted)' }}>
+                              <span>Her pizza siparişinde 1 dilim kazanırsınız.</span>
+                              <a href="#" onClick={(e) => { e.preventDefault(); setIsRewardModalOpen(true); }} className="faq-link" style={{ color: 'var(--color-primary-red)', fontWeight: 'bold' }}>Nasıl kazanırım?</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
                     </div>
                   </div>
                 </div>
