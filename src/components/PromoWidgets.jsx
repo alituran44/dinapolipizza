@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Award, ChevronLeft, ChevronRight, Gift } from 'lucide-react';
 import RewardModal from './RewardModal';
 
@@ -41,6 +41,16 @@ export default function PromoWidgets({ yeKazanSlices }) {
       badgeClass: 'gold'
     }
   ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveDealIndex((prev) => (prev + 1) % deals.length);
+    }, 4500); // 4.5 saniyede bir otomatik döner
+
+    return () => clearInterval(timer);
+  }, [deals.length]);
+
+
 
   const handleNextDeal = (e) => {
     e.preventDefault();
