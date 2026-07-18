@@ -8,7 +8,7 @@ export default function KuryeSlipModal({ order, cart, onClose, deliveryMode, add
   const whatsappNumber = '905423883010'; // Resmi Di Napoli Telefonu
 
   // Formulate WhatsApp message text
-  const itemsText = cart.map(item => {
+  const itemsText = (order.items || cart || []).map(item => {
     let details = '';
     if (item.customInfo && item.customInfo.selectedPizzas) {
       details = ' (' + item.customInfo.selectedPizzas.map((p, idx) => {
@@ -95,7 +95,7 @@ _Bu sipariş kurye bilgilendirme fişidir._`;
 
           <div className="receipt-items">
             <p className="sec-title"><strong>SİPARİŞ DETAYLARI:</strong></p>
-            {cart.map((item, idx) => {
+            {(order.items || cart || []).map((item, idx) => {
               const isCustomized = item.customInfo && item.customInfo.selectedPizzas;
               return (
                 <div key={idx} className="receipt-item-line">

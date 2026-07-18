@@ -335,6 +335,7 @@ export default function App() {
     const newOrder = {
       id: orderId,
       itemsSummary,
+      items: [...cart], // Sepetin o anki kopyasını siparişe ekle!
       deliveryMode,
       total: summary.total,
       slicesGained: summary.slicesGained,
@@ -343,6 +344,7 @@ export default function App() {
 
     setOrders([...orders, newOrder]);
     setActiveOrder(newOrder);
+    setActiveOrderSlip(newOrder); // Sipariş verildiğinde fiş modalını doğrudan aç!
     
     // Complete referral transaction if user phone matches any invite
     if (user && user.phone) {
@@ -359,7 +361,6 @@ export default function App() {
       setIsAuthModalOpen(true);
       setShowTracker(false);
     } else {
-      setIsOrdersHistoryOpen(true);
       setShowTracker(false);
     }
   };
