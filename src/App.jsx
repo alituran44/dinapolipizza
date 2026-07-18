@@ -29,7 +29,11 @@ export default function App() {
   const [deliveryMode, setDeliveryMode] = useState('delivery'); // 'delivery' or 'pickup'
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
   const [announcementText, setAnnouncementText] = useState(() => {
-    return localStorage.getItem('dinapoli_announcement') || "🍕 Haftanın Kampanyası: 3 Al 2 Öde! • 🎁 Arkadaşını Davet Et, 75 TL Cüzdan Ödülü Kazan! • 🚀 Şef Luigi ile Kendi Pizzanı Tasarla!";
+    try {
+      return localStorage.getItem('dinapoli_announcement') || "🍕 Haftanın Kampanyası: 3 Al 2 Öde! • 🎁 Arkadaşını Davet Et, 75 TL Cüzdan Ödülü Kazan! • 🚀 Şef Luigi ile Kendi Pizzanı Tasarla!";
+    } catch (e) {
+      return "🍕 Haftanın Kampanyası: 3 Al 2 Öde! • 🎁 Arkadaşını Davet Et, 75 TL Cüzdan Ödülü Kazan! • 🚀 Şef Luigi ile Kendi Pizzanı Tasarla!";
+    }
   });
   const [isAiChefOpen, setIsAiChefOpen] = useState(false);
   const [isRewardModalOpen, setIsRewardModalOpen] = useState(false);
@@ -69,14 +73,21 @@ export default function App() {
   };
 
   const [user, setUser] = useState(() => {
-    const saved = localStorage.getItem('dinapoli_user');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      // Admin accounts
-      if (parsed.email === 'admin@dinapolipizza.com' || parsed.email === 'chef.luigi@dinapolipizza.com') {
-        parsed.isAdmin = true;
+    try {
+      const saved = localStorage.getItem('dinapoli_user');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Admin accounts
+        if (parsed && (parsed.email === 'admin@dinapolipizza.com' || parsed.email === 'chef.luigi@dinapolipizza.com')) {
+          parsed.isAdmin = true;
+        }
+        return parsed;
       }
-      return parsed;
+    } catch (e) {
+      console.error("Error parsing user from localStorage:", e);
+      try {
+        localStorage.removeItem('dinapoli_user');
+      } catch (ex) {}
     }
     return null;
   });
@@ -220,6 +231,8 @@ export default function App() {
   
   // Add item to cart
   const handleAddToCart = (item) => {
+    if (!item) return;
+    
     // If product is customizable/campaign pizza and clicked from the menu directly, open wizard instead
     if (item.customizable && !item.customInfo) {
       setActiveCustomizeItem(item);
@@ -227,7 +240,7 @@ export default function App() {
     }
 
     const existingIndex = cart.findIndex((cartItem) => {
-      if (cartItem.id !== item.id) return false;
+      if (!cartItem || cartItem.id !== item.id) return false;
       
       // If it's a wizard/customized item, check if selections match
       if (cartItem.customInfo && item.customInfo) {
