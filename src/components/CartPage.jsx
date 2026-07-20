@@ -322,10 +322,10 @@ export default function CartPage({
                   {[
                     { id: 'cash', name: 'Kapıda Nakit', desc: 'Nakit ile ödeme', icon: '💵', color: '#10b981' },
                     { id: 'card', name: 'Kapıda Kredi Kartı', desc: 'Kart ile ödeme', icon: '💳', color: '#3b82f6' },
-                    { id: 'multinet', name: 'Multinet', desc: 'Yemek Kartı', icon: '🟢', color: '#22c55e' },
-                    { id: 'metropol', name: 'Metropol Card', desc: 'Yemek Kartı', icon: '🔴', color: '#ef4444' },
-                    { id: 'setcard', name: 'Setcard', desc: 'Yemek Kartı', icon: '🔵', color: '#2563eb' },
-                    { id: 'yemeksepeti', name: 'Yemeksepeti', desc: 'Aktif Cüzdan', icon: '🛵', color: '#db2777' }
+                    { id: 'multinet', name: 'Multinet', desc: 'Kapıda Nakit ya da Kapıda Kredi Kartı', icon: '🟢', color: '#22c55e' },
+                    { id: 'metropol', name: 'Metropol Card', desc: 'Kapıda Nakit ya da Kapıda Kredi Kartı', icon: '🔴', color: '#ef4444' },
+                    { id: 'setcard', name: 'Setcard', desc: 'Kapıda Nakit ya da Kapıda Kredi Kartı', icon: '🔵', color: '#2563eb' },
+                    { id: 'yemeksepeti', name: 'Yemeksepeti', desc: 'Kapıda Nakit ya da Kapıda Kredi Kartı', icon: '🛵', color: '#db2777' }
                   ].map(option => {
                     const isSelected = paymentMethod === option.id;
                     return (
