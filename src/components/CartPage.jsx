@@ -321,11 +321,7 @@ export default function CartPage({
                 }}>
                   {[
                     { id: 'cash', name: 'Kapıda Nakit', desc: 'Nakit ile ödeme', icon: '💵', color: '#10b981' },
-                    { id: 'card', name: 'Kapıda Kredi Kartı', desc: 'Kart ile ödeme', icon: '💳', color: '#3b82f6' },
-                    { id: 'multinet', name: 'Multinet', desc: 'Kapıda Nakit ya da Kapıda Kredi Kartı', icon: '🟢', color: '#22c55e' },
-                    { id: 'metropol', name: 'Metropol Card', desc: 'Kapıda Nakit ya da Kapıda Kredi Kartı', icon: '🔴', color: '#ef4444' },
-                    { id: 'setcard', name: 'Setcard', desc: 'Kapıda Nakit ya da Kapıda Kredi Kartı', icon: '🔵', color: '#2563eb' },
-                    { id: 'yemeksepeti', name: 'Yemeksepeti', desc: 'Kapıda Nakit ya da Kapıda Kredi Kartı', icon: '🛵', color: '#db2777' }
+                    { id: 'card', name: 'Kapıda Kredi Kartı', desc: 'Kart ile ödeme', icon: '💳', color: '#3b82f6' }
                   ].map(option => {
                     const isSelected = paymentMethod === option.id;
                     return (
@@ -533,14 +529,14 @@ export default function CartPage({
                     <button 
                       onClick={() => {
                         const text = "Di Napoli Çanakkale'de harika pizzalar var! Sipariş vermek için kesinlikle tavsiye ederim! 🍕🍕 #dinapolipizza";
-                        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
+                        window.open(`https://x.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
                         alert("📢 Harika! Tavsiye paylaşımınız başlatıldı. Sipariş sonrasında cüzdanınıza yansıyacaktır.");
                       }}
                       style={{
                         flex: 1,
-                        backgroundColor: '#1DA1F2',
+                        backgroundColor: '#000000',
                         color: 'white',
-                        border: 'none',
+                        border: '1px solid rgba(255,255,255,0.15)',
                         padding: '6px 8px',
                         borderRadius: '6px',
                         fontSize: '10px',
@@ -548,7 +544,7 @@ export default function CartPage({
                         cursor: 'pointer'
                       }}
                     >
-                      🐦 Twitter'da Paylaş
+                      𝕏'te Paylaş
                     </button>
                     <button 
                       onClick={() => {

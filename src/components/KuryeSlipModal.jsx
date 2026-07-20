@@ -33,8 +33,8 @@ export default function KuryeSlipModal({
       onRegisterSocialShare(order.id, platform);
     }
     const text = `Di Napoli Pizza'dan ${order.total} TL'ye harika bir sipariş verdim! Kesinlikle tavsiye ederim! 🍕🍕 #dinapolipizza`;
-    const shareUrl = platform === 'Twitter/X' 
-      ? `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`
+    const shareUrl = platform === '𝕏 (X)' 
+      ? `https://x.com/intent/tweet?text=${encodeURIComponent(text)}`
       : `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
     window.open(shareUrl, '_blank');
   };
@@ -208,13 +208,14 @@ _Bu sipariş kurye bilgilendirme fişidir._`;
 
           <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
             <button 
-              onClick={() => handleShareClick('Twitter/X')}
+              onClick={() => handleShareClick('𝕏 (X)')}
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: '6px',
-                backgroundColor: '#1DA1F2',
+                backgroundColor: '#000000',
                 color: 'white',
+                border: '1px solid rgba(255,255,255,0.15)',
                 padding: '8px 16px',
                 borderRadius: '8px',
                 fontSize: '11px',
@@ -222,7 +223,7 @@ _Bu sipariş kurye bilgilendirme fişidir._`;
                 cursor: 'pointer'
               }}
             >
-              🐦 Twitter'da Paylaş
+              𝕏'te Paylaş
             </button>
             <button 
               onClick={() => handleShareClick('WhatsApp')}
