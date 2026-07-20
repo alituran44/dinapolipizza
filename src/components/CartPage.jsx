@@ -548,6 +548,25 @@ export default function CartPage({
                     </button>
                     <button 
                       onClick={() => {
+                        window.open('https://www.instagram.com/dinapolicanakkale/', '_blank');
+                        alert("📸 Instagram profilimiz açıldı! Bizi hikayenizde etiketleyerek paylaşabilirsiniz. Paylaşımınız admin onayından sonra cüzdanınıza yansıyacaktır.");
+                      }}
+                      style={{
+                        flex: 1,
+                        background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)',
+                        color: 'white',
+                        border: 'none',
+                        padding: '6px 8px',
+                        borderRadius: '6px',
+                        fontSize: '10px',
+                        fontWeight: 'bold',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      📸 Instagram'da Paylaş
+                    </button>
+                    <button 
+                      onClick={() => {
                         const text = "Di Napoli Çanakkale'de harika pizzalar var! Sipariş vermek için kesinlikle tavsiye ederim! 🍕🍕 #dinapolipizza";
                         window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
                         alert("📢 Harika! Tavsiye paylaşımınız başlatıldı. Sipariş sonrasında cüzdanınıza yansıyacaktır.");

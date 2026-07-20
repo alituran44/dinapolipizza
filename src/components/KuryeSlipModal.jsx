@@ -32,6 +32,10 @@ export default function KuryeSlipModal({
     if (typeof onRegisterSocialShare === 'function') {
       onRegisterSocialShare(order.id, platform);
     }
+    if (platform === 'Instagram') {
+      window.open('https://www.instagram.com/dinapolicanakkale/', '_blank');
+      return;
+    }
     const text = `Di Napoli Pizza'dan ${order.total} TL'ye harika bir sipariş verdim! Kesinlikle tavsiye ederim! 🍕🍕 #dinapolipizza`;
     const shareUrl = platform === '𝕏 (X)' 
       ? `https://x.com/intent/tweet?text=${encodeURIComponent(text)}`
@@ -224,6 +228,23 @@ _Bu sipariş kurye bilgilendirme fişidir._`;
               }}
             >
               𝕏'te Paylaş
+            </button>
+            <button 
+              onClick={() => handleShareClick('Instagram')}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)',
+                color: 'white',
+                padding: '8px 16px',
+                borderRadius: '8px',
+                fontSize: '11px',
+                fontWeight: '900',
+                cursor: 'pointer'
+              }}
+            >
+              📸 Instagram'da Paylaş
             </button>
             <button 
               onClick={() => handleShareClick('WhatsApp')}
