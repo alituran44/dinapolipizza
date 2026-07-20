@@ -24,7 +24,6 @@ export default function ProductCard({ product, onAddToCart }) {
       if (selectedGroup === '2') return '2 Kişilik Porsiyon';
       if (selectedGroup === '4') return '4 Kişilik Porsiyon';
       if (selectedGroup === '6') return '6 Kişilik Porsiyon';
-      if (selectedGroup === '8') return '8 Kişilik Porsiyon';
       return 'Tek Kişilik (Küçük)';
     }
     if (selectedGroup === '2') return '2 Kişilik (Grup)';
@@ -127,7 +126,6 @@ export default function ProductCard({ product, onAddToCart }) {
                     {product.pricesByPeople['2'] && <option value="2">2 Kişilik Porsiyon - {product.pricesByPeople['2']} TL</option>}
                     {product.pricesByPeople['4'] && <option value="4">4 Kişilik Porsiyon - {product.pricesByPeople['4']} TL</option>}
                     {product.pricesByPeople['6'] && <option value="6">6 Kişilik Porsiyon - {product.pricesByPeople['6']} TL</option>}
-                    {product.pricesByPeople['8'] && <option value="8">8 Kişilik Porsiyon - {product.pricesByPeople['8']} TL</option>}
                   </>
                 ) : (
                   <>
