@@ -6,6 +6,11 @@ export default function ProductCard({ product, onAddToCart }) {
   const [selectedGroup, setSelectedGroup] = useState('1');
 
   const getPrice = () => {
+    if (product.pricesByPeople) {
+      if (product.pricesByPeople[selectedGroup]) {
+        return product.pricesByPeople[selectedGroup];
+      }
+    }
     if (product.category === 'pizzalar' || product.category === 'doyuran-menuler') {
       if (selectedGroup === '2') return 729;
       if (selectedGroup === '4') return 999;
@@ -15,6 +20,13 @@ export default function ProductCard({ product, onAddToCart }) {
   };
 
   const getGroupName = () => {
+    if (product.pricesByPeople) {
+      if (selectedGroup === '2') return '2 Kişilik Porsiyon';
+      if (selectedGroup === '4') return '4 Kişilik Porsiyon';
+      if (selectedGroup === '6') return '6 Kişilik Porsiyon';
+      if (selectedGroup === '8') return '8 Kişilik Porsiyon';
+      return 'Tek Kişilik (Küçük)';
+    }
     if (selectedGroup === '2') return '2 Kişilik (Grup)';
     if (selectedGroup === '4') return '4 Kişilik (Aile)';
     if (selectedGroup === '6') return '6 Kişilik (Dev)';
@@ -109,10 +121,22 @@ export default function ProductCard({ product, onAddToCart }) {
                   cursor: 'pointer'
                 }}
               >
-                <option value="1">1 Kişilik (Standart)</option>
-                <option value="2">2 Kişilik (Grup Fırsatı) - 729 TL</option>
-                <option value="4">4 Kişilik (Aile Fırsatı) - 999 TL</option>
-                <option value="6">6 Kişilik (Dev Fırsat) - 1249 TL</option>
+                {product.pricesByPeople ? (
+                  <>
+                    <option value="1">1 Kişilik (Tek) - {product.basePrice} TL</option>
+                    {product.pricesByPeople['2'] && <option value="2">2 Kişilik Porsiyon - {product.pricesByPeople['2']} TL</option>}
+                    {product.pricesByPeople['4'] && <option value="4">4 Kişilik Porsiyon - {product.pricesByPeople['4']} TL</option>}
+                    {product.pricesByPeople['6'] && <option value="6">6 Kişilik Porsiyon - {product.pricesByPeople['6']} TL</option>}
+                    {product.pricesByPeople['8'] && <option value="8">8 Kişilik Porsiyon - {product.pricesByPeople['8']} TL</option>}
+                  </>
+                ) : (
+                  <>
+                    <option value="1">1 Kişilik (Standart) - {product.basePrice} TL</option>
+                    <option value="2">2 Kişilik (Grup Fırsatı) - 729 TL</option>
+                    <option value="4">4 Kişilik (Aile Fırsatı) - 999 TL</option>
+                    <option value="6">6 Kişilik (Dev Fırsat) - 1249 TL</option>
+                  </>
+                )}
               </select>
             </div>
           )}

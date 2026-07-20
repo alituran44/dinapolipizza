@@ -13,6 +13,33 @@ export default function CustomizeWizard({
   onClose 
 }) {
   const isSinglePizza = !product.requiredPizzaSelections || product.requiredPizzaSelections <= 1;
+
+  const getSlotSizeInfo = (prod, idx) => {
+    const id = prod.id;
+    if (id === 'firsat-2al1ode') {
+      return idx === 0 ? 'Medium Boy' : 'Small Boy (Bedava)';
+    }
+    if (id === 'firsat-3al2ode') {
+      return idx < 2 ? 'Medium (Orta) Boy' : 'Small (Küçük) Boy (Bedava)';
+    }
+    if (id === 'firsat-sefin') {
+      return 'Medium (Orta) Boy';
+    }
+    if (id === 'firsat-arkadas') {
+      return 'Small (Küçük) Boy';
+    }
+    if (id === 'firsat-2kisilik') {
+      return 'Large (Büyük) Boy';
+    }
+    if (id === 'firsat-4kisilik') {
+      return 'XLarge (Battal) Boy';
+    }
+    if (id === 'firsat-6kisilik') {
+      return 'XXLarge (Dev) Boy';
+    }
+    return 'Standart Boy';
+  };
+
   const [selectedGroup, setSelectedGroup] = useState('1');
   const [linkCopied, setLinkCopied] = useState(false);
   const handleCopyLink = () => {
@@ -427,7 +454,7 @@ export default function CustomizeWizard({
               {pizzaSlots.map((slot, index) => (
                 <div key={index} className="selection-slot-card" onClick={() => handleOpenSlot(index)}>
                   <div className="slot-info">
-                    <span className="slot-number-label">{index + 1}. Pizza Seçimi</span>
+                    <span className="slot-number-label">{index + 1}. Pizza Seçimi - <strong style={{ color: 'var(--color-primary-red)' }}>{getSlotSizeInfo(product, index)}</strong></span>
                     {slot ? (
                       <div className="slot-selected-details">
                         <h4>{slot.name}</h4>
@@ -453,7 +480,7 @@ export default function CustomizeWizard({
             <div className="wizard-sub-panel">
               <button className="wizard-back-btn" onClick={() => setWizardStage('summary')}>
                 <ChevronLeft size={18} />
-                <span>{selectedSlotIndex + 1}. Pizza Seçimi</span>
+                <span>{selectedSlotIndex + 1}. Pizza Seçimi ({getSlotSizeInfo(product, selectedSlotIndex)})</span>
               </button>
 
               <div className="pizzas-selection-list">
