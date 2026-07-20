@@ -12,7 +12,7 @@ export default function CustomizeWizard({
   onAddToCart, 
   onClose 
 }) {
-  const isSinglePizza = !product.requiredPizzaSelections || product.requiredPizzaSelections <= 1;
+  const isSinglePizza = (!product.requiredPizzaSelections || product.requiredPizzaSelections <= 1) && product.category !== 'kampanya';
 
   const getSlotSizeInfo = (prod, idx) => {
     const id = prod.id;

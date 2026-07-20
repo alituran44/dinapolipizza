@@ -18,7 +18,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Süper Kampanya',
     description: '1 Medium Pizza + Cips + Soğan Halkası + 1 LT Coca-Cola',
     basePrice: 729,
-    image: 'https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?auto=format&fit=crop&w=600&q=80',
+    image: '/super_kampanya.png',
     yeKazanSlice: 1,
     popular: true,
     customizable: true,
