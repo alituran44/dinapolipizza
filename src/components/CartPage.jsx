@@ -548,8 +548,26 @@ export default function CartPage({
                     </button>
                     <button 
                       onClick={() => {
-                        window.open('https://www.instagram.com/dinapolicanakkale/', '_blank');
-                        alert("📸 Instagram profilimiz açıldı! Bizi hikayenizde etiketleyerek paylaşabilirsiniz. Paylaşımınız admin onayından sonra cüzdanınıza yansıyacaktır.");
+                        const shareText = "Di Napoli Çanakkale'de harika pizzalar var! Sipariş vermek için kesinlikle tavsiye ederim! 🍕🍕 #dinapolipizza @dinapolicanakkale";
+                        if (navigator.share) {
+                          navigator.share({
+                            title: 'Di Napoli Pizza Siparişi',
+                            text: shareText,
+                            url: window.location.origin
+                          }).then(() => {
+                            alert("📸 Harika! Siparişiniz paylaşım menüsüne yönlendirildi. Kendi Instagram hesabınızda hikaye veya post olarak paylaşabilirsiniz.");
+                          }).catch((err) => {
+                            console.log("Paylaşım iptal edildi: ", err);
+                            window.open('https://www.instagram.com/', '_blank');
+                          });
+                        } else {
+                          navigator.clipboard.writeText(shareText).then(() => {
+                            alert("📸 Tavsiye metniniz panoya kopyalandı!\n\nInstagram açılıyor. Kendi profilinizde paylaşırken bu metni yapıştırabilir ve bizi etiketleyebilirsiniz!\n\nKopyalanan Metin: \"" + shareText + "\"");
+                            window.open('https://www.instagram.com/', '_blank');
+                          }).catch(() => {
+                            window.open('https://www.instagram.com/', '_blank');
+                          });
+                        }
                       }}
                       style={{
                         flex: 1,

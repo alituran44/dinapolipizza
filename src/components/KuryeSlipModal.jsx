@@ -32,14 +32,33 @@ export default function KuryeSlipModal({
     if (typeof onRegisterSocialShare === 'function') {
       onRegisterSocialShare(order.id, platform);
     }
+    const shareText = `Di Napoli Pizza'dan lezzetli bir sipariş verdim! 🍕 Kesinlikle tavsiye ederim! #dinapolipizza @dinapolicanakkale`;
+    
     if (platform === 'Instagram') {
-      window.open('https://www.instagram.com/dinapolicanakkale/', '_blank');
+      if (navigator.share) {
+        navigator.share({
+          title: 'Di Napoli Pizza Siparişi',
+          text: shareText,
+          url: window.location.origin
+        }).then(() => {
+          alert("📸 Harika! Siparişiniz paylaşım menüsüne yönlendirildi. Kendi Instagram hesabınızda hikaye veya post olarak paylaşabilirsiniz.");
+        }).catch((err) => {
+          console.log("Paylaşım iptal edildi veya hata oluştu: ", err);
+          window.open('https://www.instagram.com/', '_blank');
+        });
+      } else {
+        navigator.clipboard.writeText(shareText).then(() => {
+          alert("📸 Tavsiye metniniz panoya kopyalandı!\n\nInstagram açılıyor. Kendi profilinizde paylaşırken bu metni yapıştırabilir ve bizi etiketleyebilirsiniz!\n\nKopyalanan Metin: \"" + shareText + "\"");
+          window.open('https://www.instagram.com/', '_blank');
+        }).catch(() => {
+          window.open('https://www.instagram.com/', '_blank');
+        });
+      }
       return;
     }
-    const text = `Di Napoli Pizza'dan ${order.total} TL'ye harika bir sipariş verdim! Kesinlikle tavsiye ederim! 🍕🍕 #dinapolipizza`;
     const shareUrl = platform === '𝕏 (X)' 
-      ? `https://x.com/intent/tweet?text=${encodeURIComponent(text)}`
-      : `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+      ? `https://x.com/intent/tweet?text=${encodeURIComponent(shareText)}`
+      : `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
     window.open(shareUrl, '_blank');
   };
 
