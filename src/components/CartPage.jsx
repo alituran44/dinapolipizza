@@ -513,6 +513,65 @@ export default function CartPage({
                   </svg>
                   <span>WhatsApp ile Sipariş Ver</span>
                 </button>
+
+                {/* Sepet Altı Sosyal Paylaşım Tavsiye Bölümü */}
+                <div style={{
+                  marginTop: '16px',
+                  padding: '12px',
+                  backgroundColor: '#FFFDF9',
+                  border: '1.5px dashed #d4af37',
+                  borderRadius: '10px',
+                  textAlign: 'center'
+                }}>
+                  <div style={{ fontWeight: '850', fontSize: '13px', color: 'var(--color-primary-red)', marginBottom: '4px' }}>
+                    📢 Arkadaşlarına Tavsiye Et!
+                  </div>
+                  <p style={{ fontSize: '10px', color: '#64748b', margin: '0 0 10px 0', lineHeight: '1.4' }}>
+                    Siparişi sosyal medyada tavsiye edin, her 10 tavsiyede **+1 Hediye Dilim Pizza** kazanın!
+                  </p>
+                  <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                    <button 
+                      onClick={() => {
+                        const text = "Di Napoli Çanakkale'de harika pizzalar var! Sipariş vermek için kesinlikle tavsiye ederim! 🍕🍕 #dinapolipizza";
+                        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
+                        alert("📢 Harika! Tavsiye paylaşımınız başlatıldı. Sipariş sonrasında cüzdanınıza yansıyacaktır.");
+                      }}
+                      style={{
+                        flex: 1,
+                        backgroundColor: '#1DA1F2',
+                        color: 'white',
+                        border: 'none',
+                        padding: '6px 8px',
+                        borderRadius: '6px',
+                        fontSize: '10px',
+                        fontWeight: 'bold',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      🐦 Twitter'da Paylaş
+                    </button>
+                    <button 
+                      onClick={() => {
+                        const text = "Di Napoli Çanakkale'de harika pizzalar var! Sipariş vermek için kesinlikle tavsiye ederim! 🍕🍕 #dinapolipizza";
+                        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+                        alert("📢 Harika! Tavsiye paylaşımınız başlatıldı. Sipariş sonrasında cüzdanınıza yansıyacaktır.");
+                      }}
+                      style={{
+                        flex: 1,
+                        backgroundColor: '#25D366',
+                        color: 'white',
+                        border: 'none',
+                        padding: '6px 8px',
+                        borderRadius: '6px',
+                        fontSize: '10px',
+                        fontWeight: 'bold',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      💬 WhatsApp'ta Paylaş
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           )}
