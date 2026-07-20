@@ -14,6 +14,7 @@ export default function AdminPanel({
   orders,
   onUpdateOrderStatus,
   onShowSlip,
+  socialShares = [],
   
   // Customization controls
   doughs,
@@ -284,6 +285,14 @@ export default function AdminPanel({
           >
             <LayoutDashboard size={18} />
             <span>Genel İstatistikler</span>
+          </button>
+
+          <button 
+            className={`admin-nav-item ${activeTab === 'social-shares' ? 'active' : ''}`}
+            onClick={() => setActiveTab('social-shares')}
+          >
+            <span style={{ marginRight: '6px' }}>📢</span>
+            <span>Sosyal Paylaşımlar</span>
           </button>
         </nav>
         
@@ -1197,6 +1206,67 @@ export default function AdminPanel({
                   E-Posta Duyurusu Gönder
                 </button>
               </form>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'social-shares' && (
+          <div className="admin-tab-content">
+            <h2 className="admin-tab-title">Sosyal Medya Tavsiye Paylaşımları</h2>
+            <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '20px' }}>
+              Müşterilerin siparişlerini tamamladıktan sonra sosyal medyada yaptıkları tavsiye paylaşımları ve kazandıkları Ye-Kazan dilimleri.
+            </p>
+
+            <div className="orders-list-panel">
+              {socialShares.length === 0 ? (
+                <div className="admin-empty-state">
+                  <span style={{ fontSize: '48px', display: 'block', marginBottom: '16px' }}>📢</span>
+                  <h3>Henüz Sosyal Paylaşım Yapılmadı</h3>
+                  <p>Müşteriler siparişlerini paylaştıkça anlık loglar burada listelenecektir.</p>
+                </div>
+              ) : (
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Paylaşım Kodu</th>
+                      <th>Sipariş No</th>
+                      <th>Müşteri Adı</th>
+                      <th>E-Posta</th>
+                      <th>Platform</th>
+                      <th>Saat</th>
+                      <th>Durum</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {socialShares.map((share) => (
+                      <tr key={share.id}>
+                        <td><strong>{share.id}</strong></td>
+                        <td>#{share.orderId}</td>
+                        <td>{share.userName}</td>
+                        <td>{share.userEmail}</td>
+                        <td>
+                          <span style={{
+                            padding: '3px 8px',
+                            borderRadius: '12px',
+                            fontSize: '11px',
+                            fontWeight: 'bold',
+                            backgroundColor: share.platform === 'Twitter/X' ? '#e2e8f0' : '#e6fffa',
+                            color: share.platform === 'Twitter/X' ? '#1a202c' : '#234e52'
+                          }}>
+                            {share.platform}
+                          </span>
+                        </td>
+                        <td>{share.timestamp}</td>
+                        <td>
+                          <span style={{ color: '#10b981', fontWeight: 'bold', fontSize: '12px' }}>
+                            {share.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
         )}

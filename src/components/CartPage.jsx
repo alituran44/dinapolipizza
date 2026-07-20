@@ -100,6 +100,8 @@ export default function CartPage({
     setAppliedCoupon('');
   };
 
+  const [paymentMethod, setPaymentMethod] = useState('cash'); // 'cash', 'card', 'multinet', 'metropol', 'setcard', 'yemeksepeti'
+
   const userWalletBalance = user ? (user.walletBalance || 0) : 0;
   const walletDiscountApplied = useWallet ? Math.min(itemsSubtotal - couponDiscount, userWalletBalance) : 0;
   const totalAmount = Math.max(0, itemsSubtotal - couponDiscount - walletDiscountApplied + deliveryFee);
@@ -113,7 +115,7 @@ export default function CartPage({
         }
       }
       if (typeof onCheckout === 'function') {
-        onCheckout();
+        onCheckout(paymentMethod);
       }
     } catch (err) {
       alert("Sipariş verilirken sepet sayfasında hata oluştu: " + err.message);
@@ -297,6 +299,57 @@ export default function CartPage({
                   ) : (
                     <p style={{ margin: 0 }}><strong>Saat Kulesi Karşısı, Merkez/Çanakkale</strong> şubemizden beklemeden teslim alacaksınız.</p>
                   )}
+                </div>
+              </div>
+            )}
+
+            {/* Ödeme Yöntemi Seçimi */}
+            {cart.length > 0 && (
+              <div className="cart-card-panel payment-summary-card" style={{ marginTop: '24px' }}>
+                <div className="panel-icon-title">
+                  <span style={{ fontSize: '20px' }}>💳</span>
+                  <h3 style={{ fontSize: '18px', fontWeight: '850', color: 'var(--color-dark-blue)' }}>Ödeme Yöntemi Seçin</h3>
+                </div>
+                <p style={{ fontSize: '12px', color: '#64748b', margin: '4px 0 16px 0' }}>
+                  Kapıda veya şubede yapmak istediğiniz ödeme seçeneğini belirtin.
+                </p>
+
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+                  gap: '12px'
+                }}>
+                  {[
+                    { id: 'cash', name: 'Kapıda Nakit', desc: 'Nakit ile ödeme', icon: '💵', color: '#10b981' },
+                    { id: 'card', name: 'Kapıda Kredi Kartı', desc: 'Kart ile ödeme', icon: '💳', color: '#3b82f6' },
+                    { id: 'multinet', name: 'Multinet', desc: 'Yemek Kartı', icon: '🟢', color: '#22c55e' },
+                    { id: 'metropol', name: 'Metropol Card', desc: 'Yemek Kartı', icon: '🔴', color: '#ef4444' },
+                    { id: 'setcard', name: 'Setcard', desc: 'Yemek Kartı', icon: '🔵', color: '#2563eb' },
+                    { id: 'yemeksepeti', name: 'Yemeksepeti', desc: 'Aktif Cüzdan', icon: '🛵', color: '#db2777' }
+                  ].map(option => {
+                    const isSelected = paymentMethod === option.id;
+                    return (
+                      <div
+                        key={option.id}
+                        onClick={() => setPaymentMethod(option.id)}
+                        style={{
+                          padding: '16px',
+                          borderRadius: '12px',
+                          border: isSelected ? `2.5px solid ${option.color}` : '1.5px solid #e2e8f0',
+                          backgroundColor: isSelected ? `${option.color}05` : '#f8fafc',
+                          cursor: 'pointer',
+                          textAlign: 'center',
+                          transition: 'all 0.2s ease',
+                          transform: isSelected ? 'scale(1.02)' : 'none',
+                          boxShadow: isSelected ? '0 4px 6px -1px rgba(0,0,0,0.05)' : 'none'
+                        }}
+                      >
+                        <div style={{ fontSize: '24px', marginBottom: '6px' }}>{option.icon}</div>
+                        <div style={{ fontWeight: '800', fontSize: '13px', color: 'var(--color-dark-blue)' }}>{option.name}</div>
+                        <div style={{ fontSize: '10px', color: '#64748b', marginTop: '2px' }}>{option.desc}</div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             )}

@@ -203,6 +203,29 @@ export default function App() {
     alert(`Duyuru E-Postası Başarıyla Gönderildi!\n\nAlıcılar: ${emails.join(', ')}\nKonu: ${subject}\n\nMesaj: ${message.substring(0, 100)}...`);
   };
 
+  const handleRegisterSocialShare = (orderId, platform) => {
+    const shareId = `SH-${Math.floor(1000 + Math.random() * 9000)}`;
+    const newShare = {
+      id: shareId,
+      orderId,
+      platform,
+      userEmail: user ? user.email : 'misafir@dinapolipizza.com',
+      userName: user ? user.name : 'Misafir Sinyor',
+      timestamp: new Date().toLocaleTimeString('tr-TR'),
+      status: 'Onaylandı 🍕'
+    };
+    setSocialShares(prev => [...prev, newShare]);
+    
+    // Tavsiye ve ödül algoritması: 10 paylaşımda +1 pizza dilimi hediye
+    const userSharesCount = socialShares.filter(s => s.userEmail === newShare.userEmail).length + 1;
+    if (userSharesCount % 10 === 0) {
+      setYeKazanSlices(prev => prev + 1);
+      alert(`🎉 Tebrikler Sinyor! Sosyal medyada 10 tavsiyeye ulaştınız ve +1 Ye-Kazan Pizza Dilimi kazandınız!`);
+    } else {
+      alert(`📢 Siparişiniz ${platform} üzerinde paylaşıldı! 10 tavsiyede 1 dilim hediye. (Mevcut Paylaşımınız: ${userSharesCount}/10)`);
+    }
+  };
+
   const handleAddAddress = (newAddr) => {
     setUserAddresses(prev => [...prev, newAddr]);
   };
@@ -222,6 +245,7 @@ export default function App() {
   const [orders, setOrders] = useState([]); 
   const [activeOrder, setActiveOrder] = useState(null); // Eksik olan activeOrder state'i tanımlandı!
   const [activeOrderSlip, setActiveOrderSlip] = useState(null);
+  const [socialShares, setSocialShares] = useState([]); // Sosyal paylaşımları tutan yeni state!
   const [isSlipFromAdmin, setIsSlipFromAdmin] = useState(false);
   const [showTracker, setShowTracker] = useState(false);
 
@@ -313,7 +337,7 @@ export default function App() {
   };
 
   // Place order
-  const handlePlaceOrder = (summary) => {
+  const handlePlaceOrder = (summary, paymentMethod = 'cash') => {
     try {
       const orderId = `DN-${Math.floor(100000 + Math.random() * 900000)}`;
       
@@ -339,6 +363,7 @@ export default function App() {
         itemsSummary,
         items: [...cart], // Sepetin o anki kopyasını siparişe ekle!
         deliveryMode,
+        paymentMethod, // Seçilen ödeme yöntemini siparişe ekle!
         total: summary.total,
         slicesGained: summary.slicesGained,
         status: '1' // Initial status: 'Sipariş Alındı'
@@ -481,7 +506,7 @@ export default function App() {
                       className="banner-video-element"
                     />
                   )}
-                  <div className="banner-video-overlay-tint" style={{ padding: '40px 0', backgroundColor: isMobile ? 'rgba(43, 5, 5, 0.85)' : 'rgba(43, 5, 5, 0.65)' }}>
+                  <div className="banner-video-overlay-tint" style={{ padding: '40px 0', backgroundColor: isMobile ? 'rgba(43, 5, 5, 0.55)' : 'rgba(43, 5, 5, 0.35)' }}>
                     <div className="container" style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '40px', alignItems: 'center', minHeight: '340px' }}>
                       
                       {/* Left: Text & Brand Highlights */}
@@ -615,14 +640,14 @@ export default function App() {
                   onUpdateQuantity={(index, q) => handleUpdateQuantity(index, q)}
                   onRemoveItem={(index) => handleRemoveItem(index)}
                   onAddToCart={handleAddToCart}
-                  onCheckout={() => {
+                  onCheckout={(selectedPaymentMethod) => {
                     try {
                       const itemsSubtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
                       const deliveryFee = deliveryMode === 'delivery' ? 15 : 0;
                       handlePlaceOrder({
                         total: itemsSubtotal + deliveryFee,
                         slicesGained: cart.reduce((sum, item) => sum + ((item.yeKazanSlice || 0) * item.quantity), 0)
-                      });
+                      }, selectedPaymentMethod);
                       setCurrentPage('menu');
                     } catch (err) {
                       alert("App.jsx onCheckout hatası: " + err.message);
@@ -695,6 +720,8 @@ export default function App() {
                 order={activeOrderSlip}
                 cart={cart}
                 showPrint={isSlipFromAdmin}
+                socialShares={socialShares}
+                onRegisterSocialShare={handleRegisterSocialShare}
                 onClose={() => {
                   setActiveOrderSlip(null);
                   setCart([]); // Sipariş onaylandıktan sonra sepeti sıfırla
@@ -834,6 +861,7 @@ export default function App() {
             setWhatsAppTemplate(tpl);
             localStorage.setItem('dinapoli_wa_template', tpl);
           }}
+          socialShares={socialShares}
           onClose={() => setIsAdminMode(false)}
         />
       )}

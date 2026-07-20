@@ -1,11 +1,43 @@
 import React from 'react';
 import { Printer, MessageSquare, X, CheckCircle } from 'lucide-react';
 
-export default function KuryeSlipModal({ order, cart, onClose, deliveryMode, address, showPrint }) {
+export default function KuryeSlipModal({ 
+  order, 
+  cart, 
+  onClose, 
+  deliveryMode, 
+  address, 
+  showPrint,
+  socialShares = [],
+  onRegisterSocialShare
+}) {
   if (!order) return null;
 
   const orderDate = new Date().toLocaleString('tr-TR');
   const whatsappNumber = '905423883010'; // Resmi Di Napoli Telefonu
+
+  const getPaymentName = (method) => {
+    switch (method) {
+      case 'cash': return 'KAPIDA NAKİT 💵';
+      case 'card': return 'KAPIDA KREDİ KARTI 💳';
+      case 'multinet': return 'MULTİNET (YEMEK KARTI) 🟢';
+      case 'metropol': return 'METROPOL CARD (YEMEK KARTI) 🔴';
+      case 'setcard': return 'SETCARD (YEMEK KARTI) 🔵';
+      case 'yemeksepeti': return 'YEMEKSEPETİ (CÜZDAN) 🛵';
+      default: return 'KAPIDA NAKİT 💵';
+    }
+  };
+
+  const handleShareClick = (platform) => {
+    if (typeof onRegisterSocialShare === 'function') {
+      onRegisterSocialShare(order.id, platform);
+    }
+    const text = `Di Napoli Pizza'dan ${order.total} TL'ye harika bir sipariş verdim! Kesinlikle tavsiye ederim! 🍕🍕 #dinapolipizza`;
+    const shareUrl = platform === 'Twitter/X' 
+      ? `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`
+      : `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+    window.open(shareUrl, '_blank');
+  };
 
   // Formulate WhatsApp message text
   const itemsText = (order.items || cart || []).map(item => {
@@ -82,6 +114,7 @@ _Bu sipariş kurye bilgilendirme fişidir._`;
             <p><strong>FİŞ NO:</strong> {order.id}</p>
             <p><strong>TARİH:</strong> {orderDate}</p>
             <p><strong>TESLİMAT:</strong> {deliveryMode === 'delivery' ? '🚗 ADRESE TESLİM' : '🏪 GEL-AL'}</p>
+            <p><strong>ÖDEME:</strong> {getPaymentName(order.paymentMethod)}</p>
           </div>
 
           <div className="receipt-divider-dash"></div>
@@ -137,6 +170,77 @@ _Bu sipariş kurye bilgilendirme fişidir._`;
           <div className="receipt-footer">
             <p>Afiyet Olsun!</p>
             <p>0286 214 00 30 - 0542 388 30 10</p>
+          </div>
+        </div>
+
+        {/* Sosyal Medya Paylaşım & Ödül Kartı */}
+        <div style={{
+          backgroundColor: '#FFFDF9',
+          border: '2px dashed #d4af37',
+          borderRadius: '12px',
+          padding: '16px',
+          margin: '20px 0',
+          textAlign: 'center',
+          boxShadow: '0 4px 6px rgba(0,0,0,0.03)'
+        }}>
+          <h4 style={{ color: 'var(--color-primary-red)', fontWeight: '900', fontSize: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', margin: '0 0 6px 0' }}>
+            📢 Paylaş & Hediye Dilim Pizza Kazan!
+          </h4>
+          <p style={{ fontSize: '11px', color: '#475569', margin: '0 0 12px 0', lineHeight: '1.4' }}>
+            Siparişinizi sosyal medyada tavsiye edin, her 10 tavsiye paylaşımında **+1 Ye-Kazan Pizza Dilimi** anında cüzdanınıza eklensin!
+          </p>
+
+          {/* İlerleme Çubuğu */}
+          <div style={{ marginBottom: '14px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', fontWeight: 'bold', color: '#64748b', marginBottom: '4px' }}>
+              <span>Paylaşım Hedefi</span>
+              <span>{socialShares.length % 10}/10</span>
+            </div>
+            <div style={{ height: '8px', backgroundColor: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
+              <div style={{
+                height: '100%',
+                width: `${((socialShares.length % 10) / 10) * 100}%`,
+                backgroundColor: '#d4af37',
+                transition: 'width 0.3s ease'
+              }} />
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+            <button 
+              onClick={() => handleShareClick('Twitter/X')}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                backgroundColor: '#1DA1F2',
+                color: 'white',
+                padding: '8px 16px',
+                borderRadius: '8px',
+                fontSize: '11px',
+                fontWeight: '900',
+                cursor: 'pointer'
+              }}
+            >
+              🐦 Twitter'da Paylaş
+            </button>
+            <button 
+              onClick={() => handleShareClick('WhatsApp')}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                backgroundColor: '#25D366',
+                color: 'white',
+                padding: '8px 16px',
+                borderRadius: '8px',
+                fontSize: '11px',
+                fontWeight: '900',
+                cursor: 'pointer'
+              }}
+            >
+              💬 WhatsApp'ta Öner
+            </button>
           </div>
         </div>
 

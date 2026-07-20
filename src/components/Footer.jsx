@@ -35,7 +35,7 @@ export default function Footer({ onGoToAbout, onGoToContact }) {
           left: 0,
           width: '100%',
           height: '100%',
-          background: 'linear-gradient(rgba(31, 0, 0, 0.85), rgba(41, 4, 4, 0.95))',
+          background: 'linear-gradient(rgba(31, 0, 0, 0.45), rgba(41, 4, 4, 0.6))',
           zIndex: -1
         }}
       />
@@ -138,6 +138,58 @@ export default function Footer({ onGoToAbout, onGoToContact }) {
               @dinapolicanakkale
             </span>
           </div>
+        </div>
+
+        {/* Anlaşmalı Ödeme Markaları Bandı */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '24px',
+          margin: '24px 0 16px 0',
+          padding: '12px 0',
+          borderTop: '1px solid rgba(255,255,255,0.08)',
+          borderBottom: '1px solid rgba(255,255,255,0.08)'
+        }}>
+          <span style={{ fontSize: '11px', fontWeight: '900', color: '#ffb703', letterSpacing: '1px', textTransform: 'uppercase', marginRight: '8px' }}>
+            Kabul Edilen Kartlar:
+          </span>
+          {[
+            { name: 'Multinet', icon: '🟢', color: '#22c55e', text: 'multinet' },
+            { name: 'Metropol Card', icon: '🔴', color: '#ef4444', text: 'METROPOL' },
+            { name: 'Yemeksepeti', icon: '🛵', color: '#db2777', text: 'yemeksepeti' },
+            { name: 'Setcard', icon: '🔵', color: '#2563eb', text: 'SETCARD' }
+          ].map(logo => (
+            <div 
+              key={logo.name}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '6px 14px',
+                borderRadius: '8px',
+                border: '1px solid rgba(255,255,255,0.1)',
+                backgroundColor: 'rgba(255,255,255,0.03)',
+                fontSize: '11px',
+                fontWeight: '900',
+                letterSpacing: '0.8px'
+              }}
+            >
+              <span style={{ fontSize: '14px' }}>{logo.icon}</span>
+              <span style={{ color: '#ffffff' }}>
+                {logo.name === 'Multinet' ? (
+                  <>multi<span style={{ color: '#22c55e' }}>net</span></>
+                ) : logo.name === 'Metropol Card' ? (
+                  <>Metropol<span style={{ color: '#ef4444', fontSize: '9px', marginLeft: '2px' }}>Card</span></>
+                ) : logo.name === 'Setcard' ? (
+                  <span style={{ color: '#2563eb', fontWeight: '950', letterSpacing: '1.2px' }}>SETCARD</span>
+                ) : (
+                  <>Yemek<span style={{ color: '#db2777' }}>sepeti</span></>
+                )}
+              </span>
+            </div>
+          ))}
         </div>
 
         <div className="footer-divider"></div>
