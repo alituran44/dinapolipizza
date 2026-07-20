@@ -514,7 +514,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Tekirdağ Köfte',
     description: 'Geleneksel Tekirdağ köfte porsiyonu, patates ve salata ile',
     basePrice: 400,
-    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80',
+    image: '/tekirdag_kofte.png',
     yeKazanSlice: 0,
     popular: true,
     customizable: false
@@ -707,7 +707,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Kızarmış Dondurma',
     description: 'Çıtır mısır gevreği kaplamalı kızarmış dondurma, çikolata soslu',
     basePrice: 250,
-    image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80',
+    image: '/kizarmis_dondurma.png',
     yeKazanSlice: 0,
     popular: false,
     customizable: false

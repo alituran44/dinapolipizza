@@ -643,7 +643,7 @@ export default function App() {
                   onCheckout={(selectedPaymentMethod) => {
                     try {
                       const itemsSubtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                      const deliveryFee = deliveryMode === 'delivery' ? 15 : 0;
+                      const deliveryFee = 0;
                       handlePlaceOrder({
                         total: itemsSubtotal + deliveryFee,
                         slicesGained: cart.reduce((sum, item) => sum + ((item.yeKazanSlice || 0) * item.quantity), 0)

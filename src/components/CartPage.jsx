@@ -72,7 +72,7 @@ export default function CartPage({
   const itemsSubtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
   // Delivery fee
-  const deliveryFee = deliveryMode === 'delivery' ? 15 : 0;
+  const deliveryFee = 0;
 
   // Coupon apply
   const handleApplyCoupon = (e) => {
