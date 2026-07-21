@@ -14,6 +14,7 @@ export default function Footer({ onGoToAbout, onGoToContact }) {
         loop 
         muted 
         playsInline 
+        preload="auto"
         className="footer-video-bg"
         style={{
           position: 'absolute',

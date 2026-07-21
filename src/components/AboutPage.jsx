@@ -38,6 +38,7 @@ export default function AboutPage({ onGoToMenu, onGoToContact }) {
             loop 
             muted 
             playsInline
+            preload="auto"
             style={{
               width: '100%',
               height: '100%',

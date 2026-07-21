@@ -5127,9 +5127,15 @@ button {
   }
 
   /* Grid Sistemleri Mobilde Tek Sütun */
-  .deals-grid, .menu-grid, .cart-grid-system, .footer-links-grid, .product-grid-custom {
+  .deals-grid, .menu-grid, .cart-grid-system, .footer-links-grid, .product-grid-custom, .products-grid-tr, .about-grid, .contact-grid {
     grid-template-columns: 1fr !important;
     gap: 16px !important;
+  }
+
+  /* Hakkımızda Sayfası Dikey Görünüm */
+  .about-grid > div {
+    height: auto !important;
+    min-height: 300px;
   }
 
   /* Modallar Mobil Uyum */
@@ -5203,6 +5209,20 @@ button {
   /* Kampanya kartları esnekliği */
   .deal-promo-card {
     min-width: 280px !important;
+  }
+
+  /* Özelleştirme Sihirbazı Mobilde Dikey Yapı */
+  .wizard-body-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+    padding: 12px !important;
+  }
+
+  .wizard-left-panel {
+    border-right: none !important;
+    padding-right: 0 !important;
+    border-bottom: 1px solid var(--color-border) !important;
+    padding-bottom: 20px !important;
   }
 }
 
