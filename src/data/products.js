@@ -498,7 +498,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Börek Menü',
     description: 'Usta Börek + Patates + Ayran',
     basePrice: 269,
-    image: 'https://images.unsplash.com/photo-1626700051175-6518c4793f06?auto=format&fit=crop&w=600&q=80',
+    image: '/menu_borek.png',
     yeKazanSlice: 1,
     popular: false,
     customizable: false
@@ -589,7 +589,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Elma Dilim Patates',
     description: 'Özel Baharatlı Elma Dilim Patates Kızartması',
     basePrice: 179,
-    image: '/patates.jpg',
+    image: '/elma_patates.png',
     yeKazanSlice: 0,
     popular: false,
     customizable: false
@@ -600,7 +600,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Mozzarella Stick',
     description: 'Dışı çıtır çıtır içi uzayan erimiş mozzarella peynir çubukları (5 adet)',
     basePrice: 199,
-    image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80',
+    image: '/citir_mozzarella.png',
     yeKazanSlice: 0,
     popular: true,
     customizable: false
@@ -611,7 +611,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Elma Dilim Patates',
     description: 'Özel Baharatlı Elma Dilim Patates Kızartması',
     basePrice: 179,
-    image: '/patates.jpg',
+    image: '/elma_patates.png',
     yeKazanSlice: 0,
     popular: false,
     customizable: false
@@ -657,7 +657,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Tavuklu Salata',
     description: 'Tavuk Göğsü, Marul, Domates, Salatalık, Mısır, Zeytin, Havuç',
     basePrice: 359,
-    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80',
+    image: '/salata_tavuklu.png',
     yeKazanSlice: 0,
     popular: true,
     customizable: false
@@ -668,7 +668,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Ton Balıklı Salata',
     description: 'Ton Balığı, Marul, Domates, Salatalık, Mısır, Zeytin, Havuç',
     basePrice: 359,
-    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80',
+    image: '/salata_ton.png',
     yeKazanSlice: 0,
     popular: false,
     customizable: false
@@ -679,7 +679,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Sebze Salata',
     description: 'Bol Marul, Domates, Salatalık, Mısır, Zeytin, Havuç ve Zeytinyağlı Sos',
     basePrice: 309,
-    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80',
+    image: '/salata_sebze.png',
     yeKazanSlice: 0,
     popular: false,
     customizable: false
@@ -690,7 +690,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Akdeniz Salatası',
     description: 'Beyaz Peynir, Marul, Domates, Salatalık, Zeytin, Roka ve Kırmızı Soğan',
     basePrice: 359,
-    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80',
+    image: '/salata_akdeniz.png',
     yeKazanSlice: 0,
     popular: true,
     customizable: false
@@ -703,7 +703,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Künefe',
     description: 'Sıcak ve şerbetli usta künefesi, üstünde Antep fıstığı parçaları',
     basePrice: 250,
-    image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80',
+    image: '/tatli_kunefe.png',
     yeKazanSlice: 0,
     popular: true,
     customizable: false
@@ -714,7 +714,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Sufle',
     description: 'İçi akışkan çikolatalı sıcak sufle',
     basePrice: 295,
-    image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80',
+    image: '/tatli_sufle.png',
     yeKazanSlice: 0,
     popular: true,
     customizable: false
