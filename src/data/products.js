@@ -432,7 +432,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Junyir Menü',
     description: 'Çeyrek Pizza + Patates + Nuggets + Kutu İçecek',
     basePrice: 249,
-    image: 'https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=600&q=80',
+    image: '/menu_junyir.png',
     yeKazanSlice: 1,
     popular: false,
     customizable: false
@@ -443,7 +443,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Şampiyon Menü',
     description: 'Small Pizza + Patates + Soğan Halkası + Nuggets + Kutu İçecek',
     basePrice: 349,
-    image: 'https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?auto=format&fit=crop&w=600&q=80',
+    image: '/menu_sampiyon.png',
     yeKazanSlice: 1,
     popular: true,
     customizable: false
@@ -476,7 +476,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Di Napoli Ekstra',
     description: 'Yarım Pizza + Patates + Rus Salatası + Kutu İçecek',
     basePrice: 369,
-    image: '/rus_salatasi.jpg',
+    image: '/menu_dinapoli_ekstra.png',
     yeKazanSlice: 1,
     popular: false,
     customizable: false
@@ -487,7 +487,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Sosisli Menü',
     description: 'Usta Sosisli Tabağı + Patates + Ayran',
     basePrice: 339,
-    image: 'https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?auto=format&fit=crop&w=600&q=80',
+    image: '/menu_sosisli.png',
     yeKazanSlice: 1,
     popular: false,
     customizable: false
@@ -521,7 +521,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Şinitzel',
     description: 'Özel panelenmiş tavuk göğsü şinitzel tabağı, patates kızartması ile',
     basePrice: 375,
-    image: 'https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?auto=format&fit=crop&w=600&q=80',
+    image: '/fast_sinitzel.png',
     yeKazanSlice: 0,
     popular: false,
     customizable: false
