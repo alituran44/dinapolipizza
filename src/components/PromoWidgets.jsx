@@ -10,7 +10,7 @@ export default function PromoWidgets({ yeKazanSlices }) {
       title: 'Süper Kampanya',
       desc: '1 Medium Pizza + Cips + Soğan Halkası + 1 LT Coca-Cola',
       price: '729 TL',
-      image: 'https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?auto=format&fit=crop&w=600&q=80',
+      image: '/super_kampanya.png',
       badgeClass: 'gold'
     },
     {
@@ -26,7 +26,7 @@ export default function PromoWidgets({ yeKazanSlices }) {
       title: 'Şefin Kampanyası',
       desc: '2 Medium Pizza + 1 Coca-Cola BEDAVA!',
       price: '729 TL',
-      image: 'https://images.unsplash.com/photo-1590947132387-155cc02f3212?auto=format&fit=crop&w=600&q=80',
+      image: '/sefin_pizzasi.jpg',
       badgeClass: 'red'
     },
     {
@@ -34,7 +34,7 @@ export default function PromoWidgets({ yeKazanSlices }) {
       title: '4 Kişilik Aile Kampanyası',
       desc: 'XLarge Pizza + 4 Adet Tavuk Parçacığı + Patates Cipsi + 1 LT Coca-Cola',
       price: '999 TL',
-      image: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=80',
+      image: '/firsat_4kisilik.png',
       badgeClass: 'gold'
     }
   ];

@@ -18,7 +18,7 @@ const BANNERS = [
     title: 'Siparişini Cüzdanla Öde',
     subtitle: 'Her Siparişte Ödül Kazan!',
     description: 'Cüzdan ödemelerinde anında %10 usta iade kazanımı.',
-    image: 'https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?auto=format&fit=crop&w=600&q=80'
+    image: '/super_kampanya.png'
   },
   {
     id: 3,
