@@ -606,18 +606,7 @@ export const INITIAL_PRODUCTS = [
     customizable: false
   },
   {
-    id: 'citir-elma-patates-2',
-    category: 'citir-lezzetler',
-    name: 'Elma Dilim Patates',
-    description: 'Özel Baharatlı Elma Dilim Patates Kızartması',
-    basePrice: 179,
-    image: '/elma_patates.png',
-    yeKazanSlice: 0,
-    popular: false,
-    customizable: false
-  },
-  {
-    id: 'citir-patates-cipsi-2',
+    id: 'citir-patates-cipsi',
     category: 'citir-lezzetler',
     name: 'Patates Cipsi',
     description: 'İnce ve Çıtır Parmak Patates Kızartması',
@@ -625,17 +614,6 @@ export const INITIAL_PRODUCTS = [
     image: '/patates.jpg',
     yeKazanSlice: 0,
     popular: true,
-    customizable: false
-  },
-  {
-    id: 'citir-sogan-kroket-2',
-    category: 'citir-lezzetler',
-    name: 'Soğan Kroket',
-    description: 'Çıtır Çıtır Kaplamalı Leziz Soğan Kroketleri',
-    basePrice: 129,
-    image: '/sogan_halkasi.jpg',
-    yeKazanSlice: 0,
-    popular: false,
     customizable: false
   },
 
@@ -738,7 +716,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Coca-Cola 1L',
     description: 'Soğuk ve ferahlatıcı orijinal tat',
     basePrice: 45,
-    image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80',
+    image: '/icecek_cola_1l.png',
     yeKazanSlice: 0,
     popular: false,
     customizable: false
@@ -749,7 +727,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Coca-Cola Kutu 330ml',
     description: 'Kutu kutu mutluluk, buz gibi ferahlık',
     basePrice: 35,
-    image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80',
+    image: '/icecek_cola_can.png',
     yeKazanSlice: 0,
     popular: true,
     customizable: false
@@ -760,7 +738,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Fanta Kutu 330ml',
     description: 'Portakallı gazlı içecek',
     basePrice: 35,
-    image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80',
+    image: '/icecek_fanta_can.png',
     yeKazanSlice: 0,
     popular: false,
     customizable: false
@@ -771,7 +749,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Sprite Kutu 330ml',
     description: 'Limon aromalı gazlı içecek',
     basePrice: 35,
-    image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80',
+    image: '/icecek_sprite_can.png',
     yeKazanSlice: 0,
     popular: false,
     customizable: false
@@ -782,7 +760,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Nefis Ayran 300ml',
     description: 'Köprülü usta ayranı',
     basePrice: 20,
-    image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80',
+    image: '/icecek_ayran.png',
     yeKazanSlice: 0,
     popular: true,
     customizable: false
@@ -795,7 +773,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Paket Ketçap',
     description: 'Ekstra lezzet katan paket ketçap',
     basePrice: 4,
-    image: 'https://images.unsplash.com/photo-1528750951167-a5eb871a24a9?auto=format&fit=crop&w=600&q=80',
+    image: '/sos_ketchup.png',
     yeKazanSlice: 0,
     popular: false,
     customizable: false
@@ -806,7 +784,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Paket Mayonez',
     description: 'Kremamsı ve leziz paket mayonez',
     basePrice: 4,
-    image: 'https://images.unsplash.com/photo-1528750951167-a5eb871a24a9?auto=format&fit=crop&w=600&q=80',
+    image: '/sos_mayo.png',
     yeKazanSlice: 0,
     popular: false,
     customizable: false
@@ -817,7 +795,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Paket Acı Sos',
     description: 'Acı severlere usta acı sos',
     basePrice: 4,
-    image: 'https://images.unsplash.com/photo-1528750951167-a5eb871a24a9?auto=format&fit=crop&w=600&q=80',
+    image: '/sos_aci.png',
     yeKazanSlice: 0,
     popular: true,
     customizable: false
