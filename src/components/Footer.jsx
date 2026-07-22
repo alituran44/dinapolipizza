@@ -4,7 +4,7 @@ import {
   Instagram, Facebook, Youtube 
 } from 'lucide-react';
 
-export default function Footer({ onGoToAbout, onGoToContact }) {
+export default function Footer({ onGoToAbout, onGoToContact, onAdminClick }) {
   return (
     <footer className="site-footer" style={{ position: 'relative', overflow: 'hidden', zIndex: 1 }}>
       {/* Video Background (Google Drive Custom Video) */}
@@ -200,9 +200,25 @@ export default function Footer({ onGoToAbout, onGoToContact }) {
           <p className="copyright-text">
             © 1997-{new Date().getFullYear()} Di Napoli Pizza Çanakkale. Tüm Hakları Saklıdır.
           </p>
-          <p className="love-text">
-            Made with <Heart size={14} className="heart-icon-gold" /> in Çanakkale since 1997.
-          </p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <p className="love-text">
+              Made with <Heart size={14} className="heart-icon-gold" /> in Çanakkale since 1997.
+            </p>
+            <a 
+              href="#admin" 
+              onClick={(e) => {
+                if (onAdminClick) {
+                  e.preventDefault();
+                  onAdminClick();
+                }
+              }} 
+              style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.5)', textDecoration: 'none', transition: '0.2s' }}
+              onMouseEnter={(e) => e.target.style.color = '#ffb703'}
+              onMouseLeave={(e) => e.target.style.color = 'rgba(255, 255, 255, 0.5)'}
+            >
+              ⚙️ Yönetici Girişi
+            </a>
+          </div>
         </div>
       </div>
     </footer>

@@ -204,6 +204,18 @@ export default function App() {
     }
   }, [usersList]);
 
+  // Automatic Admin Mode Activation from URL hash #admin or query parameter
+  useEffect(() => {
+    const checkAdminTrigger = () => {
+      if (window.location.hash === '#admin' || window.location.search.includes('admin=true')) {
+        setIsAdminMode(true);
+      }
+    };
+    checkAdminTrigger();
+    window.addEventListener('hashchange', checkAdminTrigger);
+    return () => window.removeEventListener('hashchange', checkAdminTrigger);
+  }, []);
+
   // Migration effect to update legacy WhatsApp numbers
   useEffect(() => {
     try {
@@ -771,6 +783,7 @@ export default function App() {
             <Footer 
               onGoToAbout={() => setCurrentPage('about')} 
               onGoToContact={() => setCurrentPage('contact')} 
+              onAdminClick={() => setIsAdminMode(true)}
             />
 
             {/* Cart Drawer */}
@@ -840,7 +853,12 @@ export default function App() {
             <AuthModal 
               isOpen={isAuthModalOpen}
               onClose={() => setIsAuthModalOpen(false)}
-              onLoginSuccess={(loggedUser) => setUser(loggedUser)}
+              onLoginSuccess={(loggedUser) => {
+                setUser(loggedUser);
+                if (loggedUser && loggedUser.isAdmin) {
+                  setIsAdminMode(true);
+                }
+              }}
             />
 
             {/* Orders History Modal */}
