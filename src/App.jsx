@@ -37,14 +37,7 @@ export default function App() {
 
   const [isAdminMode, setIsAdminMode] = useState(() => {
     try {
-      const saved = localStorage.getItem('dinapoli_user');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (parsed && (parsed.isAdmin || parsed.email === 'admin@dinapolipizza.com')) {
-          return true;
-        }
-      }
-      if (window.location.hash === '#admin' || window.location.search.includes('admin=true')) {
+      if (typeof window !== 'undefined' && (window.location.hash === '#admin' || window.location.search.includes('admin=true'))) {
         return true;
       }
     } catch (e) {}
@@ -511,8 +504,7 @@ export default function App() {
 
   return (
     <div className="app-container">
-      {!isAdminMode ? (
-        activeCustomizeItem ? (
+      {activeCustomizeItem ? (
           /* Render Pizza customizer/campaign selection wizard */
           <CustomizeWizard 
             product={activeCustomizeItem}
@@ -582,7 +574,8 @@ export default function App() {
               onGoToMenu={() => setCurrentPage('menu')}
             />
 
-            {currentPage === 'menu' && (
+            <main className="main-content">
+              {currentPage === 'menu' && (
               <>
                 {/* Header Altı Video Banner Akışı */}
                 <div className="header-video-banner" style={{ 
@@ -708,274 +701,270 @@ export default function App() {
                     </div>
                   </div>
                 </div>
+
+                <PromoWidgets yeKazanSlices={yeKazanSlices} />
+
+                {/* Usta AI Pizza Asistanı Giriş Banner'ı */}
+                <div className="ai-chef-promo-banner" onClick={() => setIsAiChefOpen(true)}>
+                  <div className="ai-promo-content">
+                    <div className="ai-badge">✨ YAPAY ZEKA DESTEKLİ</div>
+                    <h3>Kendi Pizzanı Kendin Tasarla! 🧑‍🍳</h3>
+                    <p>Nasıl bir pizza canın çekiyor? Şef Luigi'ye anlat, hamuru ve malzemeleri anında senin için fırına hazırlasın!</p>
+                  </div>
+                  <button className="ai-start-btn">
+                    Şef Luigi'yi Başlat
+                  </button>
+                </div>
+                
+                <Menu onAddToCart={handleAddToCart} products={products} />
               </>
             )}
 
-            <main className="main-content">
-              {currentPage === 'menu' && (
-                <>
-                  <PromoWidgets yeKazanSlices={yeKazanSlices} />
-
-                  {/* Usta AI Pizza Asistanı Giriş Banner'ı */}
-                  <div className="ai-chef-promo-banner" onClick={() => setIsAiChefOpen(true)}>
-                    <div className="ai-promo-content">
-                      <div className="ai-badge">✨ YAPAY ZEKA DESTEKLİ</div>
-                      <h3>Kendi Pizzanı Kendin Tasarla! 🧑‍🍳</h3>
-                      <p>Nasıl bir pizza canın çekiyor? Şef Luigi'ye anlat, hamuru ve malzemeleri anında senin için fırına hazırlasın!</p>
-                    </div>
-                    <button className="ai-start-btn">
-                      Şef Luigi'yi Başlat
-                    </button>
-                  </div>
-                  
-                  <Menu onAddToCart={handleAddToCart} products={products} />
-                </>
-              )}
-
-              {currentPage === 'cart' && (
-                <CartPage 
-                  cart={cart}
-                  onUpdateQuantity={(index, q) => handleUpdateQuantity(index, q)}
-                  onRemoveItem={(index) => handleRemoveItem(index)}
-                  onAddToCart={handleAddToCart}
-                  onCheckout={(selectedPaymentMethod) => {
-                    try {
-                      const itemsSubtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                      const deliveryFee = 0;
-                      handlePlaceOrder({
-                        total: itemsSubtotal + deliveryFee,
-                        slicesGained: cart.reduce((sum, item) => sum + ((item.yeKazanSlice || 0) * item.quantity), 0)
-                      }, selectedPaymentMethod);
-                      setCurrentPage('menu');
-                    } catch (err) {
-                      alert("App.jsx onCheckout hatası: " + err.message);
-                      console.error(err);
-                    }
-                  }}
-                  onClose={() => setCurrentPage('menu')}
-                  deliveryMode={deliveryMode}
-                  selectedAddress={address}
-                  user={user}
-                  onUpdateUserWallet={handleUpdateUserWallet}
-                  userAddresses={userAddresses}
-                  onSelectAddress={(addrText) => setAddress(addrText)}
-                  onOpenAddresses={() => setIsAddressesModalOpen(true)}
-                  whatsAppNumber={whatsAppNumber}
-                  whatsAppTemplate={whatsAppTemplate}
-                  whatsAppApiMode={whatsAppApiMode}
-                  whatsAppPhoneId={whatsAppPhoneId}
-                  whatsAppToken={whatsAppToken}
-                  whatsAppCloudEndpoint={whatsAppCloudEndpoint}
-                  whatsAppIncludePhotos={whatsAppIncludePhotos}
-                />
-              )}
-
-              {currentPage === 'referral' && (
-                <ReferralPage 
-                  user={user}
-                  usersList={usersList}
-                  onUpdateUserWallet={handleUpdateUserWallet}
-                  onGoToMenu={() => setCurrentPage('menu')}
-                  referralTransactions={referralTransactions}
-                  onApplyReferralCode={handleApplyReferralCode}
-                  rewardAmountTier={user ? getUserReferralRewardTier(user.id) : 75}
-                />
-              )}
-
-              {currentPage === 'about' && (
-                <AboutPage 
-                  onGoToMenu={() => setCurrentPage('menu')} 
-                  onGoToContact={() => setCurrentPage('contact')} 
-                />
-              )}
-
-              {currentPage === 'contact' && (
-                <ContactPage onGoToMenu={() => setCurrentPage('menu')} />
-              )}
-            </main>
-
-            <Footer 
-              onGoToAbout={() => setCurrentPage('about')} 
-              onGoToContact={() => setCurrentPage('contact')} 
-              onAdminClick={() => setIsAdminMode(true)}
-            />
-
-            {/* Cart Drawer */}
-            <CartDrawer 
-              isOpen={cartOpen}
-              onClose={() => setCartOpen(false)}
-              cart={cart}
-              onUpdateQuantity={handleUpdateQuantity}
-              onRemoveItem={handleRemoveItem}
-              deliveryMode={deliveryMode}
-              yeKazanSlices={yeKazanSlices}
-              onPlaceOrder={handlePlaceOrder}
-              onGoToCartPage={() => setCurrentPage('cart')}
-              whatsAppNumber={whatsAppNumber}
-              whatsAppTemplate={whatsAppTemplate}
-              whatsAppApiMode={whatsAppApiMode}
-              whatsAppPhoneId={whatsAppPhoneId}
-              whatsAppToken={whatsAppToken}
-              whatsAppCloudEndpoint={whatsAppCloudEndpoint}
-              whatsAppIncludePhotos={whatsAppIncludePhotos}
-              address={address}
-            />
-
-
-
-            {/* Kurye Sipariş Fişi Modalı */}
-            {activeOrderSlip && (
-              <KuryeSlipModal 
-                order={activeOrderSlip}
+            {currentPage === 'cart' && (
+              <CartPage 
                 cart={cart}
-                showPrint={isSlipFromAdmin}
-                socialShares={socialShares}
-                onRegisterSocialShare={handleRegisterSocialShare}
-                onClose={() => {
-                  setActiveOrderSlip(null);
-                  setCart([]); // Sipariş onaylandıktan sonra sepeti sıfırla
+                onUpdateQuantity={(index, q) => handleUpdateQuantity(index, q)}
+                onRemoveItem={(index) => handleRemoveItem(index)}
+                onAddToCart={handleAddToCart}
+                onCheckout={(selectedPaymentMethod) => {
+                  try {
+                    const itemsSubtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    const deliveryFee = 0;
+                    handlePlaceOrder({
+                      total: itemsSubtotal + deliveryFee,
+                      slicesGained: cart.reduce((sum, item) => sum + ((item.yeKazanSlice || 0) * item.quantity), 0)
+                    }, selectedPaymentMethod);
+                    setCurrentPage('menu');
+                  } catch (err) {
+                    alert("App.jsx onCheckout hatası: " + err.message);
+                    console.error(err);
+                  }
                 }}
+                onClose={() => setCurrentPage('menu')}
                 deliveryMode={deliveryMode}
-                address={address}
+                selectedAddress={address}
+                user={user}
+                onUpdateUserWallet={handleUpdateUserWallet}
+                userAddresses={userAddresses}
+                onSelectAddress={(addrText) => setAddress(addrText)}
+                onOpenAddresses={() => setIsAddressesModalOpen(true)}
+                whatsAppNumber={whatsAppNumber}
+                whatsAppTemplate={whatsAppTemplate}
+                whatsAppApiMode={whatsAppApiMode}
+                whatsAppPhoneId={whatsAppPhoneId}
+                whatsAppToken={whatsAppToken}
+                whatsAppCloudEndpoint={whatsAppCloudEndpoint}
+                whatsAppIncludePhotos={whatsAppIncludePhotos}
               />
             )}
 
-            {/* Branch Map Modal */}
-            <BranchMapModal 
-              isOpen={isMapModalOpen}
-              onClose={() => setIsMapModalOpen(false)}
+            {currentPage === 'referral' && (
+              <ReferralPage 
+                user={user}
+                usersList={usersList}
+                onUpdateUserWallet={handleUpdateUserWallet}
+                onGoToMenu={() => setCurrentPage('menu')}
+                referralTransactions={referralTransactions}
+                onApplyReferralCode={handleApplyReferralCode}
+                rewardAmountTier={user ? getUserReferralRewardTier(user.id) : 75}
+              />
+            )}
+
+            {currentPage === 'about' && (
+              <AboutPage 
+                onGoToMenu={() => setCurrentPage('menu')} 
+                onGoToContact={() => setCurrentPage('contact')} 
+              />
+            )}
+
+            {currentPage === 'contact' && (
+              <ContactPage onGoToMenu={() => setCurrentPage('menu')} />
+            )}
+          </main>
+
+          <Footer 
+            onGoToAbout={() => setCurrentPage('about')} 
+            onGoToContact={() => setCurrentPage('contact')} 
+            onAdminClick={() => setIsAdminMode(true)}
+          />
+
+          {/* Cart Drawer */}
+          <CartDrawer 
+            isOpen={cartOpen}
+            onClose={() => setCartOpen(false)}
+            cart={cart}
+            onUpdateQuantity={handleUpdateQuantity}
+            onRemoveItem={handleRemoveItem}
+            deliveryMode={deliveryMode}
+            yeKazanSlices={yeKazanSlices}
+            onPlaceOrder={handlePlaceOrder}
+            onGoToCartPage={() => setCurrentPage('cart')}
+            whatsAppNumber={whatsAppNumber}
+            whatsAppTemplate={whatsAppTemplate}
+            whatsAppApiMode={whatsAppApiMode}
+            whatsAppPhoneId={whatsAppPhoneId}
+            whatsAppToken={whatsAppToken}
+            whatsAppCloudEndpoint={whatsAppCloudEndpoint}
+            whatsAppIncludePhotos={whatsAppIncludePhotos}
+            address={address}
+          />
+
+          {/* Kurye Sipariş Fişi Modalı */}
+          {activeOrderSlip && (
+            <KuryeSlipModal 
+              order={activeOrderSlip}
+              cart={cart}
+              showPrint={isSlipFromAdmin}
+              socialShares={socialShares}
+              onRegisterSocialShare={handleRegisterSocialShare}
+              onClose={() => {
+                setActiveOrderSlip(null);
+                setCart([]); // Sipariş onaylandıktan sonra sepeti sıfırla
+              }}
               deliveryMode={deliveryMode}
-              onChangeDeliveryMode={(mode) => setDeliveryMode(mode)}
-              onSelectAddress={(addrText) => setAddress(addrText)}
-              onSelectBranch={(branchAddr) => {
-                setAddress(branchAddr);
-                setDeliveryMode('pickup');
-              }}
+              address={address}
             />
+          )}
 
-            {/* AI Pizza Chef Chatbot */}
-            <AiPizzaChef 
-              isOpen={isAiChefOpen}
-              onClose={() => setIsAiChefOpen(false)}
-              doughOptions={doughs}
-              crustOptions={crusts}
-              ingredientOptions={ingredients}
-              onAddToCart={handleAddToCart}
-            />
+          {/* Branch Map Modal */}
+          <BranchMapModal 
+            isOpen={isMapModalOpen}
+            onClose={() => setIsMapModalOpen(false)}
+            deliveryMode={deliveryMode}
+            onChangeDeliveryMode={(mode) => setDeliveryMode(mode)}
+            onSelectAddress={(addrText) => setAddress(addrText)}
+            onSelectBranch={(branchAddr) => {
+              setAddress(branchAddr);
+              setDeliveryMode('pickup');
+            }}
+          />
 
-            {/* Auth Login/Register Modal */}
-            <AuthModal 
-              isOpen={isAuthModalOpen}
-              onClose={() => setIsAuthModalOpen(false)}
-              onLoginSuccess={(loggedUser) => {
-                setUser(loggedUser);
-                if (loggedUser && loggedUser.isAdmin) {
-                  setIsAdminMode(true);
-                }
-              }}
-            />
+          {/* AI Pizza Chef Chatbot */}
+          <AiPizzaChef 
+            isOpen={isAiChefOpen}
+            onClose={() => setIsAiChefOpen(false)}
+            doughOptions={doughs}
+            crustOptions={crusts}
+            ingredientOptions={ingredients}
+            onAddToCart={handleAddToCart}
+          />
 
-            {/* Orders History Modal */}
-            <OrdersHistoryModal 
-              isOpen={isOrdersHistoryOpen}
-              onClose={() => setIsOrdersHistoryOpen(false)}
-              orders={orders}
-              onShowSlip={(order) => {
-                setIsSlipFromAdmin(false);
-                setActiveOrderSlip(order);
-                setIsOrdersHistoryOpen(false); // Close history to view slip modal
-              }}
-            />
+          {/* Auth Login/Register Modal */}
+          <AuthModal 
+            isOpen={isAuthModalOpen}
+            onClose={() => setIsAuthModalOpen(false)}
+            onLoginSuccess={(loggedUser) => {
+              setUser(loggedUser);
+              if (loggedUser && loggedUser.isAdmin) {
+                setIsAdminMode(true);
+              }
+            }}
+          />
 
-            {/* Reward / Sadakat Modalı */}
-            <RewardModal 
-              isOpen={isRewardModalOpen}
-              onClose={() => setIsRewardModalOpen(false)}
-            />
+          {/* Orders History Modal */}
+          <OrdersHistoryModal 
+            isOpen={isOrdersHistoryOpen}
+            onClose={() => setIsOrdersHistoryOpen(false)}
+            orders={orders}
+            onShowSlip={(order) => {
+              setIsSlipFromAdmin(false);
+              setActiveOrderSlip(order);
+              setIsOrdersHistoryOpen(false); // Close history to view slip modal
+            }}
+          />
 
-            {/* Addresses / Adreslerim Modalı */}
-            <AddressesModal 
-              isOpen={isAddressesModalOpen}
-              onClose={() => setIsAddressesModalOpen(false)}
-              userAddresses={userAddresses}
-              activeAddress={address}
-              onSelectAddress={(addrText) => {
-                setAddress(addrText);
-                setDeliveryMode('delivery');
-              }}
-              onAddAddress={handleAddAddress}
-              onDeleteAddress={handleDeleteAddress}
-              onUpdateAddress={handleUpdateAddress}
-            />
+          {/* Reward / Sadakat Modalı */}
+          <RewardModal 
+            isOpen={isRewardModalOpen}
+            onClose={() => setIsRewardModalOpen(false)}
+          />
 
-            {/* Sağ Alt Köşe Yüzen WhatsApp Sipariş Butonu */}
-            <a 
-              href={`https://api.whatsapp.com/send?phone=${whatsAppNumber}&text=${encodeURIComponent(
-                cart.length > 0 
-                  ? 'Merhaba Di Napoli! Sepetimdeki lezzetleri sipariş vermek istiyorum.' 
-                  : 'Merhaba Di Napoli! Menünüz hakkında bilgi alabilir miyim?'
-              )}`}
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="whatsapp-floating-action-btn"
-              title="WhatsApp Sipariş Hattı"
-            >
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.262 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.458L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.859-4.407 9.862-9.837.001-2.63-1.024-5.101-2.883-6.958-1.859-1.858-4.333-2.88-6.967-2.881-5.442 0-9.866 4.41-9.869 9.839-.001 1.77.46 3.5 1.335 5.021l-.99 3.616 3.687-.968zm14.42-7.581c-.269-.134-1.597-.787-1.845-.878-.247-.09-.427-.134-.607.134-.18.269-.696.878-.853 1.057-.157.18-.314.202-.583.067-.27-.134-1.14-.422-2.173-1.341-.803-.715-1.346-1.6-1.503-1.869-.157-.269-.017-.414.118-.548.121-.12.269-.314.404-.471.134-.157.18-.27.27-.449.09-.18.045-.337-.022-.471-.068-.134-.607-1.459-.831-2l-.584-1.4c-.16-.388-.344-.38-.475-.38h-.405c-.269 0-.706.1-1.077.505-.37.404-1.413 1.381-1.413 3.366 0 1.985 1.443 3.902 1.644 4.171.202.269 2.842 4.341 6.886 6.088 1 .432 1.778.69 2.387.882.852.27 1.63.233 2.245.141.685-.102 1.597-.652 1.821-1.28.225-.629.225-1.168.157-1.28-.068-.113-.247-.18-.517-.315z" />
-              </svg>
-              <span>WhatsApp Sipariş</span>
-            </a>
-          </>
-        )
-      ) : (
-        /* Admin Mode */
-        <AdminPanel 
-          products={products}
-          onAddProduct={handleAddProduct}
-          onDeleteProduct={handleDeleteProduct}
-          onUpdateProduct={handleUpdateProduct}
-          orders={orders}
-          onUpdateOrderStatus={handleUpdateOrderStatus}
-          onShowSlip={(order) => {
-            setIsSlipFromAdmin(true);
-            setActiveOrderSlip(order);
-          }}
-          
-          doughs={doughs}
-          onAddDough={handleAddDough}
-          onDeleteDough={handleDeleteDough}
-          onUpdateDough={handleUpdateDough}
-          
-          crusts={crusts}
-          onAddCrust={handleAddCrust}
-          onDeleteCrust={handleDeleteCrust}
-          onUpdateCrust={handleUpdateCrust}
-          
-          ingredients={ingredients}
-          onAddIngredient={handleAddIngredient}
-          onDeleteIngredient={handleDeleteIngredient}
-          onUpdateIngredient={handleUpdateIngredient}
-          
-          usersList={usersList}
-          onUpdateUserWallet={handleUpdateUserWallet}
-          onSendMailNotification={handleSendMailNotification}
-          referralTransactions={referralTransactions}
-          announcementText={announcementText}
-          onUpdateAnnouncement={(txt) => {
-            setAnnouncementText(txt);
-            localStorage.setItem('dinapoli_announcement', txt);
-          }}
-          whatsAppNumber={whatsAppNumber}
-          whatsAppTemplate={whatsAppTemplate}
-          whatsAppApiMode={whatsAppApiMode}
-          whatsAppPhoneId={whatsAppPhoneId}
-          whatsAppToken={whatsAppToken}
-          whatsAppCloudEndpoint={whatsAppCloudEndpoint}
-          whatsAppIncludePhotos={whatsAppIncludePhotos}
-          onUpdateWhatsAppConfig={handleUpdateWhatsAppConfig}
-          socialShares={socialShares}
-          onClose={() => setIsAdminMode(false)}
-        />
+          {/* Addresses / Adreslerim Modalı */}
+          <AddressesModal 
+            isOpen={isAddressesModalOpen}
+            onClose={() => setIsAddressesModalOpen(false)}
+            userAddresses={userAddresses}
+            activeAddress={address}
+            onSelectAddress={(addrText) => {
+              setAddress(addrText);
+              setDeliveryMode('delivery');
+            }}
+            onAddAddress={handleAddAddress}
+            onDeleteAddress={handleDeleteAddress}
+            onUpdateAddress={handleUpdateAddress}
+          />
+
+          {/* Sağ Alt Köşe Yüzen WhatsApp Sipariş Butonu */}
+          <a 
+            href={`https://api.whatsapp.com/send?phone=${whatsAppNumber}&text=${encodeURIComponent(
+              cart.length > 0 
+                ? 'Merhaba Di Napoli! Sepetimdeki lezzetleri sipariş vermek istiyorum.' 
+                : 'Merhaba Di Napoli! Menünüz hakkında bilgi alabilir miyim?'
+            )}`}
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="whatsapp-floating-action-btn"
+            title="WhatsApp Sipariş Hattı"
+          >
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.262 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.458L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.859-4.407 9.862-9.837.001-2.63-1.024-5.101-2.883-6.958-1.858-1.858-4.333-2.88-6.967-2.881-5.442 0-9.866 4.41-9.869 9.839-.001 1.77.46 3.5 1.335 5.021l-.99 3.616 3.687-.968zm14.42-7.581c-.269-.134-1.597-.787-1.845-.878-.247-.09-.427-.134-.607.134-.18.269-.696.878-.853 1.057-.157.18-.314.202-.583.067-.27-.134-1.14-.422-2.173-1.341-.803-.715-1.346-1.6-1.503-1.869-.157-.269-.017-.414.118-.548.121-.12.269-.314.404-.471.134-.157.18-.27.27-.449.09-.18.045-.337-.022-.471-.068-.134-.607-1.459-.831-2l-.584-1.4c-.16-.388-.344-.38-.475-.38h-.405c-.269 0-.706.1-1.077.505-.37.404-1.413 1.381-1.413 3.366 0 1.985 1.443 3.902 1.644 4.171.202.269 2.842 4.341 6.886 6.088 1 .432 1.778.69 2.387.882.852.27 1.63.233 2.245.141.685-.102 1.597-.652 1.821-1.28.225-.629.225-1.168.157-1.28-.068-.113-.247-.18-.517-.315z" />
+            </svg>
+            <span>WhatsApp Sipariş</span>
+          </a>
+        </>
+      )}
+
+      {/* Admin Panel Modal Overlay */}
+      {isAdminMode && (
+        <div className="admin-panel-modal-overlay">
+          <AdminPanel 
+            products={products}
+            onAddProduct={handleAddProduct}
+            onDeleteProduct={handleDeleteProduct}
+            onUpdateProduct={handleUpdateProduct}
+            orders={orders}
+            onUpdateOrderStatus={handleUpdateOrderStatus}
+            onShowSlip={(order) => {
+              setIsSlipFromAdmin(true);
+              setActiveOrderSlip(order);
+            }}
+            
+            doughs={doughs}
+            onAddDough={handleAddDough}
+            onDeleteDough={handleDeleteDough}
+            onUpdateDough={handleUpdateDough}
+            
+            crusts={crusts}
+            onAddCrust={handleAddCrust}
+            onDeleteCrust={handleDeleteCrust}
+            onUpdateCrust={handleUpdateCrust}
+            
+            ingredients={ingredients}
+            onAddIngredient={handleAddIngredient}
+            onDeleteIngredient={handleDeleteIngredient}
+            onUpdateIngredient={handleUpdateIngredient}
+            
+            usersList={usersList}
+            onUpdateUserWallet={handleUpdateUserWallet}
+            onSendMailNotification={handleSendMailNotification}
+            referralTransactions={referralTransactions}
+            announcementText={announcementText}
+            onUpdateAnnouncement={(txt) => {
+              setAnnouncementText(txt);
+              localStorage.setItem('dinapoli_announcement', txt);
+            }}
+            whatsAppNumber={whatsAppNumber}
+            whatsAppTemplate={whatsAppTemplate}
+            whatsAppApiMode={whatsAppApiMode}
+            whatsAppPhoneId={whatsAppPhoneId}
+            whatsAppToken={whatsAppToken}
+            whatsAppCloudEndpoint={whatsAppCloudEndpoint}
+            whatsAppIncludePhotos={whatsAppIncludePhotos}
+            onUpdateWhatsAppConfig={handleUpdateWhatsAppConfig}
+            socialShares={socialShares}
+            onClose={() => setIsAdminMode(false)}
+          />
+        </div>
       )}
     </div>
   );

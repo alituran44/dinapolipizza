@@ -5237,6 +5237,27 @@ button {
   }
 }
 
+/* --- ADMIN PANEL LAYOUT OVERLAY STYLES --- */
+.admin-panel-layout {
+  background-color: #f8fafc !important;
+  min-height: 100vh !important;
+  width: 100% !important;
+  position: relative !important;
+  z-index: 99999 !important;
+  color: #1e293b !important;
+}
+
+.admin-panel-modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background-color: #f8fafc !important;
+  z-index: 999999 !important;
+  overflow-y: auto !important;
+}
+
 
 
 
