@@ -262,7 +262,34 @@ export default function Header({
 
           {/* User Sign In / Profile dropdown */}
           {user ? (
-            <div className="user-profile-dropdown-container" style={{ position: 'relative' }}>
+            <div className="user-profile-dropdown-container" style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              
+              {/* Direct Admin Panel Button in Header Bar */}
+              {user.isAdmin && (
+                <button 
+                  onClick={() => onAdminClick()}
+                  style={{
+                    backgroundColor: '#dc2626',
+                    color: '#ffffff',
+                    border: 'none',
+                    padding: '8px 14px',
+                    borderRadius: '20px',
+                    fontSize: '12px',
+                    fontWeight: '800',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    boxShadow: '0 4px 12px rgba(220, 38, 38, 0.45)',
+                    transition: 'all 0.2s ease'
+                  }}
+                  title="Yönetici Panelini Aç"
+                >
+                  <ShieldCheck size={14} />
+                  <span>YÖNETİCİ PANELİ</span>
+                </button>
+              )}
+
               <button 
                 className="auth-btn-white user-logged-btn" 
                 onClick={() => setProfileMenuOpen(!profileMenuOpen)}
@@ -370,11 +397,14 @@ export default function Header({
                   {/* Admin & Logout Linkleri */}
                   <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
                     {user.isAdmin && (
-                      <button onClick={() => { onAdminClick(); setProfileMenuOpen(false); }} style={{ flex: 1, backgroundColor: 'var(--color-burgundy)', color: 'white', border: 'none', padding: '8px', borderRadius: '8px', fontSize: '11px', fontWeight: 'bold', cursor: 'pointer' }}>
-                        Yönetici Paneli
+                      <button 
+                        onClick={() => { onAdminClick(); setProfileMenuOpen(false); }} 
+                        style={{ flex: 1, backgroundColor: '#dc2626', color: '#ffffff', border: 'none', padding: '10px 8px', borderRadius: '8px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 4px 10px rgba(220, 38, 38, 0.35)' }}
+                      >
+                        ⚡ Yönetici Paneli
                       </button>
                     )}
-                    <button onClick={() => { onLogout(); setProfileMenuOpen(false); }} style={{ flex: 1, backgroundColor: '#e2e8f0', color: '#475569', border: 'none', padding: '8px', borderRadius: '8px', fontSize: '11px', fontWeight: 'bold', cursor: 'pointer' }}>
+                    <button onClick={() => { onLogout(); setProfileMenuOpen(false); }} style={{ flex: 1, backgroundColor: '#e2e8f0', color: '#475569', border: 'none', padding: '10px 8px', borderRadius: '8px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }}>
                       Çıkış Yap
                     </button>
                   </div>

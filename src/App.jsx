@@ -35,7 +35,21 @@ export default function App() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const [isAdminMode, setIsAdminMode] = useState(false);
+  const [isAdminMode, setIsAdminMode] = useState(() => {
+    try {
+      const saved = localStorage.getItem('dinapoli_user');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && (parsed.isAdmin || parsed.email === 'admin@dinapolipizza.com')) {
+          return true;
+        }
+      }
+      if (window.location.hash === '#admin' || window.location.search.includes('admin=true')) {
+        return true;
+      }
+    } catch (e) {}
+    return false;
+  });
   const [currentPage, setCurrentPage] = useState('menu'); // 'menu' or 'cart'
   const [deliveryMode, setDeliveryMode] = useState('delivery'); // 'delivery' or 'pickup'
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
