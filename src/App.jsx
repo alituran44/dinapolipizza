@@ -48,11 +48,83 @@ export default function App() {
   });
   const [whatsAppTemplate, setWhatsAppTemplate] = useState(() => {
     try {
-      return localStorage.getItem('dinapoli_wa_template') || 'Merhaba Di Napoli! Aşağıdaki siparişi oluşturmak istiyorum:\n\n*Sipariş Detayları:* {sepet_detayi}\n*Teslimat Yöntemi:* {teslimat_tipi}\n*Adresim:* {adres_detayi}\n*Toplam Tutar:* {toplam_tutar} TL';
+      return localStorage.getItem('dinapoli_wa_template') || 'Merhaba Di Napoli! Aşağıdaki siparişi oluşturmak istiyorum:\n\n*Sipariş Detayları:* {sepet_detayi}\n*Teslimat Yöntemi:* {teslimat_tipi}\n*Adresim:* {adres_detayi}\n*Toplam Tutar:* {toplam_tutar} TL\n\n*Ürün Görselleri:* {urun_gorselleri}';
     } catch (e) {
-      return 'Merhaba Di Napoli! Aşağıdaki siparişi oluşturmak istiyorum:\n\n*Sipariş Detayları:* {sepet_detayi}\n*Teslimat Yöntemi:* {teslimat_tipi}\n*Adresim:* {adres_detayi}\n*Toplam Tutar:* {toplam_tutar} TL';
+      return 'Merhaba Di Napoli! Aşağıdaki siparişi oluşturmak istiyorum:\n\n*Sipariş Detayları:* {sepet_detayi}\n*Teslimat Yöntemi:* {teslimat_tipi}\n*Adresim:* {adres_detayi}\n*Toplam Tutar:* {toplam_tutar} TL\n\n*Ürün Görselleri:* {urun_gorselleri}';
     }
   });
+  const [whatsAppApiMode, setWhatsAppApiMode] = useState(() => {
+    try {
+      return localStorage.getItem('dinapoli_wa_api_mode') || 'standard';
+    } catch (e) {
+      return 'standard';
+    }
+  });
+  const [whatsAppPhoneId, setWhatsAppPhoneId] = useState(() => {
+    try {
+      return localStorage.getItem('dinapoli_wa_phone_id') || '';
+    } catch (e) {
+      return '';
+    }
+  });
+  const [whatsAppToken, setWhatsAppToken] = useState(() => {
+    try {
+      return localStorage.getItem('dinapoli_wa_token') || '';
+    } catch (e) {
+      return '';
+    }
+  });
+  const [whatsAppCloudEndpoint, setWhatsAppCloudEndpoint] = useState(() => {
+    try {
+      return localStorage.getItem('dinapoli_wa_cloud_endpoint') || '';
+    } catch (e) {
+      return '';
+    }
+  });
+  const [whatsAppIncludePhotos, setWhatsAppIncludePhotos] = useState(() => {
+    try {
+      const val = localStorage.getItem('dinapoli_wa_include_photos');
+      return val === null ? true : val === 'true';
+    } catch (e) {
+      return true;
+    }
+  });
+
+  const handleUpdateWhatsAppConfig = (config) => {
+    try {
+      if (config.number !== undefined) {
+        setWhatsAppNumber(config.number);
+        localStorage.setItem('dinapoli_wa_number', config.number);
+      }
+      if (config.template !== undefined) {
+        setWhatsAppTemplate(config.template);
+        localStorage.setItem('dinapoli_wa_template', config.template);
+      }
+      if (config.apiMode !== undefined) {
+        setWhatsAppApiMode(config.apiMode);
+        localStorage.setItem('dinapoli_wa_api_mode', config.apiMode);
+      }
+      if (config.phoneId !== undefined) {
+        setWhatsAppPhoneId(config.phoneId);
+        localStorage.setItem('dinapoli_wa_phone_id', config.phoneId);
+      }
+      if (config.token !== undefined) {
+        setWhatsAppToken(config.token);
+        localStorage.setItem('dinapoli_wa_token', config.token);
+      }
+      if (config.cloudEndpoint !== undefined) {
+        setWhatsAppCloudEndpoint(config.cloudEndpoint);
+        localStorage.setItem('dinapoli_wa_cloud_endpoint', config.cloudEndpoint);
+      }
+      if (config.includePhotos !== undefined) {
+        setWhatsAppIncludePhotos(config.includePhotos);
+        localStorage.setItem('dinapoli_wa_include_photos', config.includePhotos ? 'true' : 'false');
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const [announcementText, setAnnouncementText] = useState(() => {
     try {
       return localStorage.getItem('dinapoli_announcement') || "🍕 Haftanın Kampanyası: 3 Al 2 Öde! • 🎁 Arkadaşını Davet Et, 75 TL Cüzdan Ödülü Kazan! • 🚀 Şef Luigi ile Kendi Pizzanı Tasarla!";
@@ -664,6 +736,11 @@ export default function App() {
                   onOpenAddresses={() => setIsAddressesModalOpen(true)}
                   whatsAppNumber={whatsAppNumber}
                   whatsAppTemplate={whatsAppTemplate}
+                  whatsAppApiMode={whatsAppApiMode}
+                  whatsAppPhoneId={whatsAppPhoneId}
+                  whatsAppToken={whatsAppToken}
+                  whatsAppCloudEndpoint={whatsAppCloudEndpoint}
+                  whatsAppIncludePhotos={whatsAppIncludePhotos}
                 />
               )}
 
@@ -709,6 +786,11 @@ export default function App() {
               onGoToCartPage={() => setCurrentPage('cart')}
               whatsAppNumber={whatsAppNumber}
               whatsAppTemplate={whatsAppTemplate}
+              whatsAppApiMode={whatsAppApiMode}
+              whatsAppPhoneId={whatsAppPhoneId}
+              whatsAppToken={whatsAppToken}
+              whatsAppCloudEndpoint={whatsAppCloudEndpoint}
+              whatsAppIncludePhotos={whatsAppIncludePhotos}
               address={address}
             />
 
@@ -852,15 +934,13 @@ export default function App() {
             localStorage.setItem('dinapoli_announcement', txt);
           }}
           whatsAppNumber={whatsAppNumber}
-          onUpdateWhatsAppNumber={(num) => {
-            setWhatsAppNumber(num);
-            localStorage.setItem('dinapoli_wa_number', num);
-          }}
           whatsAppTemplate={whatsAppTemplate}
-          onUpdateWhatsAppTemplate={(tpl) => {
-            setWhatsAppTemplate(tpl);
-            localStorage.setItem('dinapoli_wa_template', tpl);
-          }}
+          whatsAppApiMode={whatsAppApiMode}
+          whatsAppPhoneId={whatsAppPhoneId}
+          whatsAppToken={whatsAppToken}
+          whatsAppCloudEndpoint={whatsAppCloudEndpoint}
+          whatsAppIncludePhotos={whatsAppIncludePhotos}
+          onUpdateWhatsAppConfig={handleUpdateWhatsAppConfig}
           socialShares={socialShares}
           onClose={() => setIsAdminMode(false)}
         />

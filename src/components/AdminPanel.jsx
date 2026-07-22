@@ -40,14 +40,28 @@ export default function AdminPanel({
   announcementText = '',
   onUpdateAnnouncement,
   whatsAppNumber = '',
-  onUpdateWhatsAppNumber,
   whatsAppTemplate = '',
-  onUpdateWhatsAppTemplate,
+  whatsAppApiMode = 'standard',
+  whatsAppPhoneId = '',
+  whatsAppToken = '',
+  whatsAppCloudEndpoint = '',
+  whatsAppIncludePhotos = true,
+  onUpdateWhatsAppConfig,
   
   onClose 
 }) {
   const [activeTab, setActiveTab] = useState('orders'); // 'orders', 'products', 'dough-crust', 'ingredients', 'dashboard', 'announcement'
-  
+
+  // WhatsApp states
+  const [whatsAppNumberInput, setWhatsAppNumberInput] = useState(whatsAppNumber);
+  const [whatsAppTemplateInput, setWhatsAppTemplateInput] = useState(whatsAppTemplate);
+  const [whatsAppApiModeInput, setWhatsAppApiModeInput] = useState(whatsAppApiMode);
+  const [whatsAppPhoneIdInput, setWhatsAppPhoneIdInput] = useState(whatsAppPhoneId);
+  const [whatsAppTokenInput, setWhatsAppTokenInput] = useState(whatsAppToken);
+  const [whatsAppCloudEndpointInput, setWhatsAppCloudEndpointInput] = useState(whatsAppCloudEndpoint);
+  const [whatsAppIncludePhotosInput, setWhatsAppIncludePhotosInput] = useState(whatsAppIncludePhotos);
+  const [showWhatsAppSaved, setShowWhatsAppSaved] = useState(false);
+
   // Form states for new product
   const [newProduct, setNewProduct] = useState({
     name: '',
@@ -74,14 +88,11 @@ export default function AdminPanel({
   const [editingIngredientId, setEditingIngredientId] = useState(null);
   const [editingIngredient, setEditingIngredient] = useState(null);
 
-  // Email notification states
+  // Email & Announcement states
   const [emailSubject, setEmailSubject] = useState('Di Napoli Fırsatları Başladı! 🍕');
   const [emailMessage, setEmailMessage] = useState('Merhaba, Di Napoli lezzetlerinde bu haftaya özel 75 TL cüzdan indirimi fırsatını kaçırmayın!');
   const [announcementInput, setAnnouncementInput] = useState(announcementText);
   const [showAnnouncementSaved, setShowAnnouncementSaved] = useState(false);
-  const [whatsAppNumberInput, setWhatsAppNumberInput] = useState(whatsAppNumber);
-  const [whatsAppTemplateInput, setWhatsAppTemplateInput] = useState(whatsAppTemplate);
-  const [showWhatsAppSaved, setShowWhatsAppSaved] = useState(false);
 
   const handleFileUpload = (e, field, isEdit = false) => {
     const file = e.target.files[0];
@@ -1098,20 +1109,69 @@ export default function AdminPanel({
             </div>
 
             <div className="deals-card" style={{ padding: '24px', marginBottom: '24px' }}>
-              <h3>WhatsApp Sipariş Ayarları</h3>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '20px' }}>💬</span> WhatsApp Sipariş & Cloud API Ayarları
+                </h3>
+                <span style={{ 
+                  padding: '4px 10px', 
+                  borderRadius: '12px', 
+                  fontSize: '11px', 
+                  fontWeight: 'bold', 
+                  backgroundColor: whatsAppApiModeInput === 'cloud_api' ? '#e0f2fe' : '#f1f5f9',
+                  color: whatsAppApiModeInput === 'cloud_api' ? '#0369a1' : '#475569' 
+                }}>
+                  {whatsAppApiModeInput === 'cloud_api' ? '⚡ WhatsApp Cloud API Aktif' : '📱 Standart WhatsApp Aktif'}
+                </span>
+              </div>
               <p style={{ fontSize: '12px', color: '#64748b', margin: '4px 0 16px 0' }}>
-                Müşterilerin sepette "WhatsApp ile Sipariş Ver" seçeneğini kullandıklarında yönlendirilecekleri telefon numarasını ve otomatik mesaj şablonunu buradan yönetebilirsiniz.
+                Müşterilerin sepette "WhatsApp ile Sipariş Ver" butonunu tıkladıklarında çalışacak mod (Standart Web veya Meta WhatsApp Cloud API) ve mesaj ayarlarını buradan yapabilirsiniz.
               </p>
               
               <form onSubmit={(e) => {
                 e.preventDefault();
-                onUpdateWhatsAppNumber(whatsAppNumberInput);
-                onUpdateWhatsAppTemplate(whatsAppTemplateInput);
+                onUpdateWhatsAppConfig({
+                  number: whatsAppNumberInput,
+                  template: whatsAppTemplateInput,
+                  apiMode: whatsAppApiModeInput,
+                  phoneId: whatsAppPhoneIdInput,
+                  token: whatsAppTokenInput,
+                  cloudEndpoint: whatsAppCloudEndpointInput,
+                  includePhotos: whatsAppIncludePhotosInput
+                });
                 setShowWhatsAppSaved(true);
                 setTimeout(() => setShowWhatsAppSaved(false), 3000);
-              }} style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '600px' }}>
+              }} style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '650px' }}>
+                
+                {/* Entegrasyon Modu Seçimi */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', padding: '14px', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                  <label style={{ fontSize: '13px', fontWeight: 'bold', color: '#1e293b' }}>Entegrasyon Modu Seçimi</label>
+                  <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', cursor: 'pointer' }}>
+                      <input 
+                        type="radio" 
+                        name="waMode" 
+                        value="standard" 
+                        checked={whatsAppApiModeInput === 'standard'} 
+                        onChange={(e) => setWhatsAppApiModeInput(e.target.value)}
+                      />
+                      <span>Standart WhatsApp Yönlendirme (wa.me)</span>
+                    </label>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', cursor: 'pointer' }}>
+                      <input 
+                        type="radio" 
+                        name="waMode" 
+                        value="cloud_api" 
+                        checked={whatsAppApiModeInput === 'cloud_api'} 
+                        onChange={(e) => setWhatsAppApiModeInput(e.target.value)}
+                      />
+                      <span style={{ fontWeight: 'bold', color: '#0284c7' }}>WhatsApp Cloud API & Webhook (AWS / Meta)</span>
+                    </label>
+                  </div>
+                </div>
+
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label htmlFor="whatsapp-number-input" style={{ fontSize: '13px', fontWeight: 'bold' }}>WhatsApp Telefon Numarası (Ülke kodlu, boşluksuz)</label>
+                  <label htmlFor="whatsapp-number-input" style={{ fontSize: '13px', fontWeight: 'bold' }}>WhatsApp Sipariş Hattı Telefon Numarası (Ülke kodlu, boşluksuz)</label>
                   <input 
                     id="whatsapp-number-input"
                     aria-label="WhatsApp Sipariş Telefon Numarası"
@@ -1119,10 +1179,70 @@ export default function AdminPanel({
                     value={whatsAppNumberInput}
                     onChange={(e) => setWhatsAppNumberInput(e.target.value)}
                     required
-                    placeholder="Örn: 905437360660"
+                    placeholder="Örn: 905057261717"
                     style={{ padding: '10px', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '13px' }}
                   />
                 </div>
+
+                {/* Fotoğraf Bağlantılarını Ekleme Seçeneği */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 12px', backgroundColor: '#fdf4ff', borderRadius: '6px', border: '1px solid #f5d0fe' }}>
+                  <input 
+                    id="whatsapp-include-photos-input"
+                    type="checkbox" 
+                    checked={whatsAppIncludePhotosInput}
+                    onChange={(e) => setWhatsAppIncludePhotosInput(e.target.checked)}
+                    style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+                  />
+                  <label htmlFor="whatsapp-include-photos-input" style={{ fontSize: '13px', fontWeight: 'bold', color: '#86198f', cursor: 'pointer' }}>
+                    📸 Sipariş Mesajına Ürün Görsel Bağlantılarını (Fotoğrafları) Ekle
+                  </label>
+                </div>
+
+                {/* Cloud API Özel Ayarları (Eğer Cloud API modundaysa) */}
+                {whatsAppApiModeInput === 'cloud_api' && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', padding: '16px', backgroundColor: '#f0f9ff', borderRadius: '8px', border: '1px solid #bae6fd' }}>
+                    <h4 style={{ margin: 0, fontSize: '13px', color: '#0369a1', fontWeight: 'bold' }}>⚡ Meta WhatsApp Cloud API & AWS Webhook Yapılandırması</h4>
+                    
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                      <label htmlFor="wa-phone-id-input" style={{ fontSize: '12px', fontWeight: 'bold' }}>Phone Number ID (Meta Developer Dashboard)</label>
+                      <input 
+                        id="wa-phone-id-input"
+                        type="text" 
+                        value={whatsAppPhoneIdInput}
+                        onChange={(e) => setWhatsAppPhoneIdInput(e.target.value)}
+                        placeholder="Örn: 105674892019..."
+                        style={{ padding: '8px 10px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '12px' }}
+                      />
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                      <label htmlFor="wa-token-input" style={{ fontSize: '12px', fontWeight: 'bold' }}>System User Access Token (API Key)</label>
+                      <input 
+                        id="wa-token-input"
+                        type="password" 
+                        value={whatsAppTokenInput}
+                        onChange={(e) => setWhatsAppTokenInput(e.target.value)}
+                        placeholder="Örn: EAAG..."
+                        style={{ padding: '8px 10px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '12px' }}
+                      />
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                      <label htmlFor="wa-endpoint-input" style={{ fontSize: '12px', fontWeight: 'bold' }}>AWS Sunucu Webhook URL / Custom API Endpoint</label>
+                      <input 
+                        id="wa-endpoint-input"
+                        type="text" 
+                        value={whatsAppCloudEndpointInput}
+                        onChange={(e) => setWhatsAppCloudEndpointInput(e.target.value)}
+                        placeholder="Örn: https://api.dinapolipizza.com.tr/v1/whatsapp-webhook veya AWS API Gateway"
+                        style={{ padding: '8px 10px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '12px' }}
+                      />
+                      <span style={{ fontSize: '11px', color: '#0369a1' }}>
+                        * AWS Webhook sunucunuz ayarlandığında gelen siparişler doğrudan veritabanınıza kaydolur ve müşteriye onay mesajı gönderilir.
+                      </span>
+                    </div>
+                  </div>
+                )}
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   <label htmlFor="whatsapp-template-input" style={{ fontSize: '13px', fontWeight: 'bold' }}>Otomatik Mesaj Şablonu</label>
@@ -1137,13 +1257,13 @@ export default function AdminPanel({
                     placeholder="Sipariş metin şablonu..."
                   />
                   <span style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>
-                    Kullanabileceğiniz etiketler: <strong>{`{sepet_detayi}`}</strong>, <strong>{`{teslimat_tipi}`}</strong>, <strong>{`{adres_detayi}`}</strong>, <strong>{`{toplam_tutar}`}</strong>
+                    Kullanabileceğiniz etiketler: <strong>{`{sepet_detayi}`}</strong>, <strong>{`{teslimat_tipi}`}</strong>, <strong>{`{adres_detayi}`}</strong>, <strong>{`{toplam_tutar}`}</strong>, <strong>{`{urun_gorselleri}`}</strong>
                   </span>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <button type="submit" className="add-submit-btn" style={{ height: '40px', width: '220px' }}>
-                    WhatsApp Ayarlarını Güncelle
+                  <button type="submit" className="add-submit-btn" style={{ height: '40px', width: '240px' }}>
+                    WhatsApp & Cloud API Güncelle
                   </button>
                   {showWhatsAppSaved && (
                     <span style={{ color: '#10b981', fontSize: '13px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px' }}>

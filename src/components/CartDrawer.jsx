@@ -13,6 +13,11 @@ export default function CartDrawer({
   onGoToCartPage,
   whatsAppNumber = '',
   whatsAppTemplate = '',
+  whatsAppApiMode = 'standard',
+  whatsAppPhoneId = '',
+  whatsAppToken = '',
+  whatsAppCloudEndpoint = '',
+  whatsAppIncludePhotos = true,
   address = ''
 }) {
   const [couponCode, setCouponCode] = useState('');
@@ -60,7 +65,7 @@ export default function CartDrawer({
     });
   };
 
-  const handleWhatsAppCheckout = () => {
+  const handleWhatsAppCheckout = async () => {
     if (cart.length === 0) return;
 
     const itemsSummary = cart.map(item => {
@@ -79,16 +84,72 @@ export default function CartDrawer({
       return `${item.quantity}x ${item.name}${customStr}`;
     }).join(', ');
 
+    // Generate product image links if enabled
+    let productPhotosText = '';
+    if (whatsAppIncludePhotos) {
+      const photoLinks = cart.map(item => {
+        const fullImgUrl = item.image && item.image.startsWith('http') 
+          ? item.image 
+          : `https://www.dinapolipizza.com.tr${item.image || '/logo.png'}`;
+        return `▫️ *${item.name}*: ${fullImgUrl}`;
+      });
+      productPhotosText = '\n' + photoLinks.join('\n');
+    }
+
     const deliveryMethodText = deliveryMode === 'delivery' ? 'Adrese Teslim 🚀' : 'Gel-Al (Şubeden) 🛍️';
     
     let messageText = whatsAppTemplate
       .replace('{sepet_detayi}', itemsSummary)
       .replace('{teslimat_tipi}', deliveryMethodText)
       .replace('{adres_detayi}', address || 'Saat Kulesi Karşısı Merkez Şube')
-      .replace('{toplam_tutar}', finalTotal);
+      .replace('{toplam_tutar}', finalTotal)
+      .replace('{urun_gorselleri}', productPhotosText || 'Fotoğraflar eklendi');
 
-    const waUrl = `https://api.whatsapp.com/send?phone=${whatsAppNumber}&text=${encodeURIComponent(messageText)}`;
-    window.open(waUrl, '_blank');
+    // Cloud API Mode vs Standard Mode
+    if (whatsAppApiMode === 'cloud_api' && (whatsAppCloudEndpoint || whatsAppToken)) {
+      try {
+        const endpointUrl = whatsAppCloudEndpoint || `https://graph.facebook.com/v18.0/${whatsAppPhoneId}/messages`;
+        const payload = {
+          messaging_product: "whatsapp",
+          recipient_type: "individual",
+          to: whatsAppNumber,
+          type: "text",
+          text: { preview_url: true, body: messageText },
+          order_data: {
+            items: cart.map(i => ({ name: i.name, quantity: i.quantity, price: i.price, image: i.image })),
+            total: finalTotal,
+            address: address,
+            deliveryMode: deliveryMode
+          }
+        };
+
+        const response = await fetch(endpointUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(whatsAppToken ? { 'Authorization': `Bearer ${whatsAppToken}` } : {})
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          alert('⚡ Siparişiniz WhatsApp Cloud API & AWS Webhook aracılığıyla otomatik olarak kaydedildi ve onaylandı!');
+        } else {
+          // Fallback to wa.me if API endpoint returns error
+          const waUrl = `https://api.whatsapp.com/send?phone=${whatsAppNumber}&text=${encodeURIComponent(messageText)}`;
+          window.open(waUrl, '_blank');
+        }
+      } catch (err) {
+        console.warn('Cloud API Webhook çağrısı yapıldı, WhatsApp Web fallback açılıyor:', err);
+        const waUrl = `https://api.whatsapp.com/send?phone=${whatsAppNumber}&text=${encodeURIComponent(messageText)}`;
+        window.open(waUrl, '_blank');
+      }
+    } else {
+      // Standard WhatsApp wa.me link
+      const waUrl = `https://api.whatsapp.com/send?phone=${whatsAppNumber}&text=${encodeURIComponent(messageText)}`;
+      window.open(waUrl, '_blank');
+    }
+
     handleCheckout();
   };
 
