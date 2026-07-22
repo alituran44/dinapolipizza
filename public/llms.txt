@@ -1,0 +1,15 @@
+# www.dinapolipizza.com.tr AI Search & Crawling Documentation
+
+> Di Napoli Pizza Çanakkale - 1997'den beri Çanakkale Saat Kulesi karşısında odun ateşinde taş fırın pizza ve Karadeniz pidesi lezzetleri.
+
+## Main Topics & Pages
+- [/](https://www.dinapolipizza.com.tr/) - Ana Sayfa ve Tüm Kampanyalar
+- [/#menu](https://www.dinapolipizza.com.tr/#menu) - Lezzet Menümüz (Pizzalar, Doyuran Menüler, Pideler, Salatalar, Tatlılar, İçecekler)
+- [/#about](https://www.dinapolipizza.com.tr/#about) - Hakkımızda & Şef Luigi Taş Fırın Hikayesi
+- [/#contact](https://www.dinapolipizza.com.tr/#contact) - İletişim, Adres ve Çalışma Saatleri
+
+## Brand Overview
+- Adres: Kemalpaşa Mah. Şair Ece Ayhan Meydanı No:9/A (Saat Kulesi Karşısı), Merkez / Çanakkale
+- Telefon: +90 505 726 17 17 / 0 286 212 50 51 / 0 286 212 30 17 / 0 286 212 32 76
+- E-Posta: dinapolipizza1997@gmail.com
+- Özellikler: Günlük taze açılan hamur, %100 gerçek mozzarella peyniri, meşe odununda 400°C taş fırın pişirme, 30 dakikada sıcak paket servis.

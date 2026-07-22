@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.dinapolipizza.com.tr/sitemap.xml
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
