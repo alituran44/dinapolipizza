@@ -56,7 +56,7 @@ export default function ProductCard({ product, onAddToCart }) {
 
   return (
     <>
-      <div className="product-card">
+      <article className="product-card">
         {/* Image & Badge */}
         <div className="product-card-media" style={{ position: 'relative' }}>
           <img src={product.image} alt={product.name} className="product-card-img" loading="lazy" decoding="async" />
@@ -151,7 +151,7 @@ export default function ProductCard({ product, onAddToCart }) {
             </button>
           </div>
         </div>
-      </div>
+      </article>
 
       {/* Premium Video Player Modal */}
       {showVideoModal && (

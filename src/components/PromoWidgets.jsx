@@ -58,7 +58,7 @@ export default function PromoWidgets({ yeKazanSlices }) {
           scrollbarColor: 'var(--color-primary-blue) transparent'
         }}>
           {deals.map((deal, idx) => (
-            <div key={idx} className="deal-card-item" style={{ 
+            <article key={idx} className="deal-card-item" style={{ 
               flex: '0 0 300px',
               scrollSnapAlign: 'start',
               position: 'relative', 
@@ -109,8 +109,8 @@ export default function PromoWidgets({ yeKazanSlices }) {
                 <h4 style={{ fontSize: '18px', fontWeight: '800', color: 'white', marginBottom: '4px' }}>{deal.title}</h4>
                 <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.85)', marginBottom: '8px', lineHeight: '1.4' }}>{deal.desc}</p>
                 <span style={{ fontSize: '18px', fontWeight: '900', color: 'var(--color-primary-blue)' }}>{deal.price}</span>
-              </div>
-            </div>
+                </div>
+            </article>
           ))}
         </div>
       </div>
