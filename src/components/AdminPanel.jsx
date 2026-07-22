@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   Trash2, Edit, Plus, DollarSign, ClipboardList, 
   Settings, LogOut, LayoutDashboard, PlusCircle, Check,
-  Flame, Layers, Database
+  Flame, Layers, Database, User
 } from 'lucide-react';
 import { CATEGORIES } from '../data/products';
 

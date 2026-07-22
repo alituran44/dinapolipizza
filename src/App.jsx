@@ -37,6 +37,13 @@ export default function App() {
 
   const [isAdminMode, setIsAdminMode] = useState(() => {
     try {
+      const saved = localStorage.getItem('dinapoli_user');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && (parsed.isAdmin || parsed.email === 'admin@dinapolipizza.com')) {
+          return true;
+        }
+      }
       if (typeof window !== 'undefined' && (window.location.hash === '#admin' || window.location.search.includes('admin=true'))) {
         return true;
       }
