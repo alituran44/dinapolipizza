@@ -525,61 +525,63 @@ export default function App() {
         ) : (
           /* Default customer view with persistent Header and Footer */
           <>
-            {/* Scrolling Announcement Marquee */}
-            <div style={{
-              backgroundColor: 'var(--color-primary-red)',
-              color: 'var(--color-primary-blue)',
-              padding: '6px 0',
-              overflow: 'hidden',
-              whiteSpace: 'nowrap',
-              position: 'relative',
-              display: 'flex',
-              alignItems: 'center',
-              borderBottom: '1px solid rgba(43, 5, 5, 0.15)',
-              zIndex: 1010,
-              height: '36px'
-            }}>
-              <marquee 
-                behavior="scroll" 
-                direction="left" 
-                scrollamount="6" 
-                onMouseEnter={(e) => e.currentTarget.stop()} 
-                onMouseLeave={(e) => e.currentTarget.start()} 
-                style={{
-                  fontSize: '13px',
-                  fontWeight: '800',
-                  letterSpacing: '0.8px',
-                  cursor: 'pointer'
-                }}
-              >
-                {announcementText}
-              </marquee>
-            </div>
+            <div className="sticky-header-wrapper">
+              {/* Scrolling Announcement Marquee */}
+              <div style={{
+                backgroundColor: 'var(--color-primary-red)',
+                color: 'var(--color-primary-blue)',
+                padding: '6px 0',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'center',
+                borderBottom: '1px solid rgba(43, 5, 5, 0.15)',
+                zIndex: 1010,
+                height: '36px'
+              }}>
+                <marquee 
+                  behavior="scroll" 
+                  direction="left" 
+                  scrollamount="6" 
+                  onMouseEnter={(e) => e.currentTarget.stop()} 
+                  onMouseLeave={(e) => e.currentTarget.start()} 
+                  style={{
+                    fontSize: '13px',
+                    fontWeight: '800',
+                    letterSpacing: '0.8px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  {announcementText}
+                </marquee>
+              </div>
 
-            <Header 
-              deliveryMode={deliveryMode} 
-              setDeliveryMode={setDeliveryMode}
-              cart={cart}
-              setCartOpen={setCartOpen}
-              address={address}
-              onOpenMap={() => setIsMapModalOpen(true)}
-              onGoToCartPage={() => setCurrentPage('cart')}
-              user={user}
-              onLoginClick={() => setIsAuthModalOpen(true)}
-              onLogout={() => {
-                localStorage.removeItem('dinapoli_user');
-                setUser(null);
-              }}
-              onShowHistory={() => setIsOrdersHistoryOpen(true)}
-              onAdminClick={() => setIsAdminMode(true)}
-              yeKazanSlices={yeKazanSlices}
-              onGoToReferral={() => setCurrentPage('referral')}
-              onOpenRewards={() => setIsRewardModalOpen(true)}
-              onOpenAddresses={() => setIsAddressesModalOpen(true)}
-              onGoToAbout={() => setCurrentPage('about')}
-              onGoToContact={() => setCurrentPage('contact')}
-              onGoToMenu={() => setCurrentPage('menu')}
-            />
+              <Header 
+                deliveryMode={deliveryMode} 
+                setDeliveryMode={setDeliveryMode}
+                cart={cart}
+                setCartOpen={setCartOpen}
+                address={address}
+                onOpenMap={() => setIsMapModalOpen(true)}
+                onGoToCartPage={() => setCurrentPage('cart')}
+                user={user}
+                onLoginClick={() => setIsAuthModalOpen(true)}
+                onLogout={() => {
+                  localStorage.removeItem('dinapoli_user');
+                  setUser(null);
+                }}
+                onShowHistory={() => setIsOrdersHistoryOpen(true)}
+                onAdminClick={() => setIsAdminMode(true)}
+                yeKazanSlices={yeKazanSlices}
+                onGoToReferral={() => setCurrentPage('referral')}
+                onOpenRewards={() => setIsRewardModalOpen(true)}
+                onOpenAddresses={() => setIsAddressesModalOpen(true)}
+                onGoToAbout={() => setCurrentPage('about')}
+                onGoToContact={() => setCurrentPage('contact')}
+                onGoToMenu={() => setCurrentPage('menu')}
+              />
+            </div>
 
             <main className="main-content">
               {currentPage === 'menu' && (

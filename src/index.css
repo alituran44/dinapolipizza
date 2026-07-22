@@ -51,7 +51,7 @@
 }
 
 html, body {
-  overflow-x: hidden !important;
+  overflow-x: clip;
   width: 100%;
   max-width: 100%;
 }
@@ -138,13 +138,19 @@ button {
 }
 
 /* --- BURGUNDY HEADER SECTION --- */
+.sticky-header-wrapper {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 2500 !important;
+  width: 100% !important;
+  box-shadow: 0 4px 20px rgba(43, 5, 5, 0.25) !important;
+  backdrop-filter: blur(8px);
+}
+
 .site-header-blue {
   background-color: var(--color-primary-red);
   color: white;
   box-shadow: var(--shadow-sm);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
   height: 80px;
   display: flex;
   align-items: center;
