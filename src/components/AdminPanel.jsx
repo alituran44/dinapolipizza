@@ -11,6 +11,7 @@ export default function AdminPanel({
   onAddProduct, 
   onDeleteProduct, 
   onUpdateProduct,
+  onResetDatabase,
   orders,
   onUpdateOrderStatus,
   onShowSlip,
@@ -308,6 +309,10 @@ export default function AdminPanel({
         </nav>
         
         <div className="admin-sidebar-footer">
+          <button className="exit-admin-btn" onClick={onResetDatabase} style={{ backgroundColor: '#ef4444', marginBottom: '8px', color: 'white' }}>
+            <Trash2 size={18} />
+            <span>Fabrika Ayarlarına Dön</span>
+          </button>
           <button className="exit-admin-btn" onClick={onClose}>
             <LogOut size={18} />
             <span>Müşteri Ekranına Dön</span>

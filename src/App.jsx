@@ -453,6 +453,21 @@ export default function App() {
     setProducts(products.map(p => p.id === productId ? updatedProduct : p));
   };
 
+  const handleResetDatabase = () => {
+    if (window.confirm("Tüm veri tabanını fabrika ayarlarına döndürmek istediğinize emin misiniz? Yapılan tüm fiyat ve ürün değişiklikleri sıfırlanacaktır.")) {
+      try {
+        localStorage.removeItem('dinapoli_products');
+        localStorage.removeItem('dinapoli_doughs');
+        localStorage.removeItem('dinapoli_crusts');
+        localStorage.removeItem('dinapoli_ingredients');
+        localStorage.removeItem('dinapoli_announcement');
+        window.location.reload();
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
+
   // Dough modifications
   const handleAddDough = (newDough) => setDoughs([...doughs, newDough]);
   const handleDeleteDough = (id) => setDoughs(doughs.filter(d => d.id !== id));
@@ -1029,6 +1044,7 @@ export default function App() {
             onAddProduct={handleAddProduct}
             onDeleteProduct={handleDeleteProduct}
             onUpdateProduct={handleUpdateProduct}
+            onResetDatabase={handleResetDatabase}
             orders={orders}
             onUpdateOrderStatus={handleUpdateOrderStatus}
             onShowSlip={(order) => {
