@@ -222,11 +222,22 @@ export default function App() {
   const [activeCustomizeItem, setActiveCustomizeItem] = useState(null);
   
   // User Authentication & Modal States
-  const [usersList, setUsersList] = useState([
-    { id: 'u1', name: 'Ali Turan', email: 'ali.turan@example.com', phone: '(543) 736 06 60', walletBalance: 75, joinDate: '2026-05-12' },
-    { id: 'u2', name: 'Şef Luigi', email: 'chef.luigi@dinapolipizza.com', phone: '(505) 726 17 17', walletBalance: 150, joinDate: '2026-01-01' },
-    { id: 'u3', name: 'Mehmet Yılmaz', email: 'mehmet@example.com', phone: '(555) 123 45 67', walletBalance: 0, joinDate: '2026-06-20' },
-  ]);
+  const [usersList, setUsersList] = useState(() => {
+    try {
+      const saved = localStorage.getItem('dinapoli_users');
+      return saved ? JSON.parse(saved) : [
+        { id: 'u1', name: 'Ali Turan', email: 'ali.turan@example.com', phone: '(543) 736 06 60', walletBalance: 75, joinDate: '2026-05-12' },
+        { id: 'u2', name: 'Şef Luigi', email: 'chef.luigi@dinapolipizza.com', phone: '(505) 726 17 17', walletBalance: 150, joinDate: '2026-01-01' },
+        { id: 'u3', name: 'Mehmet Yılmaz', email: 'mehmet@example.com', phone: '(555) 123 45 67', walletBalance: 0, joinDate: '2026-06-20' },
+      ];
+    } catch (e) {
+      return [
+        { id: 'u1', name: 'Ali Turan', email: 'ali.turan@example.com', phone: '(543) 736 06 60', walletBalance: 75, joinDate: '2026-05-12' },
+        { id: 'u2', name: 'Şef Luigi', email: 'chef.luigi@dinapolipizza.com', phone: '(505) 726 17 17', walletBalance: 150, joinDate: '2026-01-01' },
+        { id: 'u3', name: 'Mehmet Yılmaz', email: 'mehmet@example.com', phone: '(555) 123 45 67', walletBalance: 0, joinDate: '2026-06-20' },
+      ];
+    }
+  });
 
   const [referralTransactions, setReferralTransactions] = useState([
     { id: 't1', referrerId: 'u2', referrerName: 'Şef Luigi', code: 'DN-75TL-1717', refereeName: 'Mehmet Yılmaz', refereePhone: '(555) 123 45 67', rewardAmount: 75, status: 'completed', date: '2026-07-10' },
@@ -273,6 +284,15 @@ export default function App() {
     }
   }, [usersList]);
 
+  // Sync usersList back to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem('dinapoli_users', JSON.stringify(usersList));
+    } catch (e) {
+      console.error("Error saving usersList to localStorage:", e);
+    }
+  }, [usersList]);
+
   // Automatic Admin Mode Activation from URL hash #admin or query parameter
   useEffect(() => {
     const checkAdminTrigger = () => {
@@ -298,6 +318,16 @@ export default function App() {
 
   const handleUpdateUserWallet = (userId, newBalance) => {
     setUsersList(prev => prev.map(u => u.id === userId ? { ...u, walletBalance: newBalance } : u));
+  };
+
+  const handleUpdateUser = (userId, updatedFields) => {
+    setUsersList(prev => prev.map(u => u.id === userId ? { ...u, ...updatedFields } : u));
+  };
+
+  const handleDeleteUser = (userId) => {
+    if (window.confirm("Bu kullanıcıyı sistemden silmek istediğinize emin misiniz?")) {
+      setUsersList(prev => prev.filter(u => u.id !== userId));
+    }
   };
 
   const handleGenerateReferralCode = (userId) => {
@@ -391,7 +421,7 @@ export default function App() {
   };
 
   const handleSendMailNotification = (emails, subject, message) => {
-    alert(`Duyuru E-Postası Başarıyla Gönderildi!\n\nAlıcılar: ${emails.join(', ')}\nKonu: ${subject}\n\nMesaj: ${message.substring(0, 100)}...`);
+    alert(`Duyuru E-Postası Başarıyla Gönderildi!\n\nGönderen: dinapolipizza1997@gmail.com\nAlıcılar: ${emails.join(', ')}\nKonu: ${subject}\n\nMesaj: ${message.substring(0, 100)}...`);
   };
 
   const handleRegisterSocialShare = (orderId, platform) => {
@@ -1068,6 +1098,8 @@ export default function App() {
             onUpdateIngredient={handleUpdateIngredient}
             
             usersList={usersList}
+            onUpdateUser={handleUpdateUser}
+            onDeleteUser={handleDeleteUser}
             onUpdateUserWallet={handleUpdateUserWallet}
             onSendMailNotification={handleSendMailNotification}
             referralTransactions={referralTransactions}

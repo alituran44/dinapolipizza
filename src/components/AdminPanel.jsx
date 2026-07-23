@@ -35,6 +35,8 @@ export default function AdminPanel({
 
   // Users & Wallet management
   usersList = [],
+  onUpdateUser,
+  onDeleteUser,
   onUpdateUserWallet,
   onSendMailNotification,
   referralTransactions = [],
@@ -103,6 +105,25 @@ export default function AdminPanel({
     }
   });
   const [showGoogleSaved, setShowGoogleSaved] = useState(false);
+
+  // User inline-editing states
+  const [editingUserId, setEditingUserId] = useState(null);
+  const [editingUser, setEditingUser] = useState(null);
+
+  const handleUserEditClick = (u) => {
+    setEditingUserId(u.id);
+    setEditingUser({ ...u });
+  };
+
+  const handleUserEditSave = () => {
+    onUpdateUser(editingUserId, {
+      name: editingUser.name,
+      email: editingUser.email,
+      phone: editingUser.phone
+    });
+    setEditingUserId(null);
+    setEditingUser(null);
+  };
 
   const handleFileUpload = (e, field, isEdit = false) => {
     const file = e.target.files[0];
@@ -1018,36 +1039,91 @@ export default function AdminPanel({
                     <th>Cüzdan Bakiyesi</th>
                     <th>Kayıt Tarihi</th>
                     <th>Bakiye Güncelle</th>
+                    <th style={{ textAlign: 'center' }}>İşlemler</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {usersList.map(u => (
-                    <tr key={u.id}>
-                      <td className="bold">{u.name}</td>
-                      <td>{u.email}</td>
-                      <td>{u.phone}</td>
-                      <td className="bold text-green">{u.walletBalance} TL</td>
-                      <td>{u.joinDate}</td>
-                      <td>
-                        <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-                          <input 
-                            aria-label={`${u.name} Cüzdan Bakiyesi Güncelle`}
-                            type="number" 
-                            defaultValue={u.walletBalance}
-                            onBlur={(e) => {
-                              const val = parseFloat(e.target.value);
-                              if (!isNaN(val)) {
-                                onUpdateUserWallet(u.id, val);
-                              }
-                            }}
-                            style={{ width: '70px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '12px' }}
-                            placeholder="Miktar"
-                          />
-                          <span style={{ fontSize: '10px', color: '#64748b' }}>TL</span>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                  {usersList.map(u => {
+                    const isEditing = editingUserId === u.id;
+                    return (
+                      <tr key={u.id}>
+                        {isEditing ? (
+                          <>
+                            <td>
+                              <input 
+                                aria-label="Düzenlenen Kullanıcı Adı"
+                                type="text" 
+                                value={editingUser.name}
+                                onChange={(e) => setEditingUser({ ...editingUser, name: e.target.value })}
+                                style={{ padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '12px', width: '130px' }}
+                              />
+                            </td>
+                            <td>
+                              <input 
+                                aria-label="Düzenlenen Kullanıcı E-postası"
+                                type="email" 
+                                value={editingUser.email}
+                                onChange={(e) => setEditingUser({ ...editingUser, email: e.target.value })}
+                                style={{ padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '12px', width: '170px' }}
+                              />
+                            </td>
+                            <td>
+                              <input 
+                                aria-label="Düzenlenen Kullanıcı Telefonu"
+                                type="text" 
+                                value={editingUser.phone}
+                                onChange={(e) => setEditingUser({ ...editingUser, phone: e.target.value })}
+                                style={{ padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '12px', width: '120px' }}
+                              />
+                            </td>
+                            <td className="bold text-green">{u.walletBalance} TL</td>
+                            <td>{u.joinDate}</td>
+                            <td>
+                              <span style={{ fontSize: '11px', color: '#94a3b8' }}>Düzenleniyor...</span>
+                            </td>
+                            <td>
+                              <div style={{ display: 'flex', gap: '6px', justifyContent: 'center' }}>
+                                <button onClick={handleUserEditSave} className="add-submit-btn" style={{ padding: '4px 8px', fontSize: '11px', height: '28px', backgroundColor: '#10b981' }}>✓ Kaydet</button>
+                                <button onClick={() => { setEditingUserId(null); setEditingUser(null); }} className="exit-admin-btn" style={{ padding: '4px 8px', fontSize: '11px', height: '28px', backgroundColor: '#64748b', color: 'white' }}>İptal</button>
+                              </div>
+                            </td>
+                          </>
+                        ) : (
+                          <>
+                            <td className="bold">{u.name}</td>
+                            <td>{u.email}</td>
+                            <td>{u.phone}</td>
+                            <td className="bold text-green">{u.walletBalance} TL</td>
+                            <td>{u.joinDate}</td>
+                            <td>
+                              <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                                <input 
+                                  aria-label={`${u.name} Cüzdan Bakiyesi Güncelle`}
+                                  type="number" 
+                                  defaultValue={u.walletBalance}
+                                  onBlur={(e) => {
+                                    const val = parseFloat(e.target.value);
+                                    if (!isNaN(val)) {
+                                      onUpdateUserWallet(u.id, val);
+                                    }
+                                  }}
+                                  style={{ width: '70px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '12px' }}
+                                  placeholder="Miktar"
+                                />
+                                <span style={{ fontSize: '10px', color: '#64748b' }}>TL</span>
+                              </div>
+                            </td>
+                            <td>
+                              <div style={{ display: 'flex', gap: '6px', justifyContent: 'center' }}>
+                                <button onClick={() => handleUserEditClick(u)} style={{ padding: '4px 8px', fontSize: '11px', cursor: 'pointer', backgroundColor: '#e2e8f0', border: '1px solid #cbd5e1', borderRadius: '4px' }}>✏️ Düzenle</button>
+                                <button onClick={() => onDeleteUser(u.id)} style={{ padding: '4px 8px', fontSize: '11px', cursor: 'pointer', backgroundColor: '#fee2e2', border: '1px solid #fca5a5', borderRadius: '4px', color: '#b91c1c' }}>🗑️ Sil</button>
+                              </div>
+                            </td>
+                          </>
+                        )}
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -1306,6 +1382,18 @@ export default function AdminPanel({
                 onSendMailNotification(allEmails, emailSubject, emailMessage);
               }} style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '600px' }}>
                 
+                <div className="form-group" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label htmlFor="email-sender-input" style={{ fontSize: '13px', fontWeight: 'bold' }}>Gönderen E-Posta Adresi</label>
+                  <input 
+                    id="email-sender-input"
+                    aria-label="Gönderen E-Posta Adresi"
+                    type="text" 
+                    value="dinapolipizza1997@gmail.com (Sistem Kayıtlı Gmail)"
+                    disabled
+                    style={{ padding: '10px', border: '1px solid #cbd5e1', borderRadius: '6px', backgroundColor: '#f1f5f9', fontSize: '13px', cursor: 'not-allowed', fontWeight: 'bold', color: '#1e293b' }}
+                  />
+                </div>
+
                 <div className="form-group" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   <label htmlFor="email-recipients-input" style={{ fontSize: '13px', fontWeight: 'bold' }}>Alıcılar</label>
                   <input 
