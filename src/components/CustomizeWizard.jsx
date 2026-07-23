@@ -169,27 +169,31 @@ export default function CustomizeWizard({
 
   // Toggle standard ingredient removal
   const handleToggleStandardIngredient = (ingredientName) => {
-    const isRemoved = tempCustomization.removedIngredients.includes(ingredientName);
-    const updatedRemoved = isRemoved
-      ? tempCustomization.removedIngredients.filter(name => name !== ingredientName)
-      : [...tempCustomization.removedIngredients, ingredientName];
-      
-    setTempCustomization({
-      ...tempCustomization,
-      removedIngredients: updatedRemoved
+    setTempCustomization(prev => {
+      const currentRemoved = prev.removedIngredients || [];
+      const isRemoved = currentRemoved.includes(ingredientName);
+      const updatedRemoved = isRemoved
+        ? currentRemoved.filter(name => name !== ingredientName)
+        : [...currentRemoved, ingredientName];
+      return {
+        ...prev,
+        removedIngredients: updatedRemoved
+      };
     });
   };
 
   // Toggle extra ingredient additions
   const handleToggleExtraIngredient = (ingredient) => {
-    const exists = tempCustomization.extras.some(item => item.id === ingredient.id);
-    const updatedExtras = exists
-      ? tempCustomization.extras.filter(item => item.id !== ingredient.id)
-      : [...tempCustomization.extras, ingredient];
-      
-    setTempCustomization({
-      ...tempCustomization,
-      extras: updatedExtras
+    setTempCustomization(prev => {
+      const currentExtras = prev.extras || [];
+      const exists = currentExtras.some(item => item.id === ingredient.id);
+      const updatedExtras = exists
+        ? currentExtras.filter(item => item.id !== ingredient.id)
+        : [...currentExtras, ingredient];
+      return {
+        ...prev,
+        extras: updatedExtras
+      };
     });
   };
 

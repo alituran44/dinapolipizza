@@ -27,6 +27,21 @@ export default function AiPizzaChef({
   const [pizzaName, setPizzaName] = useState('Şef Luigi Özel Pizzası');
   
   const messagesEndRef = useRef(null);
+  const doughRef = useRef(detectedDough);
+  const crustRef = useRef(detectedCrust);
+  const extrasRef = useRef(detectedExtras);
+
+  useEffect(() => {
+    doughRef.current = detectedDough;
+  }, [detectedDough]);
+
+  useEffect(() => {
+    crustRef.current = detectedCrust;
+  }, [detectedCrust]);
+
+  useEffect(() => {
+    extrasRef.current = detectedExtras;
+  }, [detectedExtras]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -66,7 +81,7 @@ export default function AiPizzaChef({
     const isFinalize = ['fırına', 'sepete', 'sipariş', 'hazır', 'bitti', 'tamamdır'].some(w => textLower.includes(w));
 
     // 1. Dough matching
-    let foundDough = detectedDough;
+    let foundDough = doughRef.current;
     doughOptions.forEach(d => {
       if (textLower.includes(d.name.toLowerCase()) || textLower.includes(d.name.toLowerCase().replace(' hamur', ''))) {
         foundDough = d;
@@ -74,7 +89,7 @@ export default function AiPizzaChef({
     });
 
     // 2. Crust matching
-    let foundCrust = detectedCrust;
+    let foundCrust = crustRef.current;
     crustOptions.forEach(c => {
       if (textLower.includes(c.name.toLowerCase()) || textLower.includes(c.name.toLowerCase().replace(' kenar', ''))) {
         foundCrust = c;
@@ -82,7 +97,7 @@ export default function AiPizzaChef({
     });
 
     // 3. Extra ingredients matching
-    let updatedExtras = [...detectedExtras];
+    let updatedExtras = [...extrasRef.current];
     let matchedNames = [];
     
     ingredientOptions.forEach(ing => {
@@ -149,16 +164,16 @@ export default function AiPizzaChef({
       chefResponse += `Mamma mia! Harika tercihler. Taze fırın tepsimize hemen **${matchedNames.join(', ')}** ekledim. `;
     }
     
-    if (foundDough.id !== detectedDough.id) {
+    if (foundDough.id !== doughRef.current.id) {
       chefResponse += `Hamurumuzu tam istediğin gibi **${foundDough.name}** olarak usta ellerimle hazırlıyorum. `;
     }
 
-    if (foundCrust.id !== detectedCrust.id) {
+    if (foundCrust.id !== crustRef.current.id) {
       chefResponse += `Kenar tipini de nefis **${foundCrust.name}** olarak sardım! `;
     }
 
     // Handle yes/no or empty inputs smart
-    if (matchedNames.length === 0 && foundDough.id === detectedDough.id && foundCrust.id === detectedCrust.id) {
+    if (matchedNames.length === 0 && foundDough.id === doughRef.current.id && foundCrust.id === crustRef.current.id) {
       if (isAffirmative) {
         // User said "yes" to general recommendation, let's add popular items automatically
         const popularItems = ingredientOptions.filter(ing => ['sucuk', 'mantar', 'zeytin'].includes(ing.id));
@@ -330,6 +345,58 @@ export default function AiPizzaChef({
                     })}
                   </div>
                 </div>
+              </div>
+            </div>
+
+            {/* Interactive rapid ingredient toggle panel */}
+            <div className="deals-card" style={{ padding: '12px', marginTop: '10px', marginBottom: '10px', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0', width: '100%' }}>
+              <h5 style={{ fontSize: '12px', fontWeight: 'bold', margin: '0 0 8px 0', color: '#475569', textAlign: 'left' }}>
+                👉 Hızlı Malzeme Ekle/Çıkar (Tıklayarak Seçin):
+              </h5>
+              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
+                {ingredientOptions.map((ingredient) => {
+                  const isSelected = detectedExtras.some(e => e.id === ingredient.id);
+                  return (
+                    <button
+                      key={ingredient.id}
+                      onClick={() => {
+                        setDetectedExtras(prev => {
+                          const exists = prev.some(item => item.id === ingredient.id);
+                          const updated = exists 
+                            ? prev.filter(item => item.id !== ingredient.id)
+                            : [...prev, ingredient];
+                          
+                          // Also dynamically update name based on selected count
+                          if (updated.length > 0) {
+                            if (updated.length >= 3) {
+                              setPizzaName('Şef Luigi Bol Malzemeli Özel');
+                            } else {
+                              setPizzaName(`Şef Luigi ${updated.map(e => e.name).join(' & ')} Pizza`);
+                            }
+                          } else {
+                            setPizzaName('Şef Luigi Özel Pizzası');
+                          }
+                          
+                          return updated;
+                        });
+                      }}
+                      style={{
+                        padding: '4px 8px',
+                        fontSize: '11px',
+                        fontWeight: '600',
+                        borderRadius: '16px',
+                        border: '1px solid',
+                        borderColor: isSelected ? 'var(--color-primary-red)' : '#cbd5e1',
+                        backgroundColor: isSelected ? '#fee2e2' : 'white',
+                        color: isSelected ? 'var(--color-primary-red)' : '#475569',
+                        cursor: 'pointer',
+                        transition: 'all 0.15s ease'
+                      }}
+                    >
+                      {isSelected ? '✓ ' : '+ '} {ingredient.name}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
