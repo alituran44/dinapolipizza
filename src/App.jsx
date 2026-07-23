@@ -245,25 +245,54 @@ export default function App() {
     setUsersList(prev => prev.map(u => u.id === userId ? { ...u, walletBalance: newBalance } : u));
   };
 
+  const handleGenerateReferralCode = (userId) => {
+    const randomChars = Math.random().toString(36).substring(2, 6).toUpperCase();
+    const matchedUser = usersList.find(u => u.id === userId);
+    if (!matchedUser) return null;
+    const rewardTier = getUserReferralRewardTier(userId);
+    const suffix = matchedUser.phone ? matchedUser.phone.replace(/\D/g, '').slice(-4) : 'LUIGI';
+    const newCode = `DN-${rewardTier}TL-${suffix}-${randomChars}`;
+    
+    setUsersList(prev => prev.map(u => u.id === userId ? { ...u, activeReferralCode: newCode } : u));
+    
+    if (user && user.id === userId) {
+      const updatedUser = { ...user, activeReferralCode: newCode };
+      setUser(updatedUser);
+      localStorage.setItem('dinapoli_user', JSON.stringify(updatedUser));
+    }
+    return newCode;
+  };
+
   const handleApplyReferralCode = (refereeId, referralCode) => {
-    const suffix = referralCode.split('-').pop();
-    const referrer = usersList.find(u => u.phone && u.phone.replace(/\D/g, '').slice(-4) === suffix);
+    const parts = referralCode.split('-');
+    if (parts.length < 4) {
+      return { success: false, message: 'Geçersiz davet kodu formatı! Lütfen tam ve güncel kodu girin.' };
+    }
+    
+    const rewardTier = parseInt(parts[1].replace('TL', '')) || 75;
+    const suffix = parts[2];
+    
+    // Find the referrer who generated this exact code
+    const referrer = usersList.find(u => {
+      const uSuffix = u.phone ? u.phone.replace(/\D/g, '').slice(-4) : 'LUIGI';
+      return uSuffix === suffix && u.activeReferralCode === referralCode;
+    });
+    
     const referee = usersList.find(u => u.id === refereeId);
     
     if (!referrer || !referee) {
-      return { success: false, message: 'Geçersiz veya bulunamayan davet kodu!' };
+      return { success: false, message: 'Bu davet kodu geçersiz, süresi dolmuş veya daha önce kullanılmış!' };
     }
+    
     if (referrer.id === referee.id) {
       return { success: false, message: 'Kendi davet kodunuzu kullanamazsınız.' };
     }
     
-    // Tek kullanımlık davet kodu kontrolü (bu referee telefonu daha önce kullanmış mı?)
+    // Check if referee already used any code
     const alreadyUsed = referralTransactions.some(t => t.refereePhone === referee.phone);
     if (alreadyUsed) {
       return { success: false, message: 'Bu hesap için davet indirim kodu zaten kullanılmış.' };
     }
-    
-    const rewardTier = getUserReferralRewardTier(referrer.id);
     
     const newTx = {
       id: `tx-${Date.now()}`,
@@ -276,6 +305,15 @@ export default function App() {
       status: 'pending',
       date: new Date().toISOString().split('T')[0]
     };
+    
+    // Code used, invalidate the referrer's active code (Single-use enforcement)
+    setUsersList(prev => prev.map(u => u.id === referrer.id ? { ...u, activeReferralCode: null } : u));
+    
+    if (user && user.id === referrer.id) {
+      const updatedUser = { ...user, activeReferralCode: null };
+      setUser(updatedUser);
+      localStorage.setItem('dinapoli_user', JSON.stringify(updatedUser));
+    }
     
     setReferralTransactions(prev => [...prev, newTx]);
     handleUpdateUserWallet(referee.id, (referee.walletBalance || 0) + rewardTier);
@@ -775,6 +813,7 @@ export default function App() {
                 onGoToMenu={() => setCurrentPage('menu')}
                 referralTransactions={referralTransactions}
                 onApplyReferralCode={handleApplyReferralCode}
+                onGenerateReferralCode={handleGenerateReferralCode}
                 rewardAmountTier={user ? getUserReferralRewardTier(user.id) : 75}
               />
             )}

@@ -8,22 +8,31 @@ export default function ReferralPage({
   onGoToMenu, 
   referralTransactions = [], 
   onApplyReferralCode,
+  onGenerateReferralCode,
   rewardAmountTier = 75
 }) {
   const [referralCodeInput, setReferralCodeInput] = useState('');
   const [couponStatus, setCouponStatus] = useState({ type: '', message: '' });
   const [faqOpen, setFaqOpen] = useState({ 0: true });
 
-  const userReferralCode = user 
-    ? `DN-${rewardAmountTier}TL-${user.phone ? user.phone.replace(/\D/g, '').slice(-4) : 'LUIGI'}`
-    : 'DN-75TL-MISAFIR';
+  const [currentCode, setCurrentCode] = useState(() => {
+    return user && user.activeReferralCode ? user.activeReferralCode : '';
+  });
 
   const myReferrals = user ? referralTransactions.filter(t => t.referrerId === user.id) : [];
   const successfulReferralsCount = myReferrals.filter(t => t.status === 'completed').length;
 
   const handleShare = () => {
-    navigator.clipboard.writeText(userReferralCode);
-    alert(`Davet kodunuz kopyalandı!\n\nKod: ${userReferralCode}\nArkadaşınızla paylaşarak ${rewardAmountTier} TL kazanabilirsiniz.`);
+    if (!user) {
+      setCouponStatus({ type: 'error', message: 'Lütfen kod üretmek ve paylaşmak için önce giriş yapın.' });
+      return;
+    }
+    const newCode = onGenerateReferralCode(user.id);
+    if (newCode) {
+      setCurrentCode(newCode);
+      navigator.clipboard.writeText(newCode);
+      alert(`Yeni tek kullanımlık davet kodunuz başarıyla üretildi ve kopyalandı!\n\nKod: ${newCode}\n\nBu kod yalnızca 1 kişi tarafından kullanılabilir. Her yeni davetiniz için yeni kod üretmelisiniz.`);
+    }
   };
 
   const handleApplyReferral = (e) => {
@@ -37,7 +46,7 @@ export default function ReferralPage({
     const formattedCode = referralCodeInput.trim().toUpperCase();
 
     // Check self use
-    if (formattedCode === userReferralCode) {
+    if (user.activeReferralCode && formattedCode === user.activeReferralCode) {
       setCouponStatus({ type: 'error', message: 'Kendi davet kodunuzu kullanamazsınız.' });
       return;
     }
@@ -60,20 +69,44 @@ export default function ReferralPage({
 
   const faqs = [
     {
-      q: 'Kampanya hangi kanallarda geçerlidir?',
-      a: 'Kampanya Di Napoli Pizza mobil arayüzü ve web sitesi üzerinden verilen siparişlerde geçerlidir.'
+      q: 'Kampanyada davet kodunu nasıl paylaşabilirim?',
+      a: 'Kampanyada davet eden kişinin "Hesabım" altından "Arkadaşına Öner" sekmesine gelerek "Kodu Paylaş" butonuyla paylaşım yapması gerekmektedir.'
     },
     {
-      q: '10 Davet / 100 TL Kuralı nedir?',
-      a: 'Eğer davet kodunuz ile sitemize getirdiğiniz 10 yeni üye sipariş (satış) verirse, bundan sonraki her davetiniz ve kendi siparişleriniz için kazanacağınız cüzdan indirimi kalıcı olarak 100 TL olacaktır!'
+      q: 'Davet edilen kişinin ne yapması gerekiyor?',
+      a: 'Davet edilen kişinin, kendisine ulaşan bilgilendirmede yer alan linke tıklayarak Di Napoli Pizza üyeliğini gerçekleştirmesi gerekmektedir.'
     },
     {
-      q: 'Davet indirimi tek kullanımlık mıdır?',
-      a: 'Evet, her davet kodu ve her yeni üyenin davet indirim hakkı tek kullanımlıktır.'
+      q: '75 TL indirim kuponunun kazanılması için kod girişi nasıl yapılır?',
+      a: '75 TL indirim kuponunun davet edilen tarafından kazanılabilmesi için davet eden kullanıcıdan gelen promosyon kodunun uygulama ve/veya web kanallarından girişi yapılmalıdır.'
     },
     {
-      q: 'Cüzdan indirimi nasıl kullanılır?',
-      a: 'Kazandığınız tüm cüzdan bakiyeleri sepet sayfasındaki "Cüzdan Bakiyesini Kullan" seçeneğiyle siparişinizden anında düşülür.'
+      q: 'Davet eden ne zaman 75 TL kazanır?',
+      a: 'Davet eden kullanıcının 75 TL indirim kuponunu kazanabilmesi için davet edilen kullanıcının 1 ay içinde en az 1 adet başarılı sipariş vermiş olması gerekmektedir.'
+    },
+    {
+      q: 'Sipariş iptali durumunda ne olur?',
+      a: 'Davet edilenin sipariş iptali durumunda 75TL indirim kuponu tekrardan hesabına tanımlanacaktır.'
+    },
+    {
+      q: 'Davet edebileceğim arkadaş sınırı var mı?',
+      a: 'Davet için herhangi bir arkadaş sınırı bulunmamaktadır.'
+    },
+    {
+      q: 'Davet eden kişi ayda ve toplamda en fazla ne kadar kazanabilir?',
+      a: 'Davet eden kişi Arkadaşına Öner kuponlarından ayda 3, toplamda ise en fazla 10 adete kadar kazanabilir.'
+    },
+    {
+      q: 'Davet edilen kişi de başkalarını davet edebilir mi?',
+      a: 'Evet, davet edilen kişi de kendi kullanıcısına özel davet kodunu paylaşarak indirim kuponu kazanmaya başlayabilecektir.'
+    },
+    {
+      q: 'Ürettiğim davet kodunu kaç kişi kullanabilir?',
+      a: 'Paylaşılan davet kodu yalnızca 1 kişi tarafından kullanılabilir. Her bir davetiniz için "Kodu Paylaş" butonuna basıp yeni bir davet kodunun üretilmesini sağlamalısınız.'
+    },
+    {
+      q: 'Kampanyadan yararlanmak için üye olmak zorunlu mu?',
+      a: 'Evet, kampanyadan faydalanmak için giriş yapılmalı veya üye olunmalıdır.'
     }
   ];
 
@@ -95,8 +128,14 @@ export default function ReferralPage({
         <h2 style={{ fontSize: '20px', fontWeight: '800', marginBottom: '12px' }}>
           Arkadaşına Öner ile arkadaşın sipariş verdiğinde sen de 75 TL kazan.
         </h2>
+        
+        {/* Bilgilendirme Bannerı */}
+        <div style={{ backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '8px', padding: '12px 16px', margin: '16px auto', maxWidth: '600px', fontSize: '12px', color: '#166534', textAlign: 'left', lineHeight: '1.5' }}>
+          ⚠️ <strong>Önemli Kural:</strong> Paylaşılan davet kodu <strong>yalnızca 1 kişi</strong> tarafından kullanılabilir. Her bir davetiniz için aşağıdaki butona basıp yeni bir kod üretilmesini sağlamalısınız.
+        </div>
+
         <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '24px' }}>
-          Senin davet kodun: <strong style={{ color: 'var(--color-burgundy)', fontSize: '16px' }}>{userReferralCode}</strong>
+          Senin Aktif Davet Kodun: <strong style={{ color: 'var(--color-burgundy)', fontSize: '16px' }}>{currentCode || 'KOD ÜRETİLMEDİ (Paylaş butonuna basarak oluşturun)'}</strong>
         </p>
 
         <button 
@@ -104,7 +143,7 @@ export default function ReferralPage({
           style={{ backgroundColor: '#10b981', color: 'white', border: 'none', padding: '12px 32px', borderRadius: '9999px', fontWeight: 'bold', fontSize: '14px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px', transition: 'all 0.2s' }}
         >
           <Share2 size={16} />
-          <span>Kodu Paylaş</span>
+          <span>Kodu Paylaş & Yeni Kod Üret</span>
         </button>
       </div>
 
@@ -114,13 +153,13 @@ export default function ReferralPage({
           Arkadaşına Öner kodunu girerek fırsatlardan yararlanabilirsin.
         </h3>
         <p style={{ fontSize: '12px', color: '#64748b', marginBottom: '20px' }}>
-          Arkadaşından gelen 8 haneli davet kodunu girerek anında 75 TL cüzdan bakiyesi kazan.
+          Arkadaşından gelen tek kullanımlık davet kodunu girerek anında 75 TL cüzdan bakiyesi kazan.
         </p>
 
         <form onSubmit={handleApplyReferral} style={{ display: 'flex', gap: '12px', justifyContent: 'center', maxWidth: '400px', margin: '0 auto' }}>
           <input 
             type="text" 
-            placeholder="DN-75TL-XXXX" 
+            placeholder="DN-75TL-XXXX-YYYY" 
             value={referralCodeInput}
             onChange={(e) => setReferralCodeInput(e.target.value)}
             style={{ flex: 1, padding: '10px 16px', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '14px', outline: 'none' }}
