@@ -1,5 +1,6 @@
 export const CATEGORIES = [
   { id: 'kampanya', name: 'Kampanyalar', icon: 'sparkles' },
+  { id: 'ozel-kampanya', name: 'Özel Kampanyalar', icon: 'gift' },
   { id: 'pizzalar', name: 'Pizzalar', icon: 'pizza' },
   { id: 'doyuran-menuler', name: 'Doyuran Menüler', icon: 'package' },
   { id: 'fastfood', name: 'Fastfood & Pide', icon: 'utensils-crossed' },
@@ -14,7 +15,7 @@ export const INITIAL_PRODUCTS = [
   // --- KAMPANYALAR ---
   {
     id: 'firsat-super',
-    category: 'kampanya',
+    category: 'ozel-kampanya',
     name: 'Süper Kampanya',
     description: '1 Medium Pizza + Cips + Soğan Halkası + 1 LT Coca-Cola',
     basePrice: 729,
@@ -26,7 +27,7 @@ export const INITIAL_PRODUCTS = [
   },
   {
     id: 'firsat-2al1ode',
-    category: 'kampanya',
+    category: 'ozel-kampanya',
     name: '2 Al 1 Öde Kampanyası',
     description: '1 Medium Pizza Alana 1 Small Pizza BEDAVA!',
     basePrice: 579,
@@ -38,7 +39,7 @@ export const INITIAL_PRODUCTS = [
   },
   {
     id: 'firsat-3al2ode',
-    category: 'kampanya',
+    category: 'ozel-kampanya',
     name: '3 Al 2 Öde Kampanyası',
     description: '2 Medium Pizza Alana 1 Small Pizza BEDAVA!',
     basePrice: 825,
@@ -50,7 +51,7 @@ export const INITIAL_PRODUCTS = [
   },
   {
     id: 'firsat-sefin',
-    category: 'kampanya',
+    category: 'ozel-kampanya',
     name: 'Şefin Kampanyası',
     description: '2 Medium Pizza + 1 Coca-Cola BEDAVA!',
     basePrice: 729,
@@ -62,7 +63,7 @@ export const INITIAL_PRODUCTS = [
   },
   {
     id: 'firsat-2kisilik',
-    category: 'kampanya',
+    category: 'ozel-kampanya',
     name: '2 Kişilik Kampanya',
     description: 'Large Pizza + Tavuk Parçacığı + Patates Cipsi + 1 LT Coca-Cola',
     basePrice: 729,
@@ -74,7 +75,7 @@ export const INITIAL_PRODUCTS = [
   },
   {
     id: 'firsat-4kisilik',
-    category: 'kampanya',
+    category: 'ozel-kampanya',
     name: '4 Kişilik Kampanya',
     description: 'XLarge Pizza + 4 Adet Tavuk Parçacığı + Patates Cipsi + 1 LT Coca-Cola',
     basePrice: 999,
@@ -86,7 +87,7 @@ export const INITIAL_PRODUCTS = [
   },
   {
     id: 'firsat-6kisilik',
-    category: 'kampanya',
+    category: 'ozel-kampanya',
     name: '6 Kişilik Kampanya',
     description: 'XXLarge Pizza + 6 Adet Tavuk Parçacığı + Patates Cipsi + 1.5 LT Coca-Cola',
     basePrice: 1249,
@@ -98,7 +99,7 @@ export const INITIAL_PRODUCTS = [
   },
   {
     id: 'firsat-arkadas',
-    category: 'kampanya',
+    category: 'ozel-kampanya',
     name: 'Arkadaş Menü',
     description: '2 Small Pizza Alana 1 Coca-Cola BEDAVA!',
     basePrice: 729,

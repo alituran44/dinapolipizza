@@ -158,11 +158,66 @@ export default function App() {
   ]);
   
   // Customization database states
-  const [products, setProducts] = useState(INITIAL_PRODUCTS);
-  const [doughs, setDoughs] = useState(INITIAL_DOUGHS);
-  const [crusts, setCrusts] = useState(INITIAL_CRUSTS);
-  const [ingredients, setIngredients] = useState(INITIAL_INGREDIENTS);
-  
+  const [products, setProducts] = useState(() => {
+    try {
+      const saved = localStorage.getItem('dinapoli_products');
+      return saved ? JSON.parse(saved) : INITIAL_PRODUCTS;
+    } catch (e) {
+      return INITIAL_PRODUCTS;
+    }
+  });
+
+  const [doughs, setDoughs] = useState(() => {
+    try {
+      const saved = localStorage.getItem('dinapoli_doughs');
+      return saved ? JSON.parse(saved) : INITIAL_DOUGHS;
+    } catch (e) {
+      return INITIAL_DOUGHS;
+    }
+  });
+
+  const [crusts, setCrusts] = useState(() => {
+    try {
+      const saved = localStorage.getItem('dinapoli_crusts');
+      return saved ? JSON.parse(saved) : INITIAL_CRUSTS;
+    } catch (e) {
+      return INITIAL_CRUSTS;
+    }
+  });
+
+  const [ingredients, setIngredients] = useState(() => {
+    try {
+      const saved = localStorage.getItem('dinapoli_ingredients');
+      return saved ? JSON.parse(saved) : INITIAL_INGREDIENTS;
+    } catch (e) {
+      return INITIAL_INGREDIENTS;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('dinapoli_products', JSON.stringify(products));
+    } catch (e) {}
+  }, [products]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('dinapoli_doughs', JSON.stringify(doughs));
+    } catch (e) {}
+  }, [doughs]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('dinapoli_crusts', JSON.stringify(crusts));
+    } catch (e) {}
+  }, [crusts]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('dinapoli_ingredients', JSON.stringify(ingredients));
+    } catch (e) {}
+  }, [ingredients]);
+
   // Wizard Active item selection state
   const [activeCustomizeItem, setActiveCustomizeItem] = useState(null);
   
@@ -749,7 +804,11 @@ export default function App() {
                   </div>
                 </div>
 
-                <PromoWidgets yeKazanSlices={yeKazanSlices} />
+                <PromoWidgets 
+                  yeKazanSlices={yeKazanSlices} 
+                  products={products}
+                  onDealClick={(deal) => setActiveCustomizeItem(deal)}
+                />
 
                 {/* Usta AI Pizza Asistanı Giriş Banner'ı */}
                 <div className="ai-chef-promo-banner" onClick={() => setIsAiChefOpen(true)}>

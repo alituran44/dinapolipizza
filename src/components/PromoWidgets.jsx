@@ -1,43 +1,11 @@
 import React, { useState } from 'react';
 import RewardModal from './RewardModal';
 
-export default function PromoWidgets({ yeKazanSlices }) {
+export default function PromoWidgets({ yeKazanSlices, products = [], onDealClick }) {
   const [isRewardOpen, setIsRewardOpen] = useState(false);
 
-  const deals = [
-    {
-      badge: 'SÜPER KAMPANYA',
-      title: 'Süper Kampanya',
-      desc: '1 Medium Pizza + Cips + Soğan Halkası + 1 LT Coca-Cola',
-      price: '729 TL',
-      image: '/super_kampanya.png',
-      badgeClass: 'gold'
-    },
-    {
-      badge: '3 AL 2 ÖDE',
-      title: '3 Al 2 Öde Kampanyası',
-      desc: '2 Medium Pizza Alana 1 Small Pizza BEDAVA!',
-      price: '825 TL',
-      image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80',
-      badgeClass: 'blue'
-    },
-    {
-      badge: 'ŞEFİN KAMPANYASI',
-      title: 'Şefin Kampanyası',
-      desc: '2 Medium Pizza + 1 Coca-Cola BEDAVA!',
-      price: '729 TL',
-      image: '/sefin_pizzasi.jpg',
-      badgeClass: 'red'
-    },
-    {
-      badge: 'GRUP FIRSATI',
-      title: '4 Kişilik Aile Kampanyası',
-      desc: 'XLarge Pizza + 4 Adet Tavuk Parçacığı + Patates Cipsi + 1 LT Coca-Cola',
-      price: '999 TL',
-      image: '/firsat_4kisilik.png',
-      badgeClass: 'gold'
-    }
-  ];
+  // Derive campaigns dynamically from products database
+  const deals = products.filter(p => p.category === 'ozel-kampanya' || p.category === 'kampanya');
 
   return (
     <section className="promo-widgets-section" style={{ padding: '32px 0', overflow: 'hidden' }}>
@@ -58,7 +26,7 @@ export default function PromoWidgets({ yeKazanSlices }) {
           scrollbarColor: 'var(--color-primary-blue) transparent'
         }}>
           {deals.map((deal, idx) => (
-            <article key={idx} className="deal-card-item" style={{ 
+            <article key={deal.id || idx} className="deal-card-item" style={{ 
               flex: '0 0 300px',
               scrollSnapAlign: 'start',
               position: 'relative', 
@@ -70,6 +38,7 @@ export default function PromoWidgets({ yeKazanSlices }) {
               transition: 'transform 0.2s ease, box-shadow 0.2s ease',
               cursor: 'pointer'
             }}
+            onClick={() => onDealClick && onDealClick(deal)}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'translateY(-4px)';
               e.currentTarget.style.boxShadow = 'var(--shadow-md)';
@@ -79,7 +48,7 @@ export default function PromoWidgets({ yeKazanSlices }) {
               e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
             }}
             >
-              <img src={deal.image} alt={deal.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" decoding="async" />
+              <img src={deal.image} alt={deal.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" decoding="async" />
               <div className="deal-slide-overlay" style={{ 
                 position: 'absolute', 
                 top: 0, 
@@ -94,22 +63,22 @@ export default function PromoWidgets({ yeKazanSlices }) {
                 color: 'white', 
                 textAlign: 'left' 
               }}>
-                <span className={`deal-badge ${deal.badgeClass}`} style={{ 
+                <span className="deal-badge" style={{ 
                   width: 'fit-content', 
                   padding: '4px 10px', 
                   borderRadius: 'var(--radius-sm)', 
                   fontSize: '11px', 
                   fontWeight: '800', 
                   marginBottom: '8px',
-                  background: deal.badgeClass === 'red' ? 'var(--color-primary-red)' : deal.badgeClass === 'gold' ? 'var(--color-primary-blue)' : '#2b6cb0',
-                  color: deal.badgeClass === 'gold' ? 'var(--color-dark-blue)' : 'white'
+                  background: deal.popular ? 'var(--color-primary-red)' : 'var(--color-primary-blue)',
+                  color: 'white'
                 }}>
-                  {deal.badge}
+                  {deal.popular ? 'POPÜLER FIRSAT' : 'ÖZEL KAMPANYA'}
                 </span>
-                <h4 style={{ fontSize: '18px', fontWeight: '800', color: 'white', marginBottom: '4px' }}>{deal.title}</h4>
-                <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.85)', marginBottom: '8px', lineHeight: '1.4' }}>{deal.desc}</p>
-                <span style={{ fontSize: '18px', fontWeight: '900', color: 'var(--color-primary-blue)' }}>{deal.price}</span>
-                </div>
+                <h4 style={{ fontSize: '18px', fontWeight: '800', color: 'white', marginBottom: '4px' }}>{deal.name}</h4>
+                <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.85)', marginBottom: '8px', lineHeight: '1.4' }}>{deal.description}</p>
+                <span style={{ fontSize: '18px', fontWeight: '900', color: 'var(--color-primary-blue)' }}>{deal.basePrice} TL</span>
+              </div>
             </article>
           ))}
         </div>

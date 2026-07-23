@@ -4,13 +4,15 @@ import ProductCard from './ProductCard';
 import { 
   Search, Pizza, Sparkles, Flame, Drumstick, Utensils, 
   Dessert, Sandwich, Croissant, CupSoda, Droplet,
-  ChevronLeft, ChevronRight 
+  ChevronLeft, ChevronRight, Gift
 } from 'lucide-react';
 
 const getCategoryIcon = (iconName) => {
   switch (iconName) {
     case 'sparkles':
       return <Sparkles size={16} />;
+    case 'gift':
+      return <Gift size={16} />;
     case 'pizza':
       return <Pizza size={16} />;
     case 'flame':
@@ -37,7 +39,7 @@ const getCategoryIcon = (iconName) => {
 };
 
 export default function Menu({ onAddToCart, products = INITIAL_PRODUCTS }) {
-  const [activeCategory, setActiveCategory] = useState('pizzalar');
+  const [activeCategory, setActiveCategory] = useState('ozel-kampanya');
   const [searchQuery, setSearchQuery] = useState('');
   const scrollContainerRef = useRef(null);
 
