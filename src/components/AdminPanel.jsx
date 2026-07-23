@@ -97,9 +97,9 @@ export default function AdminPanel({
 
   const [googleClientIdInput, setGoogleClientIdInput] = useState(() => {
     try {
-      return localStorage.getItem('dinapoli_google_client_id') || '';
+      return localStorage.getItem('dinapoli_google_client_id') || '97662071892-4e7fsue72o4ta850a2voii72rfj5qnbs.apps.googleusercontent.com';
     } catch (e) {
-      return '';
+      return '97662071892-4e7fsue72o4ta850a2voii72rfj5qnbs.apps.googleusercontent.com';
     }
   });
   const [showGoogleSaved, setShowGoogleSaved] = useState(false);

@@ -8,9 +8,9 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
   
   const [googleClientId, setGoogleClientId] = useState(() => {
     try {
-      return localStorage.getItem('dinapoli_google_client_id') || '';
+      return localStorage.getItem('dinapoli_google_client_id') || '97662071892-4e7fsue72o4ta850a2voii72rfj5qnbs.apps.googleusercontent.com';
     } catch (e) {
-      return '';
+      return '97662071892-4e7fsue72o4ta850a2voii72rfj5qnbs.apps.googleusercontent.com';
     }
   });
 
@@ -43,7 +43,7 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
 
   useEffect(() => {
     if (isOpen && window.google) {
-      const clientId = localStorage.getItem('dinapoli_google_client_id');
+      const clientId = localStorage.getItem('dinapoli_google_client_id') || '97662071892-4e7fsue72o4ta850a2voii72rfj5qnbs.apps.googleusercontent.com';
       if (clientId) {
         try {
           window.google.accounts.id.initialize({
@@ -324,7 +324,7 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
                     <span>veya</span>
                   </div>
 
-                  {localStorage.getItem('dinapoli_google_client_id') ? (
+                  {localStorage.getItem('dinapoli_google_client_id') || '97662071892-4e7fsue72o4ta850a2voii72rfj5qnbs.apps.googleusercontent.com' ? (
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', marginTop: '12px' }}>
                       <div id="google-official-btn"></div>
                       <span style={{ fontSize: '10px', color: '#94a3b8' }}>* Resmi Google Girişi Aktif</span>
