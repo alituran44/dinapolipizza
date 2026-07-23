@@ -5264,6 +5264,38 @@ button {
   overflow-y: auto !important;
 }
 
+/* Infinite Marquee styles for PromoWidgets */
+.promo-marquee-container {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+  padding: 12px 0;
+}
+
+.promo-marquee-track {
+  display: flex;
+  gap: 20px;
+  width: max-content;
+  will-change: transform;
+}
+
+.promo-marquee-track.animated {
+  animation: promoMarquee 30s linear infinite;
+}
+
+.promo-marquee-container:hover .promo-marquee-track.animated {
+  animation-play-state: paused;
+}
+
+@keyframes promoMarquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(var(--marquee-scroll-width, -50%), 0, 0);
+  }
+}
+
 
 
 
