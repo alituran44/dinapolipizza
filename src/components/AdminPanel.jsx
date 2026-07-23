@@ -148,13 +148,23 @@ export default function AdminPanel({
   };
 
   const handleEditSave = () => {
-    onUpdateProduct(editingId, {
-      ...editingProduct,
-      basePrice: parseFloat(editingProduct.basePrice),
-      requiredPizzaSelections: parseInt(editingProduct.requiredPizzaSelections || 0)
-    });
-    setEditingId(null);
-    setEditingProduct(null);
+    try {
+      if (!editingProduct) {
+        alert("Hata: Düzenlenen ürün verisi bulunamadı!");
+        return;
+      }
+      const updated = {
+        ...editingProduct,
+        basePrice: parseFloat(editingProduct.basePrice || 0),
+        requiredPizzaSelections: parseInt(editingProduct.requiredPizzaSelections || 0)
+      };
+      onUpdateProduct(editingId, updated);
+      setEditingId(null);
+      setEditingProduct(null);
+    } catch (err) {
+      alert("Ürün kaydedilirken hata oluştu: " + err.message);
+      console.error(err);
+    }
   };
 
   const handleDoughEditClick = (dough) => {

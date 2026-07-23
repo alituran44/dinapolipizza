@@ -444,13 +444,13 @@ export default function App() {
   
   // Product modifications
   const handleAddProduct = (newProduct) => {
-    setProducts([...products, newProduct]);
+    setProducts(prev => [...prev, newProduct]);
   };
   const handleDeleteProduct = (productId) => {
-    setProducts(products.filter(p => p.id !== productId));
+    setProducts(prev => prev.filter(p => p.id !== productId));
   };
   const handleUpdateProduct = (productId, updatedProduct) => {
-    setProducts(products.map(p => p.id === productId ? updatedProduct : p));
+    setProducts(prev => prev.map(p => p.id === productId ? updatedProduct : p));
   };
 
   const handleResetDatabase = () => {
@@ -469,19 +469,19 @@ export default function App() {
   };
 
   // Dough modifications
-  const handleAddDough = (newDough) => setDoughs([...doughs, newDough]);
-  const handleDeleteDough = (id) => setDoughs(doughs.filter(d => d.id !== id));
-  const handleUpdateDough = (id, updatedDough) => setDoughs(doughs.map(d => d.id === id ? updatedDough : d));
+  const handleAddDough = (newDough) => setDoughs(prev => [...prev, newDough]);
+  const handleDeleteDough = (id) => setDoughs(prev => prev.filter(d => d.id !== id));
+  const handleUpdateDough = (id, updatedDough) => setDoughs(prev => prev.map(d => d.id === id ? updatedDough : d));
 
   // Crust modifications
-  const handleAddCrust = (newCrust) => setCrusts([...crusts, newCrust]);
-  const handleDeleteCrust = (id) => setCrusts(crusts.filter(c => c.id !== id));
-  const handleUpdateCrust = (id, updatedCrust) => setCrusts(crusts.map(c => c.id === id ? updatedCrust : c));
+  const handleAddCrust = (newCrust) => setCrusts(prev => [...prev, newCrust]);
+  const handleDeleteCrust = (id) => setCrusts(prev => prev.filter(c => c.id !== id));
+  const handleUpdateCrust = (id, updatedCrust) => setCrusts(prev => prev.map(c => c.id === id ? updatedCrust : c));
 
   // Ingredient modifications
-  const handleAddIngredient = (newIng) => setIngredients([...ingredients, newIng]);
-  const handleDeleteIngredient = (id) => setIngredients(ingredients.filter(i => i.id !== id));
-  const handleUpdateIngredient = (id, updatedIng) => setIngredients(ingredients.map(i => i.id === id ? updatedIng : i));
+  const handleAddIngredient = (newIng) => setIngredients(prev => [...prev, newIng]);
+  const handleDeleteIngredient = (id) => setIngredients(prev => prev.filter(i => i.id !== id));
+  const handleUpdateIngredient = (id, updatedIng) => setIngredients(prev => prev.map(i => i.id === id ? updatedIng : i));
 
   // Order status
   const handleUpdateOrderStatus = (orderId, newStatus) => {
