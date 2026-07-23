@@ -95,6 +95,15 @@ export default function AdminPanel({
   const [announcementInput, setAnnouncementInput] = useState(announcementText);
   const [showAnnouncementSaved, setShowAnnouncementSaved] = useState(false);
 
+  const [googleClientIdInput, setGoogleClientIdInput] = useState(() => {
+    try {
+      return localStorage.getItem('dinapoli_google_client_id') || '';
+    } catch (e) {
+      return '';
+    }
+  });
+  const [showGoogleSaved, setShowGoogleSaved] = useState(false);
+
   const handleFileUpload = (e, field, isEdit = false) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -1340,6 +1349,51 @@ export default function AdminPanel({
                 <button type="submit" className="add-submit-btn" style={{ height: '40px', width: '200px', alignSelf: 'flex-start' }}>
                   E-Posta Duyurusu Gönder
                 </button>
+              </form>
+            </div>
+
+            <div className="deals-card" style={{ padding: '24px', marginBottom: '24px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  🔑 Google Giriş (Google Sign-In) Ayarları
+                </h3>
+              </div>
+              <p style={{ fontSize: '12px', color: '#64748b', margin: '4px 0 16px 0' }}>
+                Web sitenizde "Google ile Giriş Yap" butonunun çalışması için Google Cloud Console üzerinden aldığınız <strong>OAuth 2.0 Client ID</strong> değerini girin.
+              </p>
+              
+              <form onSubmit={(e) => {
+                e.preventDefault();
+                localStorage.setItem('dinapoli_google_client_id', googleClientIdInput);
+                setShowGoogleSaved(true);
+                setTimeout(() => setShowGoogleSaved(false), 3000);
+                alert("Google Client ID başarıyla kaydedildi! Sayfa yeni ayarlarla güncellenecektir.");
+                window.location.reload();
+              }} style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '600px' }}>
+                
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label htmlFor="google-client-id-input" style={{ fontSize: '13px', fontWeight: 'bold' }}>Google OAuth Client ID</label>
+                  <input 
+                    id="google-client-id-input"
+                    aria-label="Google OAuth Client ID Değeri"
+                    type="text" 
+                    value={googleClientIdInput}
+                    onChange={(e) => setGoogleClientIdInput(e.target.value)}
+                    placeholder="Örn: 1234567890-abc123xyz.apps.googleusercontent.com"
+                    style={{ padding: '10px', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '13px', fontFamily: 'monospace' }}
+                  />
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <button type="submit" className="add-submit-btn" style={{ height: '40px', width: '180px' }}>
+                    Google Ayarlarını Kaydet
+                  </button>
+                  {showGoogleSaved && (
+                    <span style={{ color: '#10b981', fontSize: '13px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      ✓ Ayarlar Kaydedildi!
+                    </span>
+                  )}
+                </div>
               </form>
             </div>
           </div>
