@@ -49,11 +49,11 @@ export default function BranchMapModal({
   const branches = [
     {
       id: 'kordon',
-      name: 'CANAKKALE KORDON',
-      distance: '2.2 KM',
-      address: 'Cevatpaşa Mahallesi İnönü Caddesi No:64/1 Merkez ÇANAKKALE',
+      name: 'CANAKKALE SAAT KULESI',
+      distance: '0.1 KM',
+      address: 'Kemalpaşa Mah. Şair Ece Ayhan Meydanı No:9/A Saat Kulesi Karşısı Merkez / Çanakkale',
       hours: '11:00 - 01:00',
-      status: 'KAPALI'
+      status: 'AÇIK'
     }
   ];
 
@@ -415,7 +415,7 @@ export default function BranchMapModal({
                       fontSize: '10px',
                       fontWeight: '800',
                       color: 'white',
-                      backgroundColor: '#ef4444',
+                      backgroundColor: br.status === 'AÇIK' ? '#22c55e' : '#ef4444',
                       padding: '2px 8px',
                       borderRadius: '4px'
                     }}>{br.status}</span>
