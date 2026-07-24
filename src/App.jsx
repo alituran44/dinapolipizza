@@ -365,19 +365,51 @@ export default function App() {
 
   const handleGenerateReferralCode = (userId) => {
     const randomChars = Math.random().toString(36).substring(2, 6).toUpperCase();
-    const matchedUser = usersList.find(u => u.id === userId);
-    if (!matchedUser) return null;
-    const rewardTier = getUserReferralRewardTier(userId);
+    
+    const actualUserId = userId || (user && user.id) || ('user-' + Date.now());
+    const actualUserEmail = (user && user.email) || 'misafir@dinapolipizza.com';
+    const actualUserName = (user && user.name) || 'Müşteri';
+    const actualUserPhone = (user && user.phone) || '0555 555 55 55';
+    
+    let matchedUser = usersList.find(u => u.id === actualUserId || u.email === actualUserEmail);
+    
+    if (!matchedUser) {
+      const newUserObj = {
+        id: actualUserId,
+        name: actualUserName,
+        email: actualUserEmail,
+        phone: actualUserPhone,
+        walletBalance: 0,
+        activeReferralCode: null
+      };
+      
+      setUsersList(prev => {
+        const exists = prev.some(u => u.id === actualUserId || u.email === actualUserEmail);
+        return exists ? prev : [...prev, newUserObj];
+      });
+      
+      matchedUser = newUserObj;
+    }
+    
+    const rewardTier = getUserReferralRewardTier(actualUserId);
     const suffix = matchedUser.phone ? matchedUser.phone.replace(/\D/g, '').slice(-4) : 'LUIGI';
     const newCode = `DN-${rewardTier}TL-${suffix}-${randomChars}`;
     
-    setUsersList(prev => prev.map(u => u.id === userId ? { ...u, activeReferralCode: newCode } : u));
+    setUsersList(prev => prev.map(u => (u.id === actualUserId || u.email === actualUserEmail) ? { ...u, activeReferralCode: newCode } : u));
     
-    if (user && user.id === userId) {
-      const updatedUser = { ...user, activeReferralCode: newCode };
-      setUser(updatedUser);
+    const updatedUser = { 
+      ...(user || {}), 
+      id: actualUserId, 
+      name: actualUserName,
+      email: actualUserEmail,
+      phone: actualUserPhone,
+      activeReferralCode: newCode 
+    };
+    setUser(updatedUser);
+    try {
       localStorage.setItem('dinapoli_user', JSON.stringify(updatedUser));
-    }
+    } catch (e) {}
+    
     return newCode;
   };
 

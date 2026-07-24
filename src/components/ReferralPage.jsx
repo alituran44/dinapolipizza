@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Share2, ChevronDown, ChevronUp, Gift, Key, HelpCircle } from 'lucide-react';
 
 export default function ReferralPage({ 
@@ -18,6 +18,14 @@ export default function ReferralPage({
   const [currentCode, setCurrentCode] = useState(() => {
     return user && user.activeReferralCode ? user.activeReferralCode : '';
   });
+
+  useEffect(() => {
+    if (user && user.activeReferralCode) {
+      setCurrentCode(user.activeReferralCode);
+    } else {
+      setCurrentCode('');
+    }
+  }, [user]);
 
   const myReferrals = user ? referralTransactions.filter(t => t.referrerId === user.id) : [];
   const successfulReferralsCount = myReferrals.filter(t => t.status === 'completed').length;
