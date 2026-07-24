@@ -18,14 +18,7 @@ export default function BranchMapModal({
   const [branchIndex, setBranchIndex] = useState(0);
 
   const getMapSrc = () => {
-    if (activeTab === 'delivery') {
-      return "https://maps.google.com/maps?q=40.14917,26.40114(Di%20Napoli%20Pizza%20Saat%20Kulesi)&t=&z=16&ie=UTF8&iwloc=B&output=embed";
-    }
-    if (selectedBranchId === 'kordon') {
-      return "https://maps.google.com/maps?q=40.14917,26.40114(Di%20Napoli%20Pizza%20Saat%20Kulesi)&t=&z=16&ie=UTF8&iwloc=B&output=embed";
-    } else {
-      return "https://maps.google.com/maps?q=40.10820,26.37680(Di%20Napoli%20Pizza%20Kepez%20Subesi)&t=&z=16&ie=UTF8&iwloc=B&output=embed";
-    }
+    return "https://maps.google.com/maps?q=40.14917,26.40114(Di%20Napoli%20Pizza%20Saat%20Kulesi)&t=&z=16&ie=UTF8&iwloc=B&output=embed";
   };
 
   useEffect(() => {
@@ -49,11 +42,7 @@ export default function BranchMapModal({
   };
 
   const handleBranchSubmit = () => {
-    if (selectedBranchId === 'kordon') {
-      onSelectBranch("Kemalpaşa Mah. Şair Ece Ayhan Meydanı No:9/A (Saat Kulesi Şubesi)");
-    } else {
-      onSelectBranch("Kepez Beldesi Boğazkent Mah. No:41/A (Kepez Şubesi)");
-    }
+    onSelectBranch("Kemalpaşa Mah. Şair Ece Ayhan Meydanı No:9/A (Saat Kulesi Şubesi)");
     onClose();
   };
 
@@ -63,14 +52,6 @@ export default function BranchMapModal({
       name: 'CANAKKALE KORDON',
       distance: '2.2 KM',
       address: 'Cevatpaşa Mahallesi İnönü Caddesi No:64/1 Merkez ÇANAKKALE',
-      hours: '11:00 - 01:00',
-      status: 'KAPALI'
-    },
-    {
-      id: 'kepez',
-      name: 'CANAKKALE KEPEZ',
-      distance: '4.8 KM',
-      address: 'Kepez Beldesi Boğazkent Mah. No:41/A Merkez Çanakkale',
       hours: '11:00 - 01:00',
       status: 'KAPALI'
     }
