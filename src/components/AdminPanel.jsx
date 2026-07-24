@@ -15,6 +15,8 @@ export default function AdminPanel({
   orders,
   onUpdateOrderStatus,
   onShowSlip,
+  onDeleteOrder,
+  onUpdateOrderTotal,
   socialShares = [],
   
   // Customization controls
@@ -109,6 +111,10 @@ export default function AdminPanel({
   // User inline-editing states
   const [editingUserId, setEditingUserId] = useState(null);
   const [editingUser, setEditingUser] = useState(null);
+
+  // Order inline-editing states
+  const [editingOrderId, setEditingOrderId] = useState(null);
+  const [editingPrice, setEditingPrice] = useState('');
 
   const handleUserEditClick = (u) => {
     setEditingUserId(u.id);
@@ -400,7 +406,18 @@ export default function AdminPanel({
                             {order.deliveryMode === 'delivery' ? 'Adrese Teslim' : 'Gel-Al'}
                           </span>
                         </td>
-                        <td className="bold text-red">{order.total} TL</td>
+                        <td className="bold text-red">
+                          {editingOrderId === order.id ? (
+                            <input 
+                              type="number" 
+                              value={editingPrice}
+                              onChange={(e) => setEditingPrice(e.target.value)}
+                              style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '12px', color: '#1e293b', fontWeight: 'bold' }}
+                            />
+                          ) : (
+                            `${order.total} TL`
+                          )}
+                        </td>
                         <td>
                           <select 
                             className="status-selector"
@@ -416,14 +433,57 @@ export default function AdminPanel({
                           </select>
                         </td>
                         <td>
-                          <button 
-                            className="action-btn edit" 
-                            onClick={() => onShowSlip(order)}
-                            title="Kurye Fişini Yazdır"
-                            style={{ padding: '6px 12px', backgroundColor: 'var(--color-dark-blue)', color: 'white', borderRadius: '4px', border: 'none', cursor: 'pointer', fontSize: '11px', fontWeight: '800' }}
-                          >
-                            Fiş Yazdır
-                          </button>
+                          <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                            {editingOrderId === order.id ? (
+                              <>
+                                <button 
+                                  onClick={() => {
+                                    onUpdateOrderTotal(order.id, Number(editingPrice));
+                                    setEditingOrderId(null);
+                                  }}
+                                  style={{ padding: '6px 10px', backgroundColor: '#22c55e', color: 'white', borderRadius: '4px', border: 'none', cursor: 'pointer', fontSize: '11px', fontWeight: 'bold' }}
+                                >
+                                  Kaydet
+                                </button>
+                                <button 
+                                  onClick={() => setEditingOrderId(null)}
+                                  style={{ padding: '6px 10px', backgroundColor: '#64748b', color: 'white', borderRadius: '4px', border: 'none', cursor: 'pointer', fontSize: '11px', fontWeight: 'bold' }}
+                                >
+                                  İptal
+                                </button>
+                              </>
+                            ) : (
+                              <>
+                                <button 
+                                  className="action-btn edit" 
+                                  onClick={() => onShowSlip(order)}
+                                  title="Kurye Fişini Yazdır"
+                                  style={{ padding: '6px 10px', backgroundColor: 'var(--color-dark-blue)', color: 'white', borderRadius: '4px', border: 'none', cursor: 'pointer', fontSize: '11px', fontWeight: '800' }}
+                                >
+                                  Fiş Yazdır
+                                </button>
+                                <button 
+                                  onClick={() => {
+                                    setEditingOrderId(order.id);
+                                    setEditingPrice(order.total);
+                                  }}
+                                  style={{ padding: '6px 10px', backgroundColor: '#e2e8f0', color: '#1e293b', borderRadius: '4px', border: '1px solid #cbd5e1', cursor: 'pointer', fontSize: '11px', fontWeight: 'bold' }}
+                                >
+                                  Düzenle
+                                </button>
+                                <button 
+                                  onClick={() => {
+                                    if (window.confirm("Bu siparişi silmek istediğinize emin misiniz?")) {
+                                      onDeleteOrder(order.id);
+                                    }
+                                  }}
+                                  style={{ padding: '6px 10px', backgroundColor: '#ef4444', color: 'white', borderRadius: '4px', border: 'none', cursor: 'pointer', fontSize: '11px', fontWeight: 'bold' }}
+                                >
+                                  Sil
+                                </button>
+                              </>
+                            )}
+                          </div>
                         </td>
                       </tr>
                     ))}

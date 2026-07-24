@@ -496,10 +496,25 @@ export default function App() {
   const [cart, setCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
   const [yeKazanSlices, setYeKazanSlices] = useState(4); 
-  const [orders, setOrders] = useState([]); 
+  const [orders, setOrders] = useState(() => {
+    try {
+      const saved = localStorage.getItem('dinapoli_orders');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      return [];
+    }
+  }); 
   const [activeOrder, setActiveOrder] = useState(null); // Eksik olan activeOrder state'i tanımlandı!
   const [activeOrderSlip, setActiveOrderSlip] = useState(null);
   const [socialShares, setSocialShares] = useState([]); // Sosyal paylaşımları tutan yeni state!
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('dinapoli_orders', JSON.stringify(orders));
+    } catch (e) {
+      console.error("Error saving orders to localStorage:", e);
+    }
+  }, [orders]);
   const [isSlipFromAdmin, setIsSlipFromAdmin] = useState(false);
   const [showTracker, setShowTracker] = useState(false);
 
@@ -554,6 +569,26 @@ export default function App() {
     setOrders(updatedOrders);
     if (activeOrder && activeOrder.id === orderId) {
       setActiveOrder({ ...activeOrder, status: newStatus });
+    }
+  };
+
+  const handleDeleteOrder = (orderId) => {
+    setOrders(prev => prev.filter(o => o.id !== orderId));
+    if (activeOrder && activeOrder.id === orderId) {
+      setActiveOrder(null);
+    }
+    if (activeOrderSlip && activeOrderSlip.id === orderId) {
+      setActiveOrderSlip(null);
+    }
+  };
+
+  const handleUpdateOrderTotal = (orderId, newTotal) => {
+    setOrders(prev => prev.map(o => o.id === orderId ? { ...o, total: newTotal } : o));
+    if (activeOrder && activeOrder.id === orderId) {
+      setActiveOrder(prev => prev ? { ...prev, total: newTotal } : null);
+    }
+    if (activeOrderSlip && activeOrderSlip.id === orderId) {
+      setActiveOrderSlip(prev => prev ? { ...prev, total: newTotal } : null);
     }
   };
 
@@ -1040,6 +1075,22 @@ export default function App() {
             onClose={() => setIsAuthModalOpen(false)}
             onLoginSuccess={(loggedUser) => {
               setUser(loggedUser);
+              if (loggedUser) {
+                setUsersList(prev => {
+                  const exists = prev.some(u => u.id === loggedUser.id || u.email === loggedUser.email);
+                  if (!exists) {
+                    return [...prev, {
+                      id: loggedUser.id || ('user-' + Date.now()),
+                      name: loggedUser.name,
+                      email: loggedUser.email,
+                      phone: loggedUser.phone || '0555 555 55 55',
+                      walletBalance: 0,
+                      activeReferralCode: null
+                    }];
+                  }
+                  return prev;
+                });
+              }
               if (loggedUser && loggedUser.isAdmin) {
                 setIsAdminMode(true);
               }
@@ -1114,6 +1165,8 @@ export default function App() {
               setIsSlipFromAdmin(true);
               setActiveOrderSlip(order);
             }}
+            onDeleteOrder={handleDeleteOrder}
+            onUpdateOrderTotal={handleUpdateOrderTotal}
             
             doughs={doughs}
             onAddDough={handleAddDough}

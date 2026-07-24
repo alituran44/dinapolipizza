@@ -26,6 +26,7 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
       const payload = JSON.parse(jsonPayload);
       
       const googleUser = {
+        id: 'user-' + payload.email.replace(/[^a-zA-Z0-9]/g, ''),
         name: payload.name,
         email: payload.email,
         avatar: payload.picture,
@@ -140,6 +141,7 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
     }
     const isAdmin = loginData.email.toLowerCase() === 'admin@dinapolipizza.com';
     const loggedUser = {
+      id: 'user-' + loginData.email.replace(/[^a-zA-Z0-9]/g, ''),
       name: isAdmin ? 'Yönetici' : loginData.email.split('@')[0].toUpperCase(),
       email: loginData.email,
       phone: isAdmin ? '0286 217 00 17' : '0542 388 30 10',
@@ -198,6 +200,7 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
 
   const handleFinalizeFlow = () => {
     const loggedUser = {
+      id: 'user-' + (formData.email || formData.phone).replace(/[^a-zA-Z0-9]/g, ''),
       name: `${formData.firstName} ${formData.lastName}`,
       email: formData.email || `${formData.firstName.toLowerCase()}@gmail.com`,
       phone: formData.phone,
@@ -215,6 +218,7 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
   const handleSelectGoogleAccount = (accountName, accountEmail) => {
     const isAdmin = accountEmail === 'chef.luigi@dinapolipizza.com';
     const googleUser = {
+      id: 'user-' + accountEmail.replace(/[^a-zA-Z0-9]/g, ''),
       name: accountName,
       email: accountEmail,
       avatar: '/logo.png',
