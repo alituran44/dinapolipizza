@@ -50,7 +50,15 @@ export default function App() {
     } catch (e) {}
     return false;
   });
-  const [currentPage, setCurrentPage] = useState('menu'); // 'menu' or 'cart'
+  const [currentPage, setCurrentPage] = useState(() => {
+    try {
+      const hash = window.location.hash.replace('#', '');
+      const validPages = ['menu', 'cart', 'referral', 'about', 'contact'];
+      return validPages.includes(hash) ? hash : 'menu';
+    } catch (e) {
+      return 'menu';
+    }
+  }); // 'menu', 'cart', 'referral', 'about', 'contact'
   const [deliveryMode, setDeliveryMode] = useState('delivery'); // 'delivery' or 'pickup'
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
   const [whatsAppNumber, setWhatsAppNumber] = useState(() => {
@@ -292,6 +300,31 @@ export default function App() {
       console.error("Error saving usersList to localStorage:", e);
     }
   }, [usersList]);
+
+  // URL Hash Navigation Sync
+  useEffect(() => {
+    const handleHashNavigation = () => {
+      const hash = window.location.hash.replace('#', '');
+      const validPages = ['menu', 'cart', 'referral', 'about', 'contact'];
+      if (validPages.includes(hash)) {
+        setCurrentPage(hash);
+      } else if (!hash || hash === 'admin') {
+        // admin hash is for admin panel modal overlay trigger, keep page as is
+      } else {
+        setCurrentPage('menu');
+      }
+    };
+    window.addEventListener('hashchange', handleHashNavigation);
+    return () => window.removeEventListener('hashchange', handleHashNavigation);
+  }, []);
+
+  // Update hash when page state changes
+  useEffect(() => {
+    const currentHash = window.location.hash.replace('#', '');
+    if (currentPage !== currentHash && currentHash !== 'admin') {
+      window.location.hash = currentPage;
+    }
+  }, [currentPage]);
 
   // Automatic Admin Mode Activation from URL hash #admin or query parameter
   useEffect(() => {
