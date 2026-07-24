@@ -14,7 +14,7 @@ export default function KuryeSlipModal({
   if (!order) return null;
 
   const orderDate = new Date().toLocaleString('tr-TR');
-  const whatsappNumber = '905423883010'; // Resmi Di Napoli Telefonu
+  const whatsappNumber = '905057261717'; // Resmi Di Napoli Telefonu
 
   const getPaymentName = (method) => {
     switch (method) {
@@ -192,7 +192,7 @@ _Bu sipariş kurye bilgilendirme fişidir._`;
 
           <div className="receipt-footer">
             <p>Afiyet Olsun!</p>
-            <p>0286 214 00 30 - 0542 388 30 10</p>
+            <p>0286 217 00 17 - 0505 726 17 17</p>
           </div>
         </div>
 
