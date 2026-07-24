@@ -122,8 +122,8 @@ export default function CartPage({
 
   const handleCheckoutClick = () => {
     try {
-      if (useWalletBalance && walletDiscount > 0 && user) {
-        onUpdateUserWallet(user.id, availableWallet - walletDiscount);
+      if (useWallet && walletDiscountApplied > 0 && user) {
+        onUpdateUserWallet(user.id, userWalletBalance - walletDiscountApplied);
       }
       onCheckout(paymentMethod);
     } catch (err) {
