@@ -71,6 +71,20 @@ export default function CartPage({
   // Calculate items total
   const itemsSubtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
+  // Automatically apply DINAPOLI10 coupon on load and dynamically recalculate it when subtotal changes
+  React.useEffect(() => {
+    if (itemsSubtotal > 0) {
+      if (!appliedCoupon || appliedCoupon === 'DINAPOLI10') {
+        const discount = Math.round(itemsSubtotal * 0.1);
+        setCouponDiscount(discount);
+        setAppliedCoupon('DINAPOLI10');
+      }
+    } else {
+      setCouponDiscount(0);
+      setAppliedCoupon('');
+    }
+  }, [itemsSubtotal, appliedCoupon]);
+
   // Delivery fee
   const deliveryFee = 0;
 
@@ -150,11 +164,16 @@ export default function CartPage({
 
     const deliveryMethodText = deliveryMode === 'delivery' ? 'Adrese Teslim 🚀' : 'Gel-Al (Şubeden) 🛍️';
     
+    let couponSuffix = '';
+    if (appliedCoupon) {
+      couponSuffix = `\n*Uygulanan İndirim Kuponu:* ${appliedCoupon} (-${couponDiscount} TL)`;
+    }
+
     let messageText = whatsAppTemplate
       .replace('{sepet_detayi}', itemsSummary)
       .replace('{teslimat_tipi}', deliveryMethodText)
       .replace('{adres_detayi}', selectedAddress || 'Saat Kulesi Karşısı Merkez Şube')
-      .replace('{toplam_tutar}', totalAmount)
+      .replace('{toplam_tutar}', `${totalAmount} TL${couponSuffix}`)
       .replace('{urun_gorselleri}', productPhotosText || 'Fotoğraflar eklendi');
 
     if (whatsAppApiMode === 'cloud_api' && (whatsAppCloudEndpoint || whatsAppToken)) {
