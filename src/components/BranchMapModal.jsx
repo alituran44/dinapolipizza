@@ -17,6 +17,17 @@ export default function BranchMapModal({
   const [selectedBranchId, setSelectedBranchId] = useState('kordon');
   const [branchIndex, setBranchIndex] = useState(0);
 
+  const getMapSrc = () => {
+    if (activeTab === 'delivery') {
+      return "https://maps.google.com/maps?q=40.14917,26.40114(Di%20Napoli%20Pizza%20Saat%20Kulesi)&t=&z=16&ie=UTF8&iwloc=B&output=embed";
+    }
+    if (selectedBranchId === 'kordon') {
+      return "https://maps.google.com/maps?q=40.14917,26.40114(Di%20Napoli%20Pizza%20Saat%20Kulesi)&t=&z=16&ie=UTF8&iwloc=B&output=embed";
+    } else {
+      return "https://maps.google.com/maps?q=40.10820,26.37680(Di%20Napoli%20Pizza%20Kepez%20Subesi)&t=&z=16&ie=UTF8&iwloc=B&output=embed";
+    }
+  };
+
   useEffect(() => {
     if (deliveryMode) {
       setActiveTab(deliveryMode);
@@ -268,7 +279,7 @@ export default function BranchMapModal({
         }}>
           {activeTab === 'delivery' ? (
             <iframe 
-              src="https://maps.google.com/maps?q=%C3%87anakkale%20Atikhisar%20Caddesi&t=&z=15&ie=UTF8&iwloc=&output=embed" 
+              src={getMapSrc()} 
               width="100%" 
               height="100%" 
               style={{ border: 0 }} 
@@ -278,7 +289,7 @@ export default function BranchMapModal({
             ></iframe>
           ) : (
             <iframe 
-              src="https://maps.google.com/maps?q=Kemalpa%C5%9Fa%20Mah.%20%C5%9Eair%20Ece%20Ayhan%20Meydan%C4%B1%20No%3A9%2FA%20Saat%20Kulesi%20Kar%C5%9F%C4%B1s%C4%B1%20Merkez%20%2F%20%C3%87anakkale&t=&z=15&ie=UTF8&iwloc=&output=embed" 
+              src={getMapSrc()} 
               width="100%" 
               height="100%" 
               style={{ border: 0 }} 
