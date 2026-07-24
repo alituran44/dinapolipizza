@@ -125,7 +125,7 @@ export default function CartPage({
       if (useWallet && walletDiscountApplied > 0 && user) {
         onUpdateUserWallet(user.id, userWalletBalance - walletDiscountApplied);
       }
-      onCheckout(paymentMethod);
+      onCheckout(paymentMethod, totalAmount);
     } catch (err) {
       alert("Sipariş verilirken sepet sayfasında hata oluştu: " + err.message);
       console.error(err);

@@ -910,12 +910,12 @@ export default function App() {
                 onUpdateQuantity={(index, q) => handleUpdateQuantity(index, q)}
                 onRemoveItem={(index) => handleRemoveItem(index)}
                 onAddToCart={handleAddToCart}
-                onCheckout={(selectedPaymentMethod) => {
+                onCheckout={(selectedPaymentMethod, finalTotal) => {
                   try {
                     const itemsSubtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
                     const deliveryFee = 0;
                     handlePlaceOrder({
-                      total: itemsSubtotal + deliveryFee,
+                      total: finalTotal !== undefined ? finalTotal : (itemsSubtotal + deliveryFee),
                       slicesGained: cart.reduce((sum, item) => sum + ((item.yeKazanSlice || 0) * item.quantity), 0)
                     }, selectedPaymentMethod);
                     setCurrentPage('menu');
