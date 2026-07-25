@@ -204,20 +204,6 @@ export default function Footer({ onGoToAbout, onGoToContact, onAdminClick }) {
             <p className="love-text">
               Made with <Heart size={14} className="heart-icon-gold" /> in Çanakkale since 1997.
             </p>
-            <a 
-              href="#admin" 
-              onClick={(e) => {
-                if (onAdminClick) {
-                  e.preventDefault();
-                  onAdminClick();
-                }
-              }} 
-              style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.5)', textDecoration: 'none', transition: '0.2s' }}
-              onMouseEnter={(e) => e.target.style.color = '#ffb703'}
-              onMouseLeave={(e) => e.target.style.color = 'rgba(255, 255, 255, 0.5)'}
-            >
-              ⚙️ Yönetici Girişi
-            </a>
           </div>
         </div>
       </div>

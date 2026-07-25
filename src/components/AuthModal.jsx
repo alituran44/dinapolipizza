@@ -140,6 +140,10 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
       return;
     }
     const isAdmin = loginData.email.toLowerCase() === 'admin@dinapolipizza.com';
+    if (isAdmin && loginData.password !== 'dinapoli1997') {
+      setErrorMessage('Hatalı yönetici şifresi.');
+      return;
+    }
     const loggedUser = {
       id: 'user-' + loginData.email.replace(/[^a-zA-Z0-9]/g, ''),
       name: isAdmin ? 'Yönetici' : loginData.email.split('@')[0].toUpperCase(),
