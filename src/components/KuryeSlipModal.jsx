@@ -20,6 +20,7 @@ export default function KuryeSlipModal({
     switch (method) {
       case 'cash': return 'KAPIDA NAKİT 💵';
       case 'card': return 'KAPIDA KREDİ KARTI 💳';
+      case 'takeout': return 'ŞUBEDEN GEL-AL 🏪';
       case 'multinet': return 'MULTİNET (YEMEK KARTI) 🟢';
       case 'metropol': return 'METROPOL CARD (YEMEK KARTI) 🔴';
       case 'setcard': return 'SETCARD (YEMEK KARTI) 🔵';
@@ -136,7 +137,7 @@ _Bu sipariş kurye bilgilendirme fişidir._`;
           <div className="receipt-meta">
             <p><strong>FİŞ NO:</strong> {order.id}</p>
             <p><strong>TARİH:</strong> {orderDate}</p>
-            <p><strong>TESLİMAT:</strong> {deliveryMode === 'delivery' ? '🚗 ADRESE TESLİM' : '🏪 GEL-AL'}</p>
+            <p><strong>TESLİMAT:</strong> {(order.deliveryMode === 'pickup' || order.paymentMethod === 'takeout') ? '🏪 ŞUBEDEN GEL-AL' : '🚗 ADRESE TESLİM'}</p>
             <p><strong>ÖDEME:</strong> {getPaymentName(order.paymentMethod)}</p>
           </div>
 
@@ -144,7 +145,31 @@ _Bu sipariş kurye bilgilendirme fişidir._`;
 
           <div className="receipt-address">
             <p><strong>TESLİMAT ADRESİ:</strong></p>
-            <p className="addr-txt">{deliveryMode === 'delivery' ? address : 'Müşteri Gel-Al Teslimat'}</p>
+            <p className="addr-txt">
+              {(order.deliveryMode === 'pickup' || order.paymentMethod === 'takeout') 
+                ? 'Kemalpaşa Mah. Şair Ece Ayhan Meydanı No:9/A Saat Kulesi Karşısı Merkez / Çanakkale' 
+                : (order.address || address || 'Adres Girilmedi')}
+            </p>
+          </div>
+
+          <div className="receipt-divider-dash"></div>
+
+          {/* QR Kod Alanı */}
+          <div style={{ textAlign: 'center', margin: '12px 0' }}>
+            <p style={{ fontSize: '10px', color: '#64748b', marginBottom: '6px', fontWeight: 'bold' }}>
+              {(order.deliveryMode === 'pickup' || order.paymentMethod === 'takeout') 
+                ? 'ŞUBE KONUMU QR KODU (NAVİGASYON)' 
+                : 'MÜŞTERİ ADRESİ QR KODU (NAVİGASYON)'}
+            </p>
+            <img 
+              src={`https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(
+                (order.deliveryMode === 'pickup' || order.paymentMethod === 'takeout')
+                  ? 'https://maps.google.com/?q=40.14917,26.40114'
+                  : `https://maps.google.com/?q=${encodeURIComponent(order.address || address || 'Saat Kulesi Canakkale')}`
+              )}`}
+              alt="Konum QR Kod"
+              style={{ width: '100px', height: '100px', border: '1px solid #e2e8f0', padding: '4px', borderRadius: '6px', backgroundColor: 'white' }}
+            />
           </div>
 
           <div className="receipt-divider-dash"></div>

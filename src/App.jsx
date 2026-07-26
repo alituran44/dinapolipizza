@@ -694,12 +694,18 @@ export default function App() {
         return `${item.quantity}x ${item.name}${customStr}`;
       }).join(', ');
 
+      const actualDeliveryMode = paymentMethod === 'takeout' ? 'pickup' : deliveryMode;
+      const actualAddress = actualDeliveryMode === 'pickup'
+        ? 'Kemalpaşa Mah. Şair Ece Ayhan Meydanı No:9/A Saat Kulesi Karşısı Merkez / Çanakkale'
+        : (address || 'Adres Girilmedi');
+
       const newOrder = {
         id: orderId,
         itemsSummary,
         items: [...cart], // Sepetin o anki kopyasını siparişe ekle!
-        deliveryMode,
+        deliveryMode: actualDeliveryMode,
         paymentMethod, // Seçilen ödeme yöntemini siparişe ekle!
+        address: actualAddress,
         total: summary.total,
         slicesGained: summary.slicesGained,
         status: '1' // Initial status: 'Sipariş Alındı'

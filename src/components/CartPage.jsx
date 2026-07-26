@@ -162,17 +162,21 @@ export default function CartPage({
       productPhotosText = '\n' + photoLinks.join('\n');
     }
 
-    const deliveryMethodText = deliveryMode === 'delivery' ? 'Adrese Teslim 🚀' : 'Gel-Al (Şubeden) 🛍️';
+    const deliveryMethodText = (paymentMethod === 'takeout' || deliveryMode === 'pickup') ? 'Gel-Al (Şubeden) 🛍️' : 'Adrese Teslim 🚀';
     
     let couponSuffix = '';
     if (appliedCoupon) {
       couponSuffix = `\n*Uygulanan İndirim Kuponu:* ${appliedCoupon} (-${couponDiscount} TL)`;
     }
 
+    const actualAddressDetails = (paymentMethod === 'takeout' || deliveryMode === 'pickup')
+      ? 'Kemalpaşa Mah. Şair Ece Ayhan Meydanı No:9/A Saat Kulesi Karşısı Merkez / Çanakkale'
+      : (selectedAddress || 'Girilmedi');
+
     let messageText = whatsAppTemplate
       .replace('{sepet_detayi}', itemsSummary)
       .replace('{teslimat_tipi}', deliveryMethodText)
-      .replace('{adres_detayi}', selectedAddress || 'Saat Kulesi Karşısı Merkez Şube')
+      .replace('{adres_detayi}', actualAddressDetails)
       .replace('{toplam_tutar}', `${totalAmount} TL${couponSuffix}`)
       .replace('{urun_gorselleri}', productPhotosText || 'Fotoğraflar eklendi');
 
@@ -387,7 +391,8 @@ export default function CartPage({
                 }}>
                   {[
                     { id: 'cash', name: 'Kapıda Nakit', desc: 'Nakit ile ödeme', icon: '💵', color: '#10b981' },
-                    { id: 'card', name: 'Kapıda Kredi Kartı', desc: 'Kart ile ödeme', icon: '💳', color: '#3b82f6' }
+                    { id: 'card', name: 'Kapıda Kredi Kartı', desc: 'Kart ile ödeme', icon: '💳', color: '#3b82f6' },
+                    { id: 'takeout', name: 'Şubeden Gel-Al', desc: 'Şubeden teslim alma', icon: '🏪', color: '#ef4444' }
                   ].map(option => {
                     const isSelected = paymentMethod === option.id;
                     return (
