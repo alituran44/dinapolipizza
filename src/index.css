@@ -3096,11 +3096,11 @@ button {
 
 .cart-grid {
   display: grid;
-  grid-template-columns: 1fr 380px;
-  gap: 32px;
+  grid-template-columns: 1fr 330px;
+  gap: 20px;
 }
 
-@media (max-width: 992px) {
+@media (max-width: 768px) {
   .cart-grid {
     grid-template-columns: 1fr;
   }
