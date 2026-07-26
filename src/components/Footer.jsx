@@ -126,17 +126,22 @@ export default function Footer({ onGoToAbout, onGoToContact, onAdminClick }) {
 
           <div className="footer-column">
             <h4>Sosyal Medyada Biz</h4>
-            <p className="social-tip">En yeni lezzetlerimizi ve kampanyalarımızı Instagram'da takip edin.</p>
+            <p className="social-tip">En yeni lezzetlerimizi, videolarımızı ve kampanyalarımızı sosyal medyada takip edin.</p>
             <div className="social-links-row">
               <a href="https://www.instagram.com/dinapolicanakkale/" target="_blank" rel="noreferrer" className="social-icon-link instagram" aria-label="Instagram">
                 <Instagram size={20} />
+              </a>
+              <a href="https://www.tiktok.com/@dinapolipizzacanakkale" target="_blank" rel="noreferrer" className="social-icon-link tiktok-social" aria-label="TikTok" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#000000', color: '#ffffff', borderRadius: '50%', width: '36px', height: '36px', transition: 'all 0.2s ease', border: '1px solid rgba(255,255,255,0.1)' }}>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                  <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.02 1.59 4.23.95.89 2.21 1.45 3.51 1.62v3.91c-1.12-.04-2.22-.38-3.19-.97-.68-.42-1.28-.97-1.74-1.63L16.6 20.3c.09 1.44-.45 2.87-1.46 3.86-1.5 1.54-3.9 2-5.96 1.15-2.21-.91-3.64-3.32-3.46-5.71.09-2.31 1.83-4.32 4.14-4.66.42-.06.84-.06 1.25-.01v3.96c-.34-.05-.7-.03-1.03.07-1.18.34-1.92 1.64-1.66 2.84.22 1 .12 2.12-.29 3.01.59.84 1.66 1.24 2.69 1.02 1.34-.28 2.26-1.61 2.08-2.96L12.525.02z" />
+                </svg>
               </a>
               <a href="https://wa.me/905057261717" target="_blank" rel="noreferrer" className="social-icon-link whatsapp-social" aria-label="WhatsApp">
                 <PhoneCall size={20} />
               </a>
             </div>
-            <span className="insta-username" style={{ fontSize: '12px', display: 'block', marginTop: '8px', color: '#B4A9A9' }}>
-              @dinapolicanakkale
+            <span className="insta-username" style={{ fontSize: '11px', display: 'block', marginTop: '8px', color: '#B4A9A9', lineHeight: '1.4' }}>
+              Instagram: @dinapolicanakkale <br /> TikTok: @dinapolipizzacanakkale
             </span>
           </div>
         </div>
