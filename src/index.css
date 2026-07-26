@@ -5296,6 +5296,35 @@ button {
   }
 }
 
+/* Infinite Marquee styles for Recommended items */
+.recommended-marquee-container {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+  padding: 8px 0;
+}
+
+.recommended-marquee-track {
+  display: flex;
+  gap: 16px;
+  width: max-content;
+  will-change: transform;
+  animation: recommendedMarquee 35s linear infinite;
+}
+
+.recommended-marquee-container:hover .recommended-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes recommendedMarquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
 
 
 

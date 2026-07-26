@@ -22,35 +22,51 @@ export default function CartPage({
 }) {
   const recommendedItems = [
     {
-      id: 'hamburgers-mini',
-      name: 'Mini Hamburger',
+      id: 'salata-ton',
+      name: 'Ton Balıklı Salata',
       price: 180,
-      image: '/hamburger_temiz_1784311377803.png',
-      description: 'Nefis di Napoli köftesi ve taze hamburger ekmeği.',
-      category: 'fastfood'
+      image: '/salata_ton.png',
+      description: 'Nefis ton balığı, mısır, zeytin ve taze yeşillikler.',
+      category: 'salatalar'
     },
     {
       id: 'tatlilar-sufle',
       name: 'Çikolatalı Sufle',
       price: 130,
-      image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=300&q=80',
+      image: '/tatli_sufle.png',
       description: 'İçi akışkan sıcak çikolatalı nefis İtalyan suflesi.',
       category: 'tatlilar'
     },
     {
-      id: 'yanlezzetler-patates',
-      name: 'Baharatlı Patates',
-      price: 100,
-      image: '/patates_temiz_1784311399634.png',
-      description: 'Özel baharatlı çıtır İtalyan elma dilim patates.',
-      category: 'yanlezzetler'
+      id: 'salata-tavuklu',
+      name: 'Çıtır Tavuklu Salata',
+      price: 190,
+      image: '/salata_tavuklu.png',
+      description: 'Çıtır tavuk dilimleri, parmesan peyniri ve özel sos.',
+      category: 'salatalar'
     },
     {
-      id: 'yanlezzetler-sogan',
-      name: 'Soğan Kroket (8\'li)',
-      price: 80,
-      image: '/sogan_kroket_temiz_1784311410670.png',
-      description: 'Altın sarısı çıtır kaplamalı soğan halkaları.',
+      id: 'tatlilar-dondurma',
+      name: 'Kızarmış Dondurma',
+      price: 140,
+      image: '/kizarmis_dondurma.png',
+      description: 'Dışı çıtır sıcak, içi buz gibi nefis kızarmış dondurma.',
+      category: 'tatlilar'
+    },
+    {
+      id: 'salata-akdeniz',
+      name: 'Akdeniz Salatası',
+      price: 160,
+      image: '/salata_akdeniz.png',
+      description: 'Beyaz peynir, zeytin, taze domates ve sızma zeytinyağı.',
+      category: 'salatalar'
+    },
+    {
+      id: 'yanlezzetler-patates',
+      name: 'Elma Dilim Patates',
+      price: 100,
+      image: '/elma_patates.png',
+      description: 'Özel baharatlı çıtır İtalyan elma dilim patates.',
       category: 'yanlezzetler'
     }
   ];
@@ -426,50 +442,47 @@ export default function CartPage({
               <div className="panel-header" style={{ marginBottom: '16px', borderBottom: '1px solid var(--color-border)', paddingBottom: '10px' }}>
                 <h3 style={{ fontSize: '18px', fontWeight: '850', color: 'var(--color-dark-blue)' }}>Bunları da Eklemek İster Misiniz?</h3>
               </div>
-              <div className="recommended-scroll-band" style={{ 
-                display: 'flex', 
-                gap: '16px', 
-                overflowX: 'auto', 
-                paddingBottom: '12px',
-                scrollbarWidth: 'thin'
-              }}>
-                {recommendedItems.map((item) => (
-                  <div key={item.id} className="rec-item-card" style={{ 
-                    flex: '0 0 160px', 
-                    background: '#f8fafc', 
-                    borderRadius: 'var(--radius-sm)', 
-                    border: '1px solid var(--color-border)', 
-                    padding: '12px', 
-                    display: 'flex', 
-                    flexDirection: 'column', 
-                    alignItems: 'center', 
-                    textAlign: 'center',
-                    boxShadow: 'var(--shadow-sm)'
-                  }}>
-                    <img src={item.image} alt={item.name} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', marginBottom: '8px' }} loading="lazy" decoding="async" />
-                    <h4 style={{ fontSize: '13px', fontWeight: '800', color: 'var(--color-dark-blue)', marginBottom: '4px', height: '36px', overflow: 'hidden' }}>{item.name}</h4>
-                    <span style={{ fontSize: '13px', fontWeight: '800', color: 'var(--color-ye-kazan-green)', marginBottom: '8px' }}>{item.price} TL</span>
-                    <button 
-                      onClick={() => handleAddRecommended(item)}
-                      style={{ 
-                        width: '100%', 
-                        backgroundColor: 'var(--color-primary-blue)', 
-                        color: 'var(--color-dark-blue)', 
-                        border: 'none', 
-                        padding: '6px 12px', 
-                        borderRadius: '16px', 
-                        fontSize: '11px', 
-                        fontWeight: '800', 
-                        cursor: 'pointer',
-                        transition: '0.2s'
-                      }}
-                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#E2BF4D'}
-                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--color-primary-blue)'}
-                    >
-                      Ekle +
-                    </button>
-                  </div>
-                ))}
+              <div className="recommended-marquee-container">
+                <div className="recommended-marquee-track">
+                  {[...recommendedItems, ...recommendedItems].map((item, idx) => (
+                    <div key={`${item.id}-${idx}`} className="rec-item-card" style={{ 
+                      flex: '0 0 160px', 
+                      background: '#f8fafc', 
+                      borderRadius: 'var(--radius-sm)', 
+                      border: '1px solid var(--color-border)', 
+                      padding: '12px', 
+                      display: 'flex', 
+                      flexDirection: 'column', 
+                      alignItems: 'center', 
+                      textAlign: 'center',
+                      boxShadow: 'var(--shadow-sm)',
+                      userSelect: 'none'
+                    }}>
+                      <img src={item.image} alt={item.name} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', marginBottom: '8px' }} loading="lazy" decoding="async" />
+                      <h4 style={{ fontSize: '13px', fontWeight: '800', color: 'var(--color-dark-blue)', marginBottom: '4px', height: '36px', overflow: 'hidden' }}>{item.name}</h4>
+                      <span style={{ fontSize: '13px', fontWeight: '800', color: 'var(--color-ye-kazan-green)', marginBottom: '8px' }}>{item.price} TL</span>
+                      <button 
+                        onClick={() => handleAddRecommended(item)}
+                        style={{ 
+                          width: '100%', 
+                          backgroundColor: 'var(--color-primary-blue)', 
+                          color: 'var(--color-dark-blue)', 
+                          border: 'none', 
+                          padding: '6px 12px', 
+                          borderRadius: '16px', 
+                          fontSize: '11px', 
+                          fontWeight: '800', 
+                          cursor: 'pointer',
+                          transition: '0.2s'
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#E2BF4D'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--color-primary-blue)'}
+                      >
+                        Ekle +
+                      </button>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
