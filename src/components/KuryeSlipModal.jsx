@@ -97,22 +97,110 @@ _Bu sipariş kurye bilgilendirme fişidir._`;
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(rawMessage)}`;
 
   // Handle browser direct print
+  // Handle browser direct print
   const handlePrint = () => {
     const printContent = document.getElementById('thermal-slip-print-area').innerHTML;
-    const originalContent = document.body.innerHTML;
     
-    // Create print window logic or replace body temporarily
-    document.body.innerHTML = `
-      <style>
-        body { background: white; color: black; font-family: 'Courier New', monospace; padding: 20px; }
-        .thermal-slip { width: 300px; margin: 0 auto; border: 1px dashed #ccc; padding: 15px; }
-        .no-print { display: none; }
-      </style>
-      <div class="thermal-slip">${printContent}</div>
-    `;
-    window.print();
-    // Reload page to restore React state cleanly
-    window.location.reload();
+    // Create a temporary hidden iframe for printing
+    const iframe = document.createElement('iframe');
+    iframe.style.position = 'absolute';
+    iframe.style.width = '0px';
+    iframe.style.height = '0px';
+    iframe.style.border = 'none';
+    document.body.appendChild(iframe);
+    
+    const doc = iframe.contentWindow.document;
+    doc.open();
+    doc.write(`
+      <html>
+        <head>
+          <title>Di Napoli Pizza Siparis Fisi - ${order.id}</title>
+          <style>
+            body { 
+              background: white; 
+              color: black; 
+              font-family: 'Courier New', monospace; 
+              padding: 10px;
+              margin: 0;
+            }
+            .thermal-slip { 
+              width: 280px; 
+              margin: 0 auto; 
+              padding: 5px; 
+            }
+            .receipt-divider-dash {
+              border-top: 1px dashed #000;
+              margin: 10px 0;
+              height: 1px;
+            }
+            .receipt-brand h2 {
+              text-align: center;
+              margin: 0 0 5px 0;
+              font-size: 18px;
+            }
+            .receipt-brand p {
+              text-align: center;
+              margin: 2px 0;
+              font-size: 12px;
+            }
+            .receipt-meta p, .customer-info-sec p {
+              margin: 4px 0;
+              font-size: 12px;
+            }
+            .receipt-items {
+              margin: 10px 0;
+            }
+            .receipt-item-line {
+              display: flex;
+              justify-content: space-between;
+              font-size: 12px;
+              margin: 3px 0;
+            }
+            .receipt-item-details {
+              font-size: 10px;
+              color: #333;
+              margin-left: 10px;
+              margin-bottom: 5px;
+            }
+            .receipt-total-sec {
+              margin-top: 10px;
+              font-size: 14px;
+              font-weight: bold;
+              display: flex;
+              justify-content: space-between;
+            }
+            .receipt-qr-sec {
+              text-align: center;
+              margin-top: 15px;
+            }
+            .receipt-qr-sec img {
+              width: 120px;
+              height: 120px;
+            }
+            .receipt-footer-text {
+              text-align: center;
+              font-size: 10px;
+              margin-top: 15px;
+            }
+            /* Hide print button itself if inside iframe */
+            .no-print { display: none !important; }
+          </style>
+        </head>
+        <body>
+          <div class="thermal-slip">${printContent}</div>
+          <script>
+            window.onload = function() {
+              window.focus();
+              window.print();
+              setTimeout(function() {
+                window.parent.document.body.removeChild(window.frameElement);
+              }, 500);
+            };
+          </script>
+        </body>
+      </html>
+    `);
+    doc.close();
   };
 
   return (

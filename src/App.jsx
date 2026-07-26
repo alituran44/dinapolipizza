@@ -729,7 +729,43 @@ export default function App() {
       setOrders([...orders, newOrder]);
       setActiveOrder(newOrder);
       setActiveOrderSlip(newOrder); // Sipariş verildiğinde fiş modalını doğrudan aç!
+      setIsSlipFromAdmin(false); // Müşteri siparişi olduğu için admin flag'ini kapat!
       
+      // Siparişi yönetici e-postasına iletmek için API isteği gönder
+      try {
+        fetch('https://api.dinapolipizza.com/webhook/email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: 'admin@dinapolipizza.com',
+            subject: `🍕 Di Napoli Pizza - Yeni Sipariş Alındı! (#${orderId})`,
+            html: `
+              <div style="font-family: 'Courier New', monospace; max-width: 450px; margin: 0 auto; padding: 20px; border: 1px dashed #000; background-color: #fff;">
+                <h2 style="text-align: center; margin: 0 0 5px 0;">Dİ NAPOLİ PIZZA</h2>
+                <p style="text-align: center; margin: 2px 0; font-size: 14px;">Pizzada Usta Eller</p>
+                <p style="text-align: center; margin: 2px 0; font-size: 12px;">Saat Kulesi Karşısı, Çanakkale</p>
+                <div style="border-top: 1px dashed #000; margin: 15px 0;"></div>
+                <p style="margin: 5px 0;"><strong>FİŞ NO:</strong> ${orderId}</p>
+                <p style="margin: 5px 0;"><strong>TESLİMAT:</strong> ${actualDeliveryMode === 'pickup' ? '🏪 ŞUBEDEN GEL-AL' : '🚗 ADRESE TESLİM'}</p>
+                <p style="margin: 5px 0;"><strong>ÖDEME:</strong> ${paymentMethod === 'takeout' ? 'Şubeden Gel-Al (Nakit/Kart)' : (paymentMethod === 'cash' ? 'Kapıda Nakit 💵' : 'Kapıda Kredi Kartı 💳')}</p>
+                <p style="margin: 5px 0;"><strong>ADRES:</strong> ${actualAddress}</p>
+                <div style="border-top: 1px dashed #000; margin: 15px 0;"></div>
+                <h3 style="margin: 10px 0 5px 0;">Sipariş İçeriği:</h3>
+                <p style="margin: 5px 0; white-space: pre-line; line-height: 1.4;">${itemsSummary.replace(/,/g, '\n')}</p>
+                <div style="border-top: 1px dashed #000; margin: 15px 0;"></div>
+                <h3 style="margin: 10px 0; text-align: right; color: #b91c1c;">GENEL TOPLAM: ${summary.total} TL</h3>
+                <div style="border-top: 1px dashed #000; margin: 15px 0;"></div>
+                <p style="text-align: center; font-size: 11px; color: #666; margin-top: 20px;">Bu sipariş Di Napoli Pizza otonom e-posta servisi tarafından otomatik iletilmiştir.</p>
+              </div>
+            `
+          })
+        }).catch(err => console.warn("Email webhook sending failed:", err));
+      } catch (emailErr) {
+        console.error("Email API calling failed:", emailErr);
+      }
+
       // Complete referral transaction if user phone matches any invite
       if (user && user.phone) {
         handleCompleteReferralSale(user.phone);
@@ -1092,7 +1128,9 @@ export default function App() {
               onRegisterSocialShare={handleRegisterSocialShare}
               onClose={() => {
                 setActiveOrderSlip(null);
-                setCart([]); // Sipariş onaylandıktan sonra sepeti sıfırla
+                if (!isSlipFromAdmin) {
+                  setCart([]); // Sadece müşteri siparişi bitirip kapatınca sepeti sıfırla
+                }
               }}
               deliveryMode={deliveryMode}
               address={address}
