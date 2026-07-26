@@ -3096,13 +3096,23 @@ button {
 
 .cart-grid {
   display: grid;
-  grid-template-columns: 1fr 330px;
+  grid-template-columns: minmax(0, 1fr) 330px;
   gap: 20px;
+}
+
+.cart-left-col {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.cart-right-col {
+  width: 330px;
+  flex-shrink: 0;
 }
 
 @media (max-width: 768px) {
   .cart-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
