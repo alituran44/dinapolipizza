@@ -739,7 +739,7 @@ export default function App() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            email: 'admin@dinapolipizza.com',
+            email: 'dinapolipizza1997@gmail.com',
             subject: `🍕 Di Napoli Pizza - Yeni Sipariş Alındı! (#${orderId})`,
             html: `
               <div style="font-family: 'Courier New', monospace; max-width: 450px; margin: 0 auto; padding: 20px; border: 1px dashed #000; background-color: #fff;">

@@ -5336,6 +5336,28 @@ button {
   }
 }
 
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  #thermal-slip-print-area, #thermal-slip-print-area * {
+    visibility: visible !important;
+  }
+  #thermal-slip-print-area {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 280px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+  .slip-modal-actions, .slip-success-header, .no-print {
+    display: none !important;
+    visibility: hidden !important;
+  }
+}
+
 
 
 
