@@ -401,9 +401,10 @@ export default function CartPage({
                 </p>
 
                 <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-                  gap: '12px'
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: '12px',
+                  width: '100%'
                 }}>
                   {[
                     { id: 'cash', name: 'Kapıda Nakit', desc: 'Nakit ile ödeme', icon: '💵', color: '#10b981' },
@@ -416,6 +417,8 @@ export default function CartPage({
                         key={option.id}
                         onClick={() => setPaymentMethod(option.id)}
                         style={{
+                          flex: '1 1 calc(33.333% - 12px)',
+                          minWidth: '110px',
                           padding: '16px',
                           borderRadius: '12px',
                           border: isSelected ? `2.5px solid ${option.color}` : '1.5px solid #e2e8f0',

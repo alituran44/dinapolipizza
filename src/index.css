@@ -2229,6 +2229,7 @@ button {
 .social-icon-link.facebook:hover { background-color: #1877F2; border-color: #1877F2; color: white; }
 .social-icon-link.youtube:hover { background-color: #FF0000; border-color: #FF0000; color: white; }
 .social-icon-link.whatsapp-social:hover { background-color: #25D366; border-color: #25D366; color: white; }
+.social-icon-link.tiktok-social:hover { background-color: #010101; border-color: #010101; color: #00f2fe; }
 
 .footer-bottom {
   display: flex;
