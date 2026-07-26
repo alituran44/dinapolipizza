@@ -525,9 +525,24 @@ export default function App() {
   };
 
   // Cart & Order Tracking States
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(() => {
+    try {
+      const saved = localStorage.getItem('dinapoli_cart');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      return [];
+    }
+  });
   const [cartOpen, setCartOpen] = useState(false);
   const [yeKazanSlices, setYeKazanSlices] = useState(4); 
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('dinapoli_cart', JSON.stringify(cart));
+    } catch (e) {
+      console.error("Error saving cart to localStorage:", e);
+    }
+  }, [cart]);
   const [orders, setOrders] = useState(() => {
     try {
       const saved = localStorage.getItem('dinapoli_orders');
