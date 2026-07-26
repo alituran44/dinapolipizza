@@ -103,8 +103,17 @@ _Bu sipariş kurye bilgilendirme fişidir._`;
     window.print();
   };
 
+  React.useEffect(() => {
+    if (showPrint && order) {
+      const timer = setTimeout(() => {
+        window.print();
+      }, 600);
+      return () => clearTimeout(timer);
+    }
+  }, [showPrint, order]);
+
   return (
-    <div className="cart-drawer-overlay" style={{ zIndex: 2000 }}>
+    <div className="cart-drawer-overlay" style={{ zIndex: 10000000 }}>
       <div className="kurye-slip-modal" onClick={(e) => e.stopPropagation()}>
         <div className="slip-success-header">
           <CheckCircle size={44} className="success-icon" />
