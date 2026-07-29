@@ -766,6 +766,53 @@ export default function App() {
         console.error("Email API calling failed:", emailErr);
       }
 
+      // Fly Kurye Entegrasyonu - Siparişi Kurye Ekranına Gönder
+      try {
+        fetch('https://flykurye.com/api/createOrderv2', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            order_id: orderId,
+            customer_name: user ? user.name : 'Misafir Müşteri',
+            customer_phone: user ? user.phone : '0505 726 17 17',
+            address: actualAddress,
+            payment_method: paymentMethod === 'takeout' ? 'Gel-Al' : (paymentMethod === 'cash' ? 'Kapıda Nakit' : 'Kapıda Kredi Kartı'),
+            total_amount: summary.total,
+            items: itemsSummary,
+            branch: 'Saat Kulesi Şubesi',
+            timestamp: new Date().toISOString()
+          })
+        })
+        .then(res => {
+          console.log('Fly Kurye API Status:', res.status);
+        })
+        .catch(err => {
+          console.warn('Fly Kurye API HTTPS hatası, HTTP fallback deneniyor:', err);
+          fetch('http://flykurye.com/api/createOrderv2', {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              order_id: orderId,
+              customer_name: user ? user.name : 'Misafir Müşteri',
+              customer_phone: user ? user.phone : '0505 726 17 17',
+              address: actualAddress,
+              payment_method: paymentMethod === 'takeout' ? 'Gel-Al' : (paymentMethod === 'cash' ? 'Kapıda Nakit' : 'Kapıda Kredi Kartı'),
+              total_amount: summary.total,
+              items: itemsSummary,
+              branch: 'Saat Kulesi Şubesi',
+              timestamp: new Date().toISOString()
+            })
+          }).catch(httpErr => console.warn('Fly Kurye HTTP Fallback hatası:', httpErr));
+        });
+      } catch (flyKuryeErr) {
+        console.error('Fly Kurye integration call failed:', flyKuryeErr);
+      }
+
       // Complete referral transaction if user phone matches any invite
       if (user && user.phone) {
         handleCompleteReferralSale(user.phone);
