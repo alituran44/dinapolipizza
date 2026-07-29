@@ -3114,6 +3114,9 @@ button {
   .cart-grid {
     grid-template-columns: minmax(0, 1fr);
   }
+  .cart-right-col {
+    width: 100% !important;
+  }
 }
 
 .cart-card-panel {
