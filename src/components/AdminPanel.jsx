@@ -18,6 +18,8 @@ export default function AdminPanel({
   onDeleteOrder,
   onUpdateOrderTotal,
   socialShares = [],
+  popupSettings,
+  onUpdatePopupSettings,
   
   // Customization controls
   doughs,
@@ -92,6 +94,15 @@ export default function AdminPanel({
 
   const [editingIngredientId, setEditingIngredientId] = useState(null);
   const [editingIngredient, setEditingIngredient] = useState(null);
+
+  // Popup Reklam form states
+  const [popupActiveInput, setPopupActiveInput] = useState(popupSettings ? popupSettings.active : false);
+  const [popupTitleInput, setPopupTitleInput] = useState(popupSettings ? popupSettings.title : '');
+  const [popupContentInput, setPopupContentInput] = useState(popupSettings ? popupSettings.content : '');
+  const [popupImageInput, setPopupImageInput] = useState(popupSettings ? popupSettings.image : '');
+  const [popupButtonTextInput, setPopupButtonTextInput] = useState(popupSettings ? popupSettings.buttonText : '');
+  const [popupButtonLinkInput, setPopupButtonLinkInput] = useState(popupSettings ? popupSettings.buttonLink : '');
+  const [showPopupSaved, setShowPopupSaved] = useState(false);
 
   // Email & Announcement states
   const [emailSubject, setEmailSubject] = useState('Di Napoli Fırsatları Başladı! 🍕');
@@ -1497,6 +1508,131 @@ export default function AdminPanel({
                 <button type="submit" className="add-submit-btn" style={{ height: '40px', width: '200px', alignSelf: 'flex-start' }}>
                   E-Posta Duyurusu Gönder
                 </button>
+              </form>
+            </div>
+
+            {/* Kampanya Popup Reklam Yönetimi */}
+            <div className="deals-card" style={{ padding: '24px', marginBottom: '24px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '20px' }}>🖼️</span> Giriş / Kampanya Popup Reklam Ayarı
+                </h3>
+                <span style={{ 
+                  padding: '4px 10px', 
+                  borderRadius: '12px', 
+                  fontSize: '11px', 
+                  fontWeight: 'bold', 
+                  backgroundColor: popupActiveInput ? '#ecfdf5' : '#f1f5f9',
+                  color: popupActiveInput ? '#065f46' : '#475569' 
+                }}>
+                  {popupActiveInput ? 'Açık / Gösteriliyor' : 'Kapalı'}
+                </span>
+              </div>
+              <p style={{ fontSize: '12px', color: '#64748b', margin: '4px 0 16px 0' }}>
+                Kullanıcılar web sitesine girdiğinde karşılarına çıkacak büyük reklam/duyuru popup penceresini buradan tasarlayabilirsiniz.
+              </p>
+
+              <form onSubmit={(e) => {
+                e.preventDefault();
+                onUpdatePopupSettings({
+                  active: popupActiveInput,
+                  title: popupTitleInput,
+                  content: popupContentInput,
+                  image: popupImageInput,
+                  buttonText: popupButtonTextInput,
+                  buttonLink: popupButtonLinkInput
+                });
+                setShowPopupSaved(true);
+                setTimeout(() => setShowPopupSaved(false), 3000);
+              }} style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '650px' }}>
+                
+                {/* Aktif/Pasif */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 12px', backgroundColor: '#f8fafc', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
+                  <input 
+                    id="popup-active-checkbox"
+                    type="checkbox" 
+                    checked={popupActiveInput}
+                    onChange={(e) => setPopupActiveInput(e.target.checked)}
+                    style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+                  />
+                  <label htmlFor="popup-active-checkbox" style={{ fontSize: '13px', fontWeight: 'bold', color: '#1e293b', cursor: 'pointer' }}>
+                    Popup Reklamı Web Sitesinde Aktif Et (Kullanıcılar ilk girişte görür)
+                  </label>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label htmlFor="popup-title-input" style={{ fontSize: '13px', fontWeight: 'bold' }}>Popup Başlığı</label>
+                  <input 
+                    id="popup-title-input"
+                    type="text" 
+                    value={popupTitleInput}
+                    onChange={(e) => setPopupTitleInput(e.target.value)}
+                    required={popupActiveInput}
+                    placeholder="Örn: Di Napoli Pizza Özel Kampanya! 🍕"
+                    style={{ padding: '10px', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '13px' }}
+                  />
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label htmlFor="popup-content-textarea" style={{ fontSize: '13px', fontWeight: 'bold' }}>Açıklama / Kampanya İçeriği</label>
+                  <textarea 
+                    id="popup-content-textarea"
+                    value={popupContentInput}
+                    onChange={(e) => setPopupContentInput(e.target.value)}
+                    required={popupActiveInput}
+                    rows="3"
+                    placeholder="Kampanya detaylarını, şartlarını ve varsa indirim kodunu buraya yazın..."
+                    style={{ padding: '10px', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '13px', fontFamily: 'inherit', resize: 'vertical' }}
+                  />
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label htmlFor="popup-image-input" style={{ fontSize: '13px', fontWeight: 'bold' }}>Popup Görsel URL'si (Resim Adresi)</label>
+                  <input 
+                    id="popup-image-input"
+                    type="text" 
+                    value={popupImageInput}
+                    onChange={(e) => setPopupImageInput(e.target.value)}
+                    placeholder="Örn: /super_campanya.png veya internetteki bir resim linki"
+                    style={{ padding: '10px', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '13px' }}
+                  />
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    <label htmlFor="popup-btn-text" style={{ fontSize: '13px', fontWeight: 'bold' }}>Yönlendirme Butonu Yazısı</label>
+                    <input 
+                      id="popup-btn-text"
+                      type="text" 
+                      value={popupButtonTextInput}
+                      onChange={(e) => setPopupButtonTextInput(e.target.value)}
+                      placeholder="Örn: Lezzetleri Keşfet"
+                      style={{ padding: '10px', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '13px' }}
+                    />
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    <label htmlFor="popup-btn-link" style={{ fontSize: '13px', fontWeight: 'bold' }}>Buton Yönlendirme Linki (Hedef)</label>
+                    <input 
+                      id="popup-btn-link"
+                      type="text" 
+                      value={popupButtonLinkInput}
+                      onChange={(e) => setPopupButtonLinkInput(e.target.value)}
+                      placeholder="Örn: #menu"
+                      style={{ padding: '10px', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '13px' }}
+                    />
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <button type="submit" className="add-submit-btn" style={{ height: '40px', width: '220px' }}>
+                    Popup Reklamı Kaydet
+                  </button>
+                  {showPopupSaved && (
+                    <span style={{ color: '#10b981', fontSize: '13px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      ✓ Popup Ayarları Kaydedildi!
+                    </span>
+                  )}
+                </div>
               </form>
             </div>
 

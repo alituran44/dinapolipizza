@@ -555,6 +555,52 @@ export default function App() {
   const [activeOrderSlip, setActiveOrderSlip] = useState(null);
   const [socialShares, setSocialShares] = useState([]); // Sosyal paylaşımları tutan yeni state!
 
+  const [popupSettings, setPopupSettings] = useState(() => {
+    try {
+      const saved = localStorage.getItem('dinapoli_popup_settings');
+      return saved ? JSON.parse(saved) : {
+        active: true,
+        title: 'Di Napoli Pizza Özel Kampanya! 🍕',
+        content: 'İlk siparişinize özel DINAPOLI10 kupon kodu ile anında %10 indirim kazanın! Bu kupon tüm pizza ve menülerde geçerlidir.',
+        image: '/super_kampanya.png',
+        buttonText: 'Lezzetleri Keşfet',
+        buttonLink: '#menu'
+      };
+    } catch (e) {
+      return {
+        active: false,
+        title: '',
+        content: '',
+        image: '',
+        buttonText: '',
+        buttonLink: ''
+      };
+    }
+  });
+
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('dinapoli_popup_settings', JSON.stringify(popupSettings));
+    } catch (e) {
+      console.error("Error saving popup settings:", e);
+    }
+  }, [popupSettings]);
+
+  useEffect(() => {
+    if (popupSettings.active) {
+      const hasShown = sessionStorage.getItem('dinapoli_popup_shown');
+      if (!hasShown) {
+        const timer = setTimeout(() => {
+          setIsPopupOpen(true);
+          sessionStorage.setItem('dinapoli_popup_shown', 'true');
+        }, 1500);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [popupSettings]);
+
   useEffect(() => {
     try {
       localStorage.setItem('dinapoli_orders', JSON.stringify(orders));
@@ -1341,8 +1387,128 @@ export default function App() {
             whatsAppIncludePhotos={whatsAppIncludePhotos}
             onUpdateWhatsAppConfig={handleUpdateWhatsAppConfig}
             socialShares={socialShares}
+            popupSettings={popupSettings}
+            onUpdatePopupSettings={setPopupSettings}
             onClose={() => setIsAdminMode(false)}
           />
+        </div>
+      )}
+
+      {/* Kampanya Popup Modalı */}
+      {isPopupOpen && (
+        <div className="cart-drawer-overlay" style={{ zIndex: 50000000 }} onClick={() => setIsPopupOpen(false)}>
+          <div 
+            className="popup-reklam-card" 
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: 'white',
+              borderRadius: '20px',
+              width: '100%',
+              maxWidth: '460px',
+              overflow: 'hidden',
+              boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
+              position: 'relative',
+              margin: '20px'
+            }}
+          >
+            {/* Close Button */}
+            <button 
+              onClick={() => setIsPopupOpen(false)}
+              style={{
+                position: 'absolute',
+                top: '12px',
+                right: '12px',
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                color: 'white',
+                border: 'none',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 10,
+                fontSize: '16px',
+                fontWeight: 'bold',
+                transition: '0.2s'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.6)'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.4)'}
+            >
+              ✕
+            </button>
+
+            {/* Campaign Image */}
+            {popupSettings.image && (
+              <div style={{ width: '100%', height: '220px', overflow: 'hidden', backgroundColor: '#f1f5f9', position: 'relative' }}>
+                <img 
+                  src={popupSettings.image} 
+                  alt={popupSettings.title} 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </div>
+            )}
+
+            {/* Content Container */}
+            <div style={{ padding: '28px 24px', textAlign: 'center' }}>
+              <h3 style={{
+                fontSize: '22px',
+                fontWeight: '850',
+                color: 'var(--color-dark-blue)',
+                margin: '0 0 12px 0',
+                lineHeight: '1.2'
+              }}>
+                {popupSettings.title}
+              </h3>
+              <p style={{
+                fontSize: '14px',
+                color: '#64748b',
+                lineHeight: '1.5',
+                margin: '0 0 24px 0'
+              }}>
+                {popupSettings.content}
+              </p>
+
+              {/* Call to Action Buttons */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {popupSettings.buttonText && (
+                  <a 
+                    href={popupSettings.buttonLink || '#'}
+                    onClick={() => setIsPopupOpen(false)}
+                    style={{
+                      display: 'block',
+                      backgroundColor: 'var(--color-primary-red)',
+                      color: 'white',
+                      textDecoration: 'none',
+                      padding: '12px 24px',
+                      borderRadius: '12px',
+                      fontSize: '15px',
+                      fontWeight: '800',
+                      transition: '0.2s',
+                      boxShadow: '0 4px 12px rgba(185, 28, 28, 0.2)'
+                    }}
+                  >
+                    {popupSettings.buttonText}
+                  </a>
+                )}
+                <button 
+                  onClick={() => setIsPopupOpen(false)}
+                  style={{
+                    backgroundColor: 'transparent',
+                    border: 'none',
+                    color: '#94a3b8',
+                    fontSize: '13px',
+                    cursor: 'pointer',
+                    padding: '8px',
+                    fontWeight: 'bold'
+                  }}
+                >
+                  Kapat
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>

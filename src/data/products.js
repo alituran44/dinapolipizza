@@ -505,17 +505,7 @@ export const INITIAL_PRODUCTS = [
     customizable: false
   },
   // --- FASTFOOD & PİDE ---
-  {
-    id: 'fast-pide',
-    category: 'fastfood',
-    name: 'Di Napoli Pide',
-    description: 'Özel Karışım Kıymalı İç, Kaşar, Domates, Biber',
-    basePrice: 245,
-    image: '/pide.jpg',
-    yeKazanSlice: 0,
-    popular: true,
-    customizable: false
-  },
+
   {
     id: 'fast-sinitzel',
     category: 'fastfood',
