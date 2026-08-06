@@ -112,6 +112,16 @@ export default function App() {
     }
   });
 
+  const handleUpdatePopupSettings = (newSettings) => {
+    setPopupSettings(newSettings);
+    if (newSettings.active) {
+      sessionStorage.removeItem('dinapoli_popup_shown');
+      setIsPopupOpen(true);
+    } else {
+      setIsPopupOpen(false);
+    }
+  };
+
   const handleUpdateWhatsAppConfig = (config) => {
     try {
       if (config.number !== undefined) {
@@ -1388,7 +1398,7 @@ export default function App() {
             onUpdateWhatsAppConfig={handleUpdateWhatsAppConfig}
             socialShares={socialShares}
             popupSettings={popupSettings}
-            onUpdatePopupSettings={setPopupSettings}
+            onUpdatePopupSettings={handleUpdatePopupSettings}
             onClose={() => setIsAdminMode(false)}
           />
         </div>
@@ -1396,21 +1406,8 @@ export default function App() {
 
       {/* Kampanya Popup Modalı */}
       {isPopupOpen && (
-        <div className="cart-drawer-overlay" style={{ zIndex: 50000000 }} onClick={() => setIsPopupOpen(false)}>
-          <div 
-            className="popup-reklam-card" 
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              background: 'white',
-              borderRadius: '20px',
-              width: '100%',
-              maxWidth: '460px',
-              overflow: 'hidden',
-              boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
-              position: 'relative',
-              margin: '20px'
-            }}
-          >
+        <div className="popup-reklam-overlay" onClick={() => setIsPopupOpen(false)}>
+          <div className="popup-reklam-card" onClick={(e) => e.stopPropagation()}>
             {/* Close Button */}
             <button 
               onClick={() => setIsPopupOpen(false)}
