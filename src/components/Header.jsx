@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { 
   ShoppingBag, User, Search, MapPin, ChevronDown, Edit2, ShieldCheck, Map,
-  Bell, CreditCard, Smartphone, Sparkles, Percent, ChevronRight, Gift
+  Bell, CreditCard, Smartphone, Sparkles, Percent, ChevronRight, Gift,
+  Menu as MenuIcon, X as XIcon, LogOut
 } from 'lucide-react';
 
 export default function Header({ 
@@ -28,6 +29,7 @@ export default function Header({
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [sidesDropdownOpen, setSidesDropdownOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   const handleSelectMode = (mode) => {
@@ -43,12 +45,21 @@ export default function Header({
       <div className="container header-inner-blue">
         {/* Left Side: Logo & Main Navigation */}
         <div className="header-left-group">
-          <a href="/" className="brand-logo-white">
+          {/* Mobile Menu Toggle Button */}
+          <button 
+            className="mobile-menu-toggle-btn"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Menüyü Aç"
+          >
+            {mobileMenuOpen ? <XIcon size={24} /> : <MenuIcon size={24} />}
+          </button>
+
+          <a href="/" className="brand-logo-white" onClick={(e) => { e.preventDefault(); onGoToMenu(); }}>
             <img 
               src="/logo.png" 
               alt="di napoli pizza" 
               className="di-napoli-header-logo" 
-              style={{ height: '56px', objectFit: 'contain' }}
+              style={{ height: '48px', objectFit: 'contain' }}
             />
           </a>
           
@@ -190,14 +201,16 @@ export default function Header({
 
         {/* Right Side: Delivery Picker, User & Cart actions */}
         <div className="header-right-group">
-          {/* Search Icon */}
-          <button className="header-search-btn" aria-label="Arama Yap">
-            <Search size={20} color="white" />
-          </button>
+          {/* Kompakt Adres Çubuğu (Mobilde Tıklanabilir İkon) */}
+          <div className="compact-address-trigger-mobile" onClick={() => onOpenAddresses()} title="Teslimat Adresim">
+            <MapPin size={20} color="white" />
+            <span className="compact-address-mobile-text">
+              {address ? (address.length > 12 ? address.slice(0, 12) + '...' : address) : 'Konum Seçin'}
+            </span>
+          </div>
 
-          {/* Location / Address Picker Dropdown */}
-          {/* Location / Address Picker Directly Triggers Map */}
-          <div className="address-picker-widget" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {/* Location / Address Picker Widget (Masaüstü) */}
+          <div className="address-picker-widget">
             <div className="delivery-toggle-container" style={{
               display: 'flex',
               backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -262,27 +275,12 @@ export default function Header({
 
           {/* User Sign In / Profile dropdown */}
           {user ? (
-            <div className="user-profile-dropdown-container" style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              
+            <div className="user-profile-dropdown-container">
               {/* Direct Admin Panel Button in Header Bar */}
               {user.isAdmin && (
                 <button 
                   onClick={() => onAdminClick()}
-                  style={{
-                    backgroundColor: '#dc2626',
-                    color: '#ffffff',
-                    border: 'none',
-                    padding: '8px 14px',
-                    borderRadius: '20px',
-                    fontSize: '12px',
-                    fontWeight: '800',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    boxShadow: '0 4px 12px rgba(220, 38, 38, 0.45)',
-                    transition: 'all 0.2s ease'
-                  }}
+                  className="admin-header-btn-white"
                   title="Yönetici Panelini Aç"
                 >
                   <ShieldCheck size={14} />
@@ -413,7 +411,7 @@ export default function Header({
               )}
             </div>
           ) : (
-            <button className="auth-btn-white" onClick={onLoginClick}>
+            <button className="auth-btn-white desktop-auth-btn" onClick={onLoginClick}>
               <User size={16} />
               <span>Giriş Yap</span>
             </button>
@@ -425,10 +423,157 @@ export default function Header({
               <ShoppingBag size={18} />
               {totalItems > 0 && <span className="cart-badge-blue">{totalItems}</span>}
             </div>
-            <span>Sepetim</span>
+            <span className="cart-text-desktop">Sepetim</span>
           </button>
         </div>
       </div>
+
+      {/* Mobile Drawer Navigation (Slide-out Sidebar Menu) */}
+      {mobileMenuOpen && (
+        <div className="mobile-drawer-overlay" onClick={() => setMobileMenuOpen(false)}>
+          <div className="mobile-drawer-content" onClick={(e) => e.stopPropagation()}>
+            <div className="mobile-drawer-header">
+              <img src="/logo.png" alt="logo" className="mobile-drawer-logo" />
+              <button className="mobile-drawer-close" onClick={() => setMobileMenuOpen(false)} aria-label="Kapat">
+                <XIcon size={24} />
+              </button>
+            </div>
+            
+            {/* User Info / Login in Mobile Drawer */}
+            <div className="mobile-drawer-user-section">
+              {user ? (
+                <div className="mobile-user-card">
+                  <div className="mobile-user-avatar-wrap">
+                    <div className="avatar-fallback">{user.name ? user.name[0].toUpperCase() : 'DN'}</div>
+                    <div style={{ textAlign: 'left' }}>
+                      <h4 style={{ margin: 0, fontSize: '14px', fontWeight: 'bold', color: 'var(--color-dark-blue)' }}>{user.name}</h4>
+                      <p style={{ margin: 0, fontSize: '11px', color: '#64748b' }}>{user.phone || 'Telefon doğrulanmadı'}</p>
+                    </div>
+                  </div>
+                  <div className="mobile-user-wallet">
+                    <span>Cüzdan Bakiyesi:</span>
+                    <strong>{user.walletBalance || 0} TL</strong>
+                  </div>
+                </div>
+              ) : (
+                <button className="mobile-drawer-login-btn" onClick={() => { setMobileMenuOpen(false); onLoginClick(); }}>
+                  <User size={18} />
+                  <span>Giriş Yap / Üye Ol</span>
+                </button>
+              )}
+            </div>
+
+            {/* Delivery Toggle & Address in Mobile Drawer */}
+            <div className="mobile-drawer-delivery-section">
+              <h4 className="drawer-section-title">Teslimat Yöntemi</h4>
+              <div className="mobile-delivery-toggle">
+                <button 
+                  className={deliveryMode === 'delivery' ? 'active' : ''}
+                  onClick={() => { setDeliveryMode('delivery'); onOpenMap(); }}
+                >
+                  Adrese Teslim
+                </button>
+                <button 
+                  className={deliveryMode === 'pickup' ? 'active' : ''}
+                  onClick={() => { setDeliveryMode('pickup'); onOpenMap(); }}
+                >
+                  Gel-Al
+                </button>
+              </div>
+              
+              <div className="mobile-drawer-address" onClick={() => { setMobileMenuOpen(false); onOpenAddresses(); }}>
+                <MapPin size={16} />
+                <span className="drawer-address-text">{address || 'Adres Seçilmedi'}</span>
+                <Edit2 size={12} />
+              </div>
+            </div>
+
+            {/* Navigation Links in Mobile Drawer */}
+            <div className="mobile-drawer-nav-links">
+              <h4 className="drawer-section-title">Menü Hızlı Bağlantıları</h4>
+              
+              <a href="#menu" className="drawer-nav-item" onClick={(e) => {
+                e.preventDefault();
+                setMobileMenuOpen(false);
+                onGoToMenu();
+                setTimeout(() => {
+                  const element = document.querySelector('.promo-widgets-section') || document.querySelector('.header-video-banner');
+                  if (element) element.scrollIntoView({ behavior: 'smooth' });
+                }, 150);
+              }}>
+                📢 Tüm Kampanyalar
+              </a>
+
+              <a href="#menu" className="drawer-nav-item" onClick={(e) => {
+                e.preventDefault();
+                setMobileMenuOpen(false);
+                onGoToMenu();
+                setTimeout(() => {
+                  const element = document.getElementById('sec-pizzalar');
+                  if (element) element.scrollIntoView({ behavior: 'smooth' });
+                }, 150);
+              }}>
+                🍕 Tüm Pizzalar
+              </a>
+
+              <a href="#menu" className="drawer-nav-item" onClick={(e) => {
+                e.preventDefault();
+                setMobileMenuOpen(false);
+                onGoToMenu();
+                setTimeout(() => {
+                  const element = document.getElementById('sec-fastfood');
+                  if (element) element.scrollIntoView({ behavior: 'smooth' });
+                }, 150);
+              }}>
+                🍟 Yan Ürünler
+              </a>
+              
+              <hr style={{ border: 'none', borderBottom: '1px solid #e2e8f0', margin: '8px 0' }} />
+
+              <a href="#about" className="drawer-nav-item" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); onGoToAbout(); }}>
+                ℹ️ Hakkımızda
+              </a>
+              
+              <a href="#contact" className="drawer-nav-item" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); onGoToContact(); }}>
+                📞 İletişim & Şubemiz
+              </a>
+
+              {user && (
+                <>
+                  <hr style={{ border: 'none', borderBottom: '1px solid #e2e8f0', margin: '8px 0' }} />
+                  
+                  <a href="#orders" className="drawer-nav-item" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); onShowHistory(); }}>
+                    🛍️ Geçmiş Siparişlerim
+                  </a>
+                  
+                  <a href="#addresses" className="drawer-nav-item" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); onOpenAddresses(); }}>
+                    📍 Kayıtlı Adreslerim
+                  </a>
+                  
+                  <a href="#referral" className="drawer-nav-item" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); onGoToReferral(); }}>
+                    👥 Davet Et & 75 TL Kazan
+                  </a>
+                </>
+              )}
+            </div>
+
+            {/* Admin and Logout */}
+            <div className="mobile-drawer-footer">
+              {user && user.isAdmin && (
+                <button className="mobile-drawer-admin-btn" onClick={() => { setMobileMenuOpen(false); onAdminClick(); }}>
+                  ⚡ Yönetici Paneli
+                </button>
+              )}
+              {user && (
+                <button className="mobile-drawer-logout-btn" onClick={() => { setMobileMenuOpen(false); onLogout(); }}>
+                  <LogOut size={16} />
+                  <span>Çıkış Yap</span>
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

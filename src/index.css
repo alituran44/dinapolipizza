@@ -5109,14 +5109,14 @@ button {
 @media (max-width: 991px) {
   .header-video-banner {
     height: auto !important;
-    min-height: 500px;
+    min-height: 380px;
   }
   .banner-video-overlay-tint {
-    padding: 30px 16px !important;
+    padding: 24px 12px !important;
   }
   .banner-video-overlay-tint .container {
     grid-template-columns: 1fr !important;
-    gap: 30px !important;
+    gap: 20px !important;
     text-align: center !important;
     justify-items: center;
   }
@@ -5126,15 +5126,20 @@ button {
     flex-direction: column;
     align-items: center;
   }
+  .hero-left-col h1 {
+    font-size: 26px !important;
+    line-height: 1.2 !important;
+  }
   .banner-subtitle {
-    margin: 0 auto 16px auto !important;
+    margin: 0 auto 12px auto !important;
+    font-size: 13px !important;
   }
   .hero-right-col {
     width: 100%;
-    max-width: 450px;
+    max-width: 400px;
   }
   .hero-right-col .ye-kazan-loyalty-card {
-    transform: scale(1) !important;
+    transform: scale(0.9) !important;
   }
 }
 
@@ -5142,25 +5147,113 @@ button {
 @media (max-width: 768px) {
   /* Başlık ve Butonlar */
   h1 {
-    font-size: 32px !important;
+    font-size: 28px !important;
   }
   h2 {
-    font-size: 24px !important;
+    font-size: 22px !important;
   }
   h3 {
-    font-size: 20px !important;
+    font-size: 18px !important;
   }
   
   /* Container ve Paddingler */
   .container {
-    padding-left: 16px !important;
-    padding-right: 16px !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
   }
 
-  /* Grid Sistemleri Mobilde Tek Sütun */
-  .deals-grid, .menu-grid, .cart-grid-system, .footer-links-grid, .product-grid-custom, .products-grid-tr, .about-grid, .contact-grid {
+  /* Kategori Barı Mobilde Header Altına Tam Yapışsın */
+  .categories-scroller-container.sticky-category-bar {
+    top: 76px !important;
+    background-color: var(--color-dark-blue) !important;
+    padding: 8px 4px !important;
+    border-radius: 0 0 16px 16px !important;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3) !important;
+  }
+
+  /* Grid Sistemleri Mobilde 2 Sütunlu Kompakt */
+  .products-grid-tr {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  .deals-grid, .menu-grid, .cart-grid-system, .footer-links-grid, .product-grid-custom, .about-grid, .contact-grid {
     grid-template-columns: 1fr !important;
     gap: 16px !important;
+  }
+
+  /* Ürün Kartı Mobil Uyum Cilası */
+  .product-card {
+    border-radius: 16px !important;
+    padding: 8px !important;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .product-card-image-wrapper {
+    height: 120px !important;
+    border-radius: 12px !important;
+  }
+
+  .product-card-content {
+    padding: 8px 4px 4px 4px !important;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .product-card-title {
+    font-size: 13.5px !important;
+    font-weight: 850 !important;
+    line-height: 1.2 !important;
+    margin-bottom: 4px !important;
+  }
+
+  .product-card-desc {
+    font-size: 10.5px !important;
+    line-height: 1.3 !important;
+    color: #64748b !important;
+    margin-bottom: 8px !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    height: 28px !important;
+  }
+
+  .product-card-footer {
+    margin-top: auto !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 6px !important;
+    padding-top: 6px !important;
+    border-top: 1px solid #f1f5f9;
+  }
+
+  .product-price-box {
+    display: flex;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+  }
+
+  .product-price-box .price-currency {
+    font-size: 10px !important;
+  }
+
+  .product-price-box .price-amount {
+    font-size: 15px !important;
+  }
+
+  .add-to-cart-btn {
+    width: 100% !important;
+    padding: 8px 12px !important;
+    font-size: 11px !important;
+    height: 32px !important;
+    border-radius: 8px !important;
+    justify-content: center !important;
   }
 
   /* Hakkımızda Sayfası Dikey Görünüm */
@@ -5215,31 +5308,13 @@ button {
 
 @media (max-width: 480px) {
   /* Ekstra Küçük Cihazlar İçin Sıkışmayı Önleme */
-  .product-card {
-    margin: 0 auto;
-    width: 100% !important;
-    max-width: 340px !important;
-  }
-
-  /* Kart Footer'ı dikey hizala */
-  .product-card-footer {
-    flex-direction: column !important;
-    gap: 8px !important;
-    align-items: stretch !important;
-  }
-
-  .product-price-box {
-    text-align: center !important;
-  }
-
-  .add-to-cart-btn {
-    width: 100% !important;
-    justify-content: center !important;
+  .product-card-title {
+    font-size: 12.5px !important;
   }
 
   /* Kampanya kartları esnekliği */
   .deal-promo-card {
-    min-width: 280px !important;
+    min-width: 250px !important;
   }
 
   /* Özelleştirme Sihirbazı Mobilde Dikey Yapı */
@@ -5358,6 +5433,293 @@ button {
   .slip-modal-actions, .slip-success-header, .no-print {
     display: none !important;
     visibility: hidden !important;
+  }
+}
+
+/* --- MOBIL HAMBURGER & DRAWER MENU STILLERI --- */
+.mobile-menu-toggle-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+.compact-address-trigger-mobile {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 8px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  max-width: 140px;
+}
+
+.compact-address-mobile-text {
+  font-size: 11px;
+  font-weight: 700;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Mobile Drawer overlays and structures */
+.mobile-drawer-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background-color: rgba(15, 23, 42, 0.6) !important;
+  backdrop-filter: blur(4px) !important;
+  z-index: 9999999 !important;
+  display: flex !important;
+  justify-content: flex-start !important;
+}
+
+.mobile-drawer-content {
+  background-color: #f8fafc;
+  width: 85%;
+  max-width: 320px;
+  height: 100%;
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  overflow-y: auto;
+  animation: slideInLeft 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+.mobile-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 12px;
+}
+
+.mobile-drawer-logo {
+  height: 40px;
+  object-fit: contain;
+}
+
+.mobile-drawer-close {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-drawer-user-section {
+  margin-bottom: 24px;
+}
+
+.mobile-user-card {
+  background: white;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mobile-user-avatar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar-fallback {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(235, 94, 40, 0.1);
+  color: var(--color-orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.mobile-user-wallet {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #475569;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 8px;
+}
+
+.mobile-drawer-login-btn {
+  width: 100%;
+  background: var(--color-primary-blue);
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 13.5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(10, 58, 96, 0.15);
+}
+
+.mobile-drawer-delivery-section {
+  background: white;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.drawer-section-title {
+  margin: 0 0 10px 0;
+  font-size: 12px;
+  font-weight: 800;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.mobile-delivery-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background-color: #f1f5f9;
+  padding: 3px;
+  border-radius: 30px;
+  margin-bottom: 12px;
+}
+
+.mobile-delivery-toggle button {
+  border: none;
+  background: transparent;
+  padding: 8px;
+  border-radius: 30px;
+  font-size: 11px;
+  font-weight: 800;
+  color: #64748b;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.mobile-delivery-toggle button.active {
+  background-color: var(--color-primary-blue);
+  color: white;
+}
+
+.mobile-drawer-address {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #475569;
+  cursor: pointer;
+}
+
+.drawer-address-text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 600;
+}
+
+.mobile-drawer-nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 24px;
+}
+
+.drawer-nav-item {
+  display: block;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #334155;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.drawer-nav-item:hover {
+  background-color: #e2e8f0;
+  color: var(--color-primary-blue);
+}
+
+.mobile-drawer-footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mobile-drawer-admin-btn {
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+
+.mobile-drawer-logout-btn {
+  background-color: #e2e8f0;
+  color: #475569;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 12.5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+@media (max-width: 768px) {
+  .mobile-menu-toggle-btn {
+    display: flex !important;
+  }
+  .compact-address-trigger-mobile {
+    display: flex !important;
+  }
+  .header-nav-links, .address-picker-widget, .desktop-auth-btn {
+    display: none !important;
+  }
+  .cart-text-desktop {
+    display: none !important;
+  }
+  .header-right-group {
+    gap: 8px !important;
+  }
+  .admin-header-btn-white {
+    display: none !important;
   }
 }
 
