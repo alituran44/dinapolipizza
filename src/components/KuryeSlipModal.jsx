@@ -214,7 +214,7 @@ _Bu sipariş kurye bilgilendirme fişidir._`;
 
           <div className="receipt-footer">
             <p>Afiyet Olsun!</p>
-            <p>0286 217 00 17 - 0505 726 17 17</p>
+            <p>0505 726 17 17 / 0286 212 50 51 / 0286 212 30 17 / 0286 212 32 76</p>
           </div>
         </div>
 

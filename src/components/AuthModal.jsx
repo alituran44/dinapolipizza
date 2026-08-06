@@ -148,7 +148,7 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
       id: 'user-' + loginData.email.replace(/[^a-zA-Z0-9]/g, ''),
       name: isAdmin ? 'Yönetici' : loginData.email.split('@')[0].toUpperCase(),
       email: loginData.email,
-      phone: isAdmin ? '0286 217 00 17' : '0542 388 30 10',
+      phone: isAdmin ? '0286 212 50 51' : '0542 388 30 10',
       avatar: null,
       isAdmin: isAdmin
     };

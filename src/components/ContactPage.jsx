@@ -70,7 +70,7 @@ export default function ContactPage({ onGoToMenu }) {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px' }}>
               <Phone size={18} color="var(--color-burgundy)" />
-              <span style={{ fontWeight: 'bold' }}>+90 505 726 17 17 / 0 286 217 00 17</span>
+              <span style={{ fontWeight: 'bold' }}>+90 505 726 17 17 / 0 286 212 50 51 / 0 286 212 30 17 / 0 286 212 32 76</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px' }}>
               <Mail size={18} color="var(--color-burgundy)" />
