@@ -104,6 +104,17 @@ export default function AdminPanel({
   const [popupButtonLinkInput, setPopupButtonLinkInput] = useState(popupSettings ? popupSettings.buttonLink : '');
   const [showPopupSaved, setShowPopupSaved] = useState(false);
 
+  React.useEffect(() => {
+    if (popupSettings) {
+      setPopupActiveInput(popupSettings.active);
+      setPopupTitleInput(popupSettings.title || '');
+      setPopupContentInput(popupSettings.content || '');
+      setPopupImageInput(popupSettings.image || '');
+      setPopupButtonTextInput(popupSettings.buttonText || '');
+      setPopupButtonLinkInput(popupSettings.buttonLink || '');
+    }
+  }, [popupSettings]);
+
   // Email & Announcement states
   const [emailSubject, setEmailSubject] = useState('Di Napoli Fırsatları Başladı! 🍕');
   const [emailMessage, setEmailMessage] = useState('Merhaba, Di Napoli lezzetlerinde bu haftaya özel 75 TL cüzdan indirimi fırsatını kaçırmayın!');

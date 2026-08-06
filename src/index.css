@@ -5761,6 +5761,26 @@ button {
   to { transform: scale(1) translateY(0); opacity: 1; }
 }
 
+/* Popup Mobil Dikey Sığma ve Kaydırma Garantisi */
+@media (max-width: 480px) {
+  .popup-reklam-card {
+    max-height: 85vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 92% !important;
+    border-radius: 20px !important;
+  }
+  .popup-reklam-card > div:nth-child(2) {
+    height: 150px !important;
+    flex-shrink: 0 !important;
+  }
+  .popup-reklam-card > div:nth-child(3) {
+    padding: 16px 20px !important;
+    overflow-y: auto !important;
+    flex-grow: 1 !important;
+  }
+}
+
 
 
 
