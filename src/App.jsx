@@ -179,7 +179,15 @@ export default function App() {
   const [products, setProducts] = useState(() => {
     try {
       const saved = localStorage.getItem('dinapoli_products');
-      return saved ? JSON.parse(saved) : INITIAL_PRODUCTS;
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Sync latest prices from INITIAL_PRODUCTS while preserving custom items
+        return parsed.map(item => {
+          const init = INITIAL_PRODUCTS.find(p => p.id === item.id);
+          return init ? { ...item, basePrice: init.basePrice } : item;
+        });
+      }
+      return INITIAL_PRODUCTS;
     } catch (e) {
       return INITIAL_PRODUCTS;
     }

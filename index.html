@@ -40,6 +40,19 @@
     <meta property="twitter:image" content="https://www.dinapolipizza.com.tr/logo.png" />
 
     <link rel="canonical" href="https://www.dinapolipizza.com.tr/" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#FFB70D" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Di Napoli" />
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/sw.js').catch(function(err) { console.log('SW Reg error', err); });
+        });
+      }
+    </script>
     
     <!-- AI Crawlers, Robots & Sitemap Links -->
     <link rel="author" type="text/plain" href="/llms.txt" />
