@@ -5164,7 +5164,7 @@ button {
 
   /* Kategori Barı Mobilde Header Altına Tam Yapışsın */
   .categories-scroller-container.sticky-category-bar {
-    top: 76px !important;
+    top: 102px !important;
     background-color: var(--color-dark-blue) !important;
     padding: 8px 4px !important;
     border-radius: 0 0 16px 16px !important;
@@ -5284,17 +5284,56 @@ button {
     padding-bottom: 8px !important;
   }
 
-  /* Header esnekliği */
-  .header-main-nav {
-    flex-wrap: wrap !important;
+  /* Mobil Header 2-Satır Cilası */
+  .site-header-blue {
+    height: auto !important;
+    padding: 8px 0 !important;
+  }
+
+  .header-inner-blue {
+    flex-direction: column !important;
     gap: 8px !important;
+    align-items: stretch !important;
+  }
+
+  .header-left-group {
+    width: 100% !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 12px !important;
+  }
+
+  .brand-logo-white {
+    margin: 0 auto !important;
+  }
+
+  .brand-logo-white img {
+    height: 38px !important;
+  }
+
+  .header-right-group {
+    width: 100% !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 10px !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
+    padding-top: 6px !important;
+    margin-top: 2px !important;
+    display: flex !important;
+  }
+
+  .compact-address-trigger-mobile {
+    flex-grow: 1 !important;
+    max-width: none !important;
+    height: 34px !important;
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    border-radius: 8px !important;
     justify-content: center !important;
   }
 
-  .header-actions-group {
-    width: 100% !important;
-    justify-content: center !important;
-    margin-top: 8px !important;
+  .cart-btn-white {
+    height: 34px !important;
+    padding: 6px 12px !important;
   }
 
   /* WhatsApp Butonu Mobilde Biraz Daha Yukarıda */
