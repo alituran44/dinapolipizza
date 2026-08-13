@@ -551,9 +551,9 @@ export const INITIAL_PRODUCTS = [
     customizable: false
   },
   {
-    id: 'fast-patates',
-    category: 'fastfood',
-    name: 'Patates',
+    id: 'citir-patates',
+    category: 'citir-lezzetler',
+    name: 'Çıtır Patates',
     description: 'Çıtır porsiyon patates kızartması',
     basePrice: 179,
     image: '/patates.jpg',

@@ -1,6 +1,6 @@
 {
   "success": true,
-  "lastUpdated": "2026-08-13T13:48:00Z",
+  "lastUpdated": "2026-08-13T17:59:00Z",
   "catalog": {
     "pizzas": [
       {
@@ -488,17 +488,17 @@
         "image": "https://www.dinapolipizza.com.tr/cheeseburger.jpg",
         "category": "fastfood"
       },
+    ],
+    "citir": [
       {
-        "id": "patates",
-        "name": "Patates Kızartması",
+        "id": "citir_patates",
+        "name": "Çıtır Patates",
         "price": 179,
         "basePrice": 179,
         "description": "Çıtır porsiyon patates kızartması",
         "image": "https://www.dinapolipizza.com.tr/patates.jpg",
-        "category": "fastfood"
-      }
-    ],
-    "citir": [
+        "category": "citir"
+      },
       {
         "id": "sogan_kroket",
         "name": "Soğan Kroket",
