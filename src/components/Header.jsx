@@ -34,6 +34,12 @@ export default function Header({
 
 
 
+  const [pwaBarVisible, setPwaBarVisible] = useState(true);
+  const [showInstallModal, setShowInstallModal] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.innerWidth < 768;
+  });
+
   const handleSelectMode = (mode) => {
     setDeliveryMode(mode);
     setDropdownOpen(false);
@@ -43,6 +49,113 @@ export default function Header({
   };
 
   return (
+    <>
+      {/* POP-UP APP INSTALLATION MODAL ON MAIN WEBSITE (dinapolipizza.com.tr) */}
+      {showInstallModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0, left: 0, right: 0, bottom: 0,
+          width: '100vw', height: '100vh',
+          backgroundColor: 'rgba(0, 0, 0, 0.88)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          zIndex: 999999,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: '20px',
+          boxSizing: 'border-box'
+        }}>
+          <div style={{
+            background: '#141211',
+            border: '2px solid #FFB70D',
+            borderRadius: '24px',
+            padding: '28px 24px',
+            maxWidth: '420px',
+            width: '100%',
+            textAlign: 'center',
+            position: 'relative',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.95)',
+            color: '#FFFFFF'
+          }}>
+            <button 
+              onClick={() => setShowInstallModal(false)}
+              style={{
+                position: 'absolute', top: '14px', right: '14px',
+                background: 'rgba(255,255,255,0.15)', color: '#FFF',
+                border: 'none', width: '36px', height: '36px',
+                borderRadius: '50%', cursor: 'pointer', fontWeight: '800', fontSize: '1.1rem'
+              }}
+            >
+              ✕
+            </button>
+
+            <img 
+              src="/logo.png" 
+              alt="Di Napoli Pizza" 
+              style={{ width: '80px', height: '80px', objectFit: 'contain', margin: '0 auto 16px auto', borderRadius: '16px', boxShadow: '0 6px 20px rgba(255,183,13,0.3)' }} 
+            />
+
+            <div style={{ fontSize: '1.35rem', fontWeight: '900', color: '#FFB70D', marginBottom: '8px', fontFamily: 'var(--font-title, sans-serif)' }}>
+              Di Napoli Mobil Uygulamasını Yükleyin! 📲
+            </div>
+
+            <div style={{ fontSize: '0.88rem', color: 'rgba(255,255,255,0.85)', lineHeight: '1.5', marginBottom: '16px' }}>
+              Çanakkale Saat Kulesi karşısındaki gurme lezzetlerimiz cebinizde! Kamera ile okutun veya tıklayıp indirin.
+            </div>
+
+            <div style={{ background: '#1C1917', padding: '16px', borderRadius: '16px', border: '1px solid #FFB70D', marginBottom: '18px' }}>
+              <img 
+                src="/app_qr.png" 
+                alt="Di Napoli Mobil Uygulama QR Kod" 
+                style={{ width: '170px', height: '170px', borderRadius: '12px', margin: '0 auto', display: 'block', border: '2px solid #FFB70D', boxShadow: '0 4px 16px rgba(0,0,0,0.6)' }} 
+              />
+              <div style={{ fontSize: '0.8rem', color: '#FFB70D', fontWeight: '800', marginTop: '10px' }}>
+                📷 Telefon Kamerasıyla Okutun & İndirin
+              </div>
+            </div>
+
+            <a 
+              href="https://app.dinapolipizza.com.tr/?install=true"
+              onClick={() => setShowInstallModal(false)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '10px',
+                width: '100%',
+                background: 'linear-gradient(135deg, #FFB70D 0%, #F59E0B 100%)',
+                color: '#1A1715',
+                textDecoration: 'none',
+                padding: '16px',
+                borderRadius: '16px',
+                fontWeight: '900',
+                fontSize: '1.05rem',
+                boxShadow: '0 8px 25px rgba(255, 183, 13, 0.5)',
+                cursor: 'pointer',
+                marginBottom: '12px'
+              }}
+            >
+              <Smartphone size={22} /> UYGULAMAYI TELEFONA YÜKLE
+            </a>
+            <button 
+              onClick={() => setShowInstallModal(false)}
+              style={{
+                width: '100%',
+                background: 'transparent',
+                color: 'rgba(255,255,255,0.5)',
+                border: 'none',
+                padding: '10px',
+                fontSize: '0.85rem',
+                cursor: 'pointer'
+              }}
+            >
+              Web Siteden Devam Et
+            </button>
+          </div>
+        </div>
+      )}
+
     <header className="site-header-blue">
       <div className="container header-inner-blue">
         {/* Left Side: Logo & Main Navigation */}
@@ -577,5 +690,6 @@ export default function Header({
         </div>
       )}
     </header>
+  </>
   );
 }

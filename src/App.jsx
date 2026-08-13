@@ -182,10 +182,10 @@ export default function App() {
       if (saved) {
         const parsed = JSON.parse(saved);
         // Sync latest prices from INITIAL_PRODUCTS while preserving custom items
-        return parsed.map(item => {
-          const init = INITIAL_PRODUCTS.find(p => p.id === item.id);
-          return init ? { ...item, ...init } : null;
-        }).filter(Boolean);
+        return INITIAL_PRODUCTS.map(initItem => {
+          const cachedItem = parsed.find(p => p.id === initItem.id);
+          return cachedItem ? { ...cachedItem, ...initItem } : initItem;
+        });
       }
       return INITIAL_PRODUCTS;
     } catch (e) {
