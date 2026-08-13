@@ -184,8 +184,8 @@ export default function App() {
         // Sync latest prices from INITIAL_PRODUCTS while preserving custom items
         return parsed.map(item => {
           const init = INITIAL_PRODUCTS.find(p => p.id === item.id);
-          return init ? { ...item, ...init } : item;
-        });
+          return init ? { ...item, ...init } : null;
+        }).filter(Boolean);
       }
       return INITIAL_PRODUCTS;
     } catch (e) {
