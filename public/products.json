@@ -1,6 +1,6 @@
 {
   "success": true,
-  "lastUpdated": "2026-08-13T13:06:00Z",
+  "lastUpdated": "2026-08-13T13:48:00Z",
   "catalog": {
     "pizzas": [
       {
@@ -50,9 +50,6 @@
         "name": "Küçük Mista Pizza",
         "price": 275,
         "basePrice": 275,
-        "pricesByPeople": {
-          "2": 275
-        },
         "description": "Dana Salam, Sucuk, Mantar, Mısır, Mozzarella Peyniri, Özel Di Napoli Sosu",
         "image": "https://www.dinapolipizza.com.tr/mista.jpg",
         "category": "pizzas"
@@ -224,6 +221,34 @@
         "description": "Pastırma, Domates, Biber, Mozzarella Peyniri",
         "image": "https://www.dinapolipizza.com.tr/pastirmali.jpg",
         "category": "pizzas"
+      },
+      {
+        "id": "apollo",
+        "name": "Apollo Pizza",
+        "price": 285,
+        "basePrice": 285,
+        "pricesByPeople": {
+          "2": 410,
+          "4": 540,
+          "6": 675
+        },
+        "description": "Sucuk, Mısır, Yeşil Biber, Mantar, Mozzarella Peyniri, Özel Di Napoli Sosu",
+        "image": "https://www.dinapolipizza.com.tr/apollo.jpg",
+        "category": "pizzas"
+      },
+      {
+        "id": "primavera",
+        "name": "Primavera Pizza",
+        "price": 285,
+        "basePrice": 285,
+        "pricesByPeople": {
+          "2": 410,
+          "4": 540,
+          "6": 675
+        },
+        "description": "Roka, Cherry Domates, Zeytin, Parmesan, Mozzarella Peyniri, Özel Di Napoli Sosu",
+        "image": "https://www.dinapolipizza.com.tr/primavera.jpg",
+        "category": "pizzas"
       }
     ],
     "campaigns": [
@@ -266,8 +291,8 @@
       {
         "id": "arkadas_menu",
         "name": "Arkadaş Menü",
-        "price": 375,
-        "basePrice": 375,
+        "price": 875,
+        "basePrice": 875,
         "description": "2 Small Pizza Alana 1 Coca-Cola BEDAVA!",
         "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80",
         "category": "campaigns"

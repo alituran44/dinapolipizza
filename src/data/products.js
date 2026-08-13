@@ -3,7 +3,7 @@ export const CATEGORIES = [
   { id: 'ozel-kampanya', name: 'Özel Kampanyalar', icon: 'gift' },
   { id: 'pizzalar', name: 'Pizzalar', icon: 'pizza' },
   { id: 'doyuran-menuler', name: 'Doyuran Menüler', icon: 'package' },
-  { id: 'fastfood', name: 'Fastfood & Pide', icon: 'utensils-crossed' },
+  { id: 'fastfood', name: 'Fastfood', icon: 'utensils-crossed' },
   { id: 'citir-lezzetler', name: 'Çıtır Lezzetler', icon: 'french-fries' },
   { id: 'salatalar', name: 'Salatalar', icon: 'salad' },
   { id: 'tatlilar', name: 'Tatlılar', icon: 'ice-cream' },
@@ -102,7 +102,7 @@ export const INITIAL_PRODUCTS = [
     category: 'ozel-kampanya',
     name: 'Arkadaş Menü',
     description: '2 Small Pizza Alana 1 Coca-Cola BEDAVA!',
-    basePrice: 575,
+    basePrice: 875,
     image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80',
     yeKazanSlice: 2,
     popular: false,
@@ -171,7 +171,6 @@ export const INITIAL_PRODUCTS = [
     name: 'Küçük Mista Pizza',
     description: 'Dana Salam, Sucuk, Mantar, Mısır, Mozzarella Peyniri, Özel Di Napoli Sosu',
     basePrice: 275,
-    pricesByPeople: { '2': 275 },
     image: '/mista.jpg',
     yeKazanSlice: 1,
     popular: false,
@@ -313,7 +312,7 @@ export const INITIAL_PRODUCTS = [
     category: 'pizzalar',
     name: 'Kalzone (Kapalı Pizza)',
     description: 'Dana Salam, Sucuk, Mantar, Mozzarella Peyniri, Özel Di Napoli Sosu',
-    basePrice: 235,
+    basePrice: 285,
     pricesByPeople: { '2': 410, '4': 540, '6': 675 },
     image: '/kalzone.jpg',
     yeKazanSlice: 1,
@@ -326,7 +325,7 @@ export const INITIAL_PRODUCTS = [
     category: 'pizzalar',
     name: 'Apollo Pizza',
     description: 'Sucuk, Mısır, Yeşil Biber, Mantar, Mozzarella Peyniri, Özel Di Napoli Sosu',
-    basePrice: 225,
+    basePrice: 285,
     pricesByPeople: { '2': 410, '4': 540, '6': 675 },
     image: '/apollo.jpg',
     yeKazanSlice: 1,
@@ -597,17 +596,7 @@ export const INITIAL_PRODUCTS = [
     popular: true,
     customizable: false
   },
-  {
-    id: 'citir-patates-cipsi',
-    category: 'citir-lezzetler',
-    name: 'Patates Cipsi',
-    description: 'İnce ve Çıtır Parmak Patates Kızartması',
-    basePrice: 179,
-    image: '/patates.jpg',
-    yeKazanSlice: 0,
-    popular: true,
-    customizable: false
-  },
+
 
   // --- SALATALAR ---
   {
