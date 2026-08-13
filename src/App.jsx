@@ -184,7 +184,7 @@ export default function App() {
         // Sync latest prices from INITIAL_PRODUCTS while preserving custom items
         return parsed.map(item => {
           const init = INITIAL_PRODUCTS.find(p => p.id === item.id);
-          return init ? { ...item, basePrice: init.basePrice } : item;
+          return init ? { ...item, basePrice: init.basePrice, pricesByPeople: init.pricesByPeople } : item;
         });
       }
       return INITIAL_PRODUCTS;

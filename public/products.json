@@ -1,0 +1,629 @@
+{
+  "success": true,
+  "lastUpdated": "2026-08-13T13:06:00Z",
+  "catalog": {
+    "pizzas": [
+      {
+        "id": "margarita",
+        "name": "Margherita Pizza",
+        "price": 245,
+        "basePrice": 245,
+        "pricesByPeople": {
+          "2": 390,
+          "4": 525,
+          "6": 635
+        },
+        "description": "Özel Di Napoli Sosu, Mozzarella Peyniri, Taze Fesleğen, Taze Karabiber",
+        "image": "https://www.dinapolipizza.com.tr/margarita.jpg",
+        "category": "pizzas"
+      },
+      {
+        "id": "fungi",
+        "name": "Fungi Pizza",
+        "price": 265,
+        "basePrice": 265,
+        "pricesByPeople": {
+          "2": 400,
+          "4": 530,
+          "6": 640
+        },
+        "description": "Mantar, Mozzarella Peyniri, Özel Di Napoli Sosu, Taze Kekik",
+        "image": "https://www.dinapolipizza.com.tr/fungi.jpg",
+        "category": "pizzas"
+      },
+      {
+        "id": "romano",
+        "name": "Romano Pizza",
+        "price": 285,
+        "basePrice": 285,
+        "pricesByPeople": {
+          "2": 410,
+          "4": 540,
+          "6": 675
+        },
+        "description": "Dana Salam, Sucuk, Mantar, Mozzarella Peyniri, Özel Di Napoli Sosu",
+        "image": "https://www.dinapolipizza.com.tr/romano.jpg",
+        "category": "pizzas"
+      },
+      {
+        "id": "kucuk_mista",
+        "name": "Küçük Mista Pizza",
+        "price": 275,
+        "basePrice": 275,
+        "pricesByPeople": {
+          "2": 275
+        },
+        "description": "Dana Salam, Sucuk, Mantar, Mısır, Mozzarella Peyniri, Özel Di Napoli Sosu",
+        "image": "https://www.dinapolipizza.com.tr/mista.jpg",
+        "category": "pizzas"
+      },
+      {
+        "id": "mista",
+        "name": "Mista Pizza",
+        "price": 290,
+        "basePrice": 290,
+        "pricesByPeople": {
+          "2": 475,
+          "4": 660,
+          "6": 810
+        },
+        "description": "Dana Salam, Sucuk, Mantar, Mısır, Zeytin, Mozzarella Peyniri, Özel Di Napoli Sosu",
+        "image": "https://www.dinapolipizza.com.tr/mista.jpg",
+        "category": "pizzas"
+      },
+      {
+        "id": "sefin_ozel",
+        "name": "Şefin Pizzası",
+        "price": 385,
+        "basePrice": 385,
+        "pricesByPeople": {
+          "2": 510,
+          "4": 790,
+          "6": 975
+        },
+        "description": "Dana Salam, Sucuk, Mantar, Biber, Zeytin, Mozzarella Peyniri, Özel Di Napoli Sosu",
+        "image": "https://www.dinapolipizza.com.tr/sefin_pizzasi.jpg",
+        "category": "pizzas"
+      },
+      {
+        "id": "citir_tavuklu",
+        "name": "Çıtır Tavuklu Pizza",
+        "price": 340,
+        "basePrice": 340,
+        "pricesByPeople": {
+          "2": 510,
+          "4": 680,
+          "6": 850
+        },
+        "description": "Çıtır Tavuk, Mantar, Mısır, Mozzarella Peyniri, Özel Di Napoli Sosu",
+        "image": "https://www.dinapolipizza.com.tr/citir_tavuklu.jpg",
+        "category": "pizzas"
+      },
+      {
+        "id": "kasap_sucuklu",
+        "name": "Kasap Sucuklu Pizza",
+        "price": 450,
+        "basePrice": 450,
+        "pricesByPeople": {
+          "2": 675,
+          "4": 900,
+          "6": 1150
+        },
+        "description": "Kasap Sucuk, Yeşil Biber, Mantar, Mozzarella Peyniri, Özel Di Napoli Sosu",
+        "image": "https://www.dinapolipizza.com.tr/kasap_sucuklu.jpg",
+        "category": "pizzas"
+      },
+      {
+        "id": "kavurmali",
+        "name": "Kavurmalı Pizza",
+        "price": 450,
+        "basePrice": 450,
+        "pricesByPeople": {
+          "2": 675,
+          "4": 900,
+          "6": 1150
+        },
+        "description": "Dana Kavurma, Kırmızı Biber, Yeşil Biber, Soğan, Mozzarella Peyniri, Özel Di Napoli Sosu",
+        "image": "https://www.dinapolipizza.com.tr/kavurmali.jpg",
+        "category": "pizzas"
+      },
+      {
+        "id": "dinapoli",
+        "name": "Di Napoli Özel Pizza",
+        "price": 450,
+        "basePrice": 450,
+        "pricesByPeople": {
+          "2": 675,
+          "4": 900,
+          "6": 1150
+        },
+        "description": "Dana Salam, Sucuk, Mantar, Biber, Zeytin, Mozzarella Peyniri, Özel Di Napoli Sosu",
+        "image": "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=80",
+        "category": "pizzas"
+      },
+      {
+        "id": "vejetaryen",
+        "name": "Vejetaryen Pizza",
+        "price": 300,
+        "basePrice": 300,
+        "pricesByPeople": {
+          "2": 425,
+          "4": 575,
+          "6": 710
+        },
+        "description": "Mantar, Siyah Zeytin, Yeşil Biber, Kırmızı Biber, Domates, Mozzarella Peyniri",
+        "image": "https://www.dinapolipizza.com.tr/vejetaryen.jpg",
+        "category": "pizzas"
+      },
+      {
+        "id": "tonno",
+        "name": "Tonno Pizza",
+        "price": 360,
+        "basePrice": 360,
+        "pricesByPeople": {
+          "2": 460,
+          "4": 590,
+          "6": 720
+        },
+        "description": "Ton Balığı, Kırmızı Soğan, Siyah Zeytin, Mozzarella Peyniri, Özel Di Napoli Sosu",
+        "image": "https://www.dinapolipizza.com.tr/tonno.jpg",
+        "category": "pizzas"
+      },
+      {
+        "id": "kalzone",
+        "name": "Kalzone Pizza",
+        "price": 235,
+        "basePrice": 235,
+        "pricesByPeople": {
+          "2": 410,
+          "4": 540,
+          "6": 675
+        },
+        "description": "Dana Salam, Sucuk, Mantar, Mozzarella Peyniri, Özel Di Napoli Sosu",
+        "image": "https://www.dinapolipizza.com.tr/kalzone.jpg",
+        "category": "pizzas"
+      },
+      {
+        "id": "akdeniz",
+        "name": "Akdeniz Pizza",
+        "price": 390,
+        "basePrice": 390,
+        "pricesByPeople": {
+          "2": 550,
+          "4": 720,
+          "6": 890
+        },
+        "description": "Beyaz Peynir, Siyah Zeytin, Yeşil Zeytin, Mısır, Domates, Mozzarella Peyniri",
+        "image": "https://www.dinapolipizza.com.tr/akdeniz.jpg",
+        "category": "pizzas"
+      },
+      {
+        "id": "meksikano",
+        "name": "Meksikano Pizza",
+        "price": 390,
+        "basePrice": 390,
+        "pricesByPeople": {
+          "2": 550,
+          "4": 720,
+          "6": 890
+        },
+        "description": "Jalapeno Biber, Mantar, Küp Sucuk, Mısır, Mozzarella Peyniri",
+        "image": "https://www.dinapolipizza.com.tr/meksikano.jpg",
+        "category": "pizzas"
+      },
+      {
+        "id": "pastirmali",
+        "name": "Pastırmalı Pizza",
+        "price": 450,
+        "basePrice": 450,
+        "pricesByPeople": {
+          "2": 675,
+          "4": 900,
+          "6": 1150
+        },
+        "description": "Pastırma, Domates, Biber, Mozzarella Peyniri",
+        "image": "https://www.dinapolipizza.com.tr/pastirmali.jpg",
+        "category": "pizzas"
+      }
+    ],
+    "campaigns": [
+      {
+        "id": "super_kampanya",
+        "name": "Süper Kampanya",
+        "price": 729,
+        "basePrice": 729,
+        "description": "1 Medium Pizza + Cips + Soğan Halkası + 1 LT Coca-Cola",
+        "image": "https://www.dinapolipizza.com.tr/super_kampanya.png",
+        "category": "campaigns"
+      },
+      {
+        "id": "iki_al_bir_ode",
+        "name": "2 Al 1 Öde Kampanyası",
+        "price": 579,
+        "basePrice": 579,
+        "description": "1 Medium Pizza Alana 1 Small Pizza BEDAVA!",
+        "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80",
+        "category": "campaigns"
+      },
+      {
+        "id": "uc_al_iki_ode",
+        "name": "3 Al 2 Öde Kampanyası",
+        "price": 835,
+        "basePrice": 835,
+        "description": "2 Medium Pizza Alana 1 Small Pizza BEDAVA!",
+        "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80",
+        "category": "campaigns"
+      },
+      {
+        "id": "sefin_kampanyasi",
+        "name": "Şefin Kampanyası",
+        "price": 756,
+        "basePrice": 756,
+        "description": "2 Medium Pizza + 1 Coca-Cola BEDAVA!",
+        "image": "https://images.unsplash.com/photo-1590947132387-155cc02f3212?auto=format&fit=crop&w=600&q=80",
+        "category": "campaigns"
+      },
+      {
+        "id": "arkadas_menu",
+        "name": "Arkadaş Menü",
+        "price": 375,
+        "basePrice": 375,
+        "description": "2 Small Pizza Alana 1 Coca-Cola BEDAVA!",
+        "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80",
+        "category": "campaigns"
+      },
+      {
+        "id": "iki_kisilik",
+        "name": "2 Kişilik Kampanya",
+        "price": 729,
+        "basePrice": 729,
+        "description": "Large Pizza + Tavuk Parçacığı + Patates Cipsi + 1 LT Coca-Cola",
+        "image": "https://www.dinapolipizza.com.tr/firsat_2kisilik.png",
+        "category": "campaigns"
+      },
+      {
+        "id": "dort_kisilik",
+        "name": "4 Kişilik Kampanya",
+        "price": 999,
+        "basePrice": 999,
+        "description": "XLarge Pizza + 4 Adet Tavuk Parçacığı + Patates Cipsi + 1 LT Coca-Cola",
+        "image": "https://www.dinapolipizza.com.tr/firsat_4kisilik.png",
+        "category": "campaigns"
+      },
+      {
+        "id": "alti_kisilik",
+        "name": "6 Kişilik Kampanya",
+        "price": 1249,
+        "basePrice": 1249,
+        "description": "XXLarge Pizza + 6 Adet Tavuk Parçacığı + Patates Cipsi + 1.5 LT Coca-Cola",
+        "image": "https://www.dinapolipizza.com.tr/firsat_6kisilik.png",
+        "category": "campaigns"
+      }
+    ],
+    "fastfood": [
+      {
+        "id": "ogrenci_menu",
+        "name": "Öğrenci Menü",
+        "price": 289,
+        "basePrice": 289,
+        "description": "Yarım Pizza + Çıtır Patates + Şişe Coca-Cola",
+        "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80",
+        "category": "fastfood"
+      },
+      {
+        "id": "ekonomik_menu",
+        "name": "Ekonomik Menü",
+        "price": 299,
+        "basePrice": 299,
+        "description": "Small Pizza + Patates + Şişe Coca-Cola",
+        "image": "https://images.unsplash.com/photo-1590947132387-155cc02f3212?auto=format&fit=crop&w=600&q=80",
+        "category": "fastfood"
+      },
+      {
+        "id": "fix_menu",
+        "name": "Fix Menü",
+        "price": 250,
+        "basePrice": 250,
+        "description": "Yarım Pizza + Patates + Şişe Coca-Cola",
+        "image": "https://images.unsplash.com/photo-1590947132387-155cc02f3212?auto=format&fit=crop&w=600&q=80",
+        "category": "fastfood"
+      },
+      {
+        "id": "dinapoli_menu",
+        "name": "Di Napoli Menü",
+        "price": 359,
+        "basePrice": 359,
+        "description": "Yarım Pizza + Patates + Çıtır Tavuk + Şişe Coca-Cola",
+        "image": "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=80",
+        "category": "fastfood"
+      },
+      {
+        "id": "genc_menu",
+        "name": "Genç Menü",
+        "price": 399,
+        "basePrice": 399,
+        "description": "Medium Pizza + Patates + Şişe Coca-Cola",
+        "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80",
+        "category": "fastfood"
+      },
+      {
+        "id": "super_menu",
+        "name": "Süper Menü",
+        "price": 459,
+        "basePrice": 459,
+        "description": "Medium Pizza + Patates + Çıtır Tavuk + Şişe Coca-Cola",
+        "image": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80",
+        "category": "fastfood"
+      },
+      {
+        "id": "hamburger_menu",
+        "name": "Hamburger Menü",
+        "price": 329,
+        "basePrice": 329,
+        "description": "Hamburger + Patates + Çıtır Tavuk + Şişe Coca-Cola",
+        "image": "https://www.dinapolipizza.com.tr/hamburger.jpg",
+        "category": "fastfood"
+      },
+      {
+        "id": "junyir_menu",
+        "name": "Junyir Menü",
+        "price": 429,
+        "basePrice": 429,
+        "description": "Çeyrek Pizza + Patates + Çıtır Tavuk + Şişe Coca-Cola",
+        "image": "https://www.dinapolipizza.com.tr/menu_junyir.png",
+        "category": "fastfood"
+      },
+      {
+        "id": "sampiyon_menu",
+        "name": "Şampiyon Menü",
+        "price": 349,
+        "basePrice": 349,
+        "description": "Small Pizza + Patates + Soğan Halkası + Çıtır Tavuk + Şişe Coca-Cola",
+        "image": "https://www.dinapolipizza.com.tr/menu_sampiyon.png",
+        "category": "fastfood"
+      },
+      {
+        "id": "chicken_menu",
+        "name": "Chicken Menü",
+        "price": 389,
+        "basePrice": 389,
+        "description": "Çıtır Tavuk + Patates + Ayran",
+        "image": "https://www.dinapolipizza.com.tr/citir_tavuklu.jpg",
+        "category": "fastfood"
+      },
+      {
+        "id": "mix_menu",
+        "name": "Mix Menü",
+        "price": 369,
+        "basePrice": 369,
+        "description": "Çıtır Tavuk + Sosis + Patates + Domates + Salatalık + Ayran",
+        "image": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80",
+        "category": "fastfood"
+      },
+      {
+        "id": "dinapoli_ekstra",
+        "name": "Di Napoli Ekstra",
+        "price": 369,
+        "basePrice": 369,
+        "description": "Yarım Pizza + Patates + Çıtır Tavuk + Rus Salatası + Şişe Coca-Cola",
+        "image": "https://www.dinapolipizza.com.tr/menu_dinapoli_ekstra.png",
+        "category": "fastfood"
+      },
+      {
+        "id": "sosisli_menu",
+        "name": "Sosisli Menü",
+        "price": 339,
+        "basePrice": 339,
+        "description": "Sosis + Patates + Ayran",
+        "image": "https://www.dinapolipizza.com.tr/menu_sosisli.png",
+        "category": "fastfood"
+      },
+      {
+        "id": "borek_menu",
+        "name": "Börek Menü",
+        "price": 269,
+        "basePrice": 269,
+        "description": "Börek + Ayran",
+        "image": "https://www.dinapolipizza.com.tr/menu_borek.png",
+        "category": "fastfood"
+      },
+      {
+        "id": "fast_sinitzel",
+        "name": "Şinitzel Tabağı",
+        "price": 375,
+        "basePrice": 375,
+        "description": "Özel panelenmiş tavuk şinitzel tabağı, patates kızartması ve salata ile",
+        "image": "https://www.dinapolipizza.com.tr/fast_sinitzel.png",
+        "category": "fastfood"
+      },
+      {
+        "id": "fast_kofte",
+        "name": "Tekirdağ Köfte",
+        "price": 499,
+        "basePrice": 499,
+        "description": "Geleneksel Tekirdağ köfte porsiyonu, patates ve salata ile",
+        "image": "https://www.dinapolipizza.com.tr/tekirdag_kofte.png",
+        "category": "fastfood"
+      },
+      {
+        "id": "fast_hamburger",
+        "name": "Hamburger",
+        "price": 159,
+        "basePrice": 159,
+        "description": "Tek Usta Hamburger Köftesi, Marul, Turşu ve Özel Sos",
+        "image": "https://www.dinapolipizza.com.tr/hamburger.jpg",
+        "category": "fastfood"
+      },
+      {
+        "id": "fast_cheeseburger",
+        "name": "Çizburger",
+        "price": 169,
+        "basePrice": 169,
+        "description": "Tek Hamburger Köftesi, Cheddar Peyniri, Marul, Turşu ve Özel Sos",
+        "image": "https://www.dinapolipizza.com.tr/cheeseburger.jpg",
+        "category": "fastfood"
+      },
+      {
+        "id": "patates",
+        "name": "Patates Kızartması",
+        "price": 179,
+        "basePrice": 179,
+        "description": "Çıtır porsiyon patates kızartması",
+        "image": "https://www.dinapolipizza.com.tr/patates.jpg",
+        "category": "fastfood"
+      }
+    ],
+    "citir": [
+      {
+        "id": "sogan_kroket",
+        "name": "Soğan Kroket",
+        "price": 129,
+        "basePrice": 129,
+        "description": "Çıtır Soğan Halkası Porsiyon",
+        "image": "https://www.dinapolipizza.com.tr/sogan_halkasi.jpg",
+        "category": "citir"
+      },
+      {
+        "id": "rus_salatasi",
+        "name": "Rus Salatası",
+        "price": 229,
+        "basePrice": 229,
+        "description": "Geleneksel Garnitürlü Rus Salatası",
+        "image": "https://www.dinapolipizza.com.tr/rus_salatasi.jpg",
+        "category": "citir"
+      },
+      {
+        "id": "elma_patates",
+        "name": "Elma Dilim Patates",
+        "price": 179,
+        "basePrice": 179,
+        "description": "Baharatlı Elma Dilim Patates",
+        "image": "https://www.dinapolipizza.com.tr/elma_patates.png",
+        "category": "citir"
+      },
+      {
+        "id": "mozzarella_stik",
+        "name": "Mozzarella Stik",
+        "price": 199,
+        "basePrice": 199,
+        "description": "Eriyen Peynirli Çıtır Çubuklar",
+        "image": "https://www.dinapolipizza.com.tr/citir_mozzarella.png",
+        "category": "citir"
+      }
+    ],
+    "salatalar": [
+      {
+        "id": "tavuklu_salata",
+        "name": "Tavuklu Salata",
+        "price": 359,
+        "basePrice": 359,
+        "description": "Izgara Tavuklu Taze Akdeniz Salatası",
+        "image": "https://www.dinapolipizza.com.tr/salata_tavuklu.png",
+        "category": "salatalar"
+      },
+      {
+        "id": "tonbalikli_salata",
+        "name": "Tonbalıklı Salata",
+        "price": 359,
+        "basePrice": 359,
+        "description": "Ton Balıklı Taze Salata",
+        "image": "https://www.dinapolipizza.com.tr/salata_ton.png",
+        "category": "salatalar"
+      },
+      {
+        "id": "sebze_salata",
+        "name": "Sebze Salata",
+        "price": 309,
+        "basePrice": 309,
+        "description": "Taze Mevsim Sebzeleri Salatası",
+        "image": "https://www.dinapolipizza.com.tr/salata_sebze.png",
+        "category": "salatalar"
+      },
+      {
+        "id": "akdeniz_salata",
+        "name": "Akdeniz Salata",
+        "price": 359,
+        "basePrice": 359,
+        "description": "Beyaz Peynirli Akdeniz Salatası",
+        "image": "https://www.dinapolipizza.com.tr/salata_akdeniz.png",
+        "category": "salatalar"
+      }
+    ],
+    "tatlilar": [
+      {
+        "id": "kizarmis_dondurma",
+        "name": "Kızarmış Dondurma",
+        "price": 199,
+        "basePrice": 199,
+        "description": "Çıtır Dış Kaplamalı Sıcak Kızarmış Dondurma",
+        "image": "https://www.dinapolipizza.com.tr/kizarmis_dondurma.png",
+        "category": "tatlilar"
+      },
+      {
+        "id": "suffle",
+        "name": "Sufle",
+        "price": 275,
+        "basePrice": 275,
+        "description": "Sıcak Akışkan Çikolatalı Sufle",
+        "image": "https://www.dinapolipizza.com.tr/tatli_sufle.png",
+        "category": "tatlilar"
+      },
+      {
+        "id": "kunefe",
+        "name": "Künefe",
+        "price": 250,
+        "basePrice": 250,
+        "description": "Antep Fıstıklı Taze Künefe",
+        "image": "https://www.dinapolipizza.com.tr/tatli_kunefe.png",
+        "category": "tatlilar"
+      }
+    ],
+    "drinks": [
+      {
+        "id": "kola_1lt",
+        "name": "Coca-Cola (1 LT)",
+        "price": 180,
+        "basePrice": 180,
+        "description": "Buz gibi serinletici 1 Litre Coca-Cola",
+        "image": "https://www.dinapolipizza.com.tr/icecek_cola_1l.png",
+        "category": "drinks"
+      },
+      {
+        "id": "kola_330",
+        "name": "Coca-Cola Kutu (330ml)",
+        "price": 90,
+        "basePrice": 90,
+        "description": "Buz gibi serinletici kutu meşrubat",
+        "image": "https://www.dinapolipizza.com.tr/icecek_cola_can.png",
+        "category": "drinks"
+      },
+      {
+        "id": "fanta_330",
+        "name": "Fanta (330ml)",
+        "price": 90,
+        "basePrice": 90,
+        "description": "Portakal lezzeti kutu meşrubat",
+        "image": "https://www.dinapolipizza.com.tr/icecek_fanta_can.png",
+        "category": "drinks"
+      },
+      {
+        "id": "sprite_330",
+        "name": "Sprite (330ml)",
+        "price": 90,
+        "basePrice": 90,
+        "description": "Limon ferahlığı kutu meşrubat",
+        "image": "https://www.dinapolipizza.com.tr/icecek_sprite_can.png",
+        "category": "drinks"
+      },
+      {
+        "id": "ayran",
+        "name": "Yayık Ayranı (300ml)",
+        "price": 60,
+        "basePrice": 60,
+        "description": "Taze ve lezzetli yayık ayranı",
+        "image": "https://www.dinapolipizza.com.tr/icecek_ayran.png",
+        "category": "drinks"
+      }
+    ]
+  }
+}
