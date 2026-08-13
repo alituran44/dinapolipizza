@@ -582,7 +582,8 @@
         "basePrice": 199,
         "description": "Çıtır Dış Kaplamalı Sıcak Kızarmış Dondurma",
         "image": "https://www.dinapolipizza.com.tr/kizarmis_dondurma.png",
-        "category": "tatlilar"
+        "category": "tatlilar",
+        "comingSoon": true
       },
       {
         "id": "suffle",

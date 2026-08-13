@@ -141,14 +141,20 @@ export default function ProductCard({ product, onAddToCart }) {
 
           <div className="product-card-footer" style={{ marginTop: (product.category === 'pizzalar' || product.category === 'doyuran-menuler') ? '0' : 'auto' }}>
             <div className="price-info">
-              <span className="price-label">{selectedGroup !== '1' ? 'Seçilen Tutar' : 'Başlayan fiyatlar'}</span>
-              <span className="price-value">{getPrice()} TL</span>
+              <span className="price-label">{product.comingSoon ? 'Durum' : (selectedGroup !== '1' ? 'Seçilen Tutar' : 'Başlayan fiyatlar')}</span>
+              <span className="price-value">{product.comingSoon ? 'Yakında Gelecek' : `${getPrice()} TL`}</span>
             </div>
             
-            <button className="add-to-cart-btn" onClick={handleAddClick}>
-              <Plus size={18} />
-              <span>{product.customizable && selectedGroup === '1' ? 'Seç' : 'Ekle'}</span>
-            </button>
+            {product.comingSoon ? (
+              <button className="add-to-cart-btn" disabled style={{ background: '#475569', cursor: 'not-allowed', color: '#cbd5e1', gap: '0' }}>
+                <span>Gelecek</span>
+              </button>
+            ) : (
+              <button className="add-to-cart-btn" onClick={handleAddClick}>
+                <Plus size={18} />
+                <span>{product.customizable && selectedGroup === '1' ? 'Seç' : 'Ekle'}</span>
+              </button>
+            )}
           </div>
         </div>
       </article>

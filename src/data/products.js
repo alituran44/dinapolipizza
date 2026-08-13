@@ -687,7 +687,8 @@ export const INITIAL_PRODUCTS = [
     image: '/kizarmis_dondurma.png',
     yeKazanSlice: 0,
     popular: false,
-    customizable: false
+    customizable: false,
+    comingSoon: true
   },
 
   // --- İÇECEKLER ---
