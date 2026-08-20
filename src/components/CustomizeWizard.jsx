@@ -364,7 +364,7 @@ export default function CustomizeWizard({
             />
           </div>
 
-          {(product.category === 'pizzalar' || product.category === 'doyuran-menuler') && (!product.pricesByPeople || Object.keys(product.pricesByPeople).length > 0) && (
+          {product.category === 'pizzalar' && (!product.pricesByPeople || Object.keys(product.pricesByPeople).length > 0) && (
             <div className="group-selection-box" style={{ marginTop: '16px', marginBottom: '16px', textAlign: 'left', background: 'white', padding: '16px', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', boxShadow: 'var(--shadow-sm)' }}>
               <label htmlFor="wizard-group-select" style={{ fontSize: '13px', fontWeight: '800', color: 'var(--color-dark-blue)', display: 'block', marginBottom: '8px' }}>Porsiyon / Kişilik Seçimi:</label>
               <select 
