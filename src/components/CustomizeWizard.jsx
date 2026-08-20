@@ -364,7 +364,7 @@ export default function CustomizeWizard({
             />
           </div>
 
-          {(product.category === 'pizzalar' || product.category === 'doyuran-menuler') && (
+          {(product.category === 'pizzalar' || product.category === 'doyuran-menuler') && (!product.pricesByPeople || Object.keys(product.pricesByPeople).length > 0) && (
             <div className="group-selection-box" style={{ marginTop: '16px', marginBottom: '16px', textAlign: 'left', background: 'white', padding: '16px', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', boxShadow: 'var(--shadow-sm)' }}>
               <label htmlFor="wizard-group-select" style={{ fontSize: '13px', fontWeight: '800', color: 'var(--color-dark-blue)', display: 'block', marginBottom: '8px' }}>Porsiyon / Kişilik Seçimi:</label>
               <select 
@@ -385,10 +385,21 @@ export default function CustomizeWizard({
                   cursor: 'pointer'
                 }}
               >
-                <option value="1">1 Kişilik (Standart)</option>
-                <option value="2">2 Kişilik (Grup Fırsatı) - 729 TL</option>
-                <option value="4">4 Kişilik (Aile Fırsatı) - 999 TL</option>
-                <option value="6">6 Kişilik (Dev Fırsat) - 1249 TL</option>
+                {product.pricesByPeople ? (
+                  <>
+                    <option value="1">1 Kişilik (Tek) - {product.basePrice} TL</option>
+                    {product.pricesByPeople['2'] && <option value="2">2 Kişilik Porsiyon - {product.pricesByPeople['2']} TL</option>}
+                    {product.pricesByPeople['4'] && <option value="4">4 Kişilik Porsiyon - {product.pricesByPeople['4']} TL</option>}
+                    {product.pricesByPeople['6'] && <option value="6">6 Kişilik Porsiyon - {product.pricesByPeople['6']} TL</option>}
+                  </>
+                ) : (
+                  <>
+                    <option value="1">1 Kişilik (Standart) - {product.basePrice} TL</option>
+                    <option value="2">2 Kişilik (Grup Fırsatı) - 729 TL</option>
+                    <option value="4">4 Kişilik (Aile Fırsatı) - 999 TL</option>
+                    <option value="6">6 Kişilik (Dev Fırsat) - 1249 TL</option>
+                  </>
+                )}
               </select>
             </div>
           )}

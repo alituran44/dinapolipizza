@@ -171,6 +171,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Küçük Mista Pizza',
     description: 'Dana Salam, Sucuk, Mantar, Mısır, Mozzarella Peyniri, Özel Di Napoli Sosu',
     basePrice: 275,
+    pricesByPeople: {},
     image: '/mista.jpg',
     yeKazanSlice: 1,
     popular: false,

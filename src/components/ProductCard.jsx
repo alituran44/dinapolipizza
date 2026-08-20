@@ -99,7 +99,7 @@ export default function ProductCard({ product, onAddToCart }) {
           <div className="product-card-title" style={{ fontSize: '16px', fontWeight: '800', color: 'var(--color-dark-blue)', marginBottom: '8px' }}>{product.name}</div>
           <p className="product-card-description">{product.description}</p>
           
-          {(product.category === 'pizzalar' || product.category === 'doyuran-menuler') && (
+          {(product.category === 'pizzalar' || product.category === 'doyuran-menuler') && (!product.pricesByPeople || Object.keys(product.pricesByPeople).length > 0) && (
             <div className="group-selection-box" style={{ marginTop: 'auto', marginBottom: '12px', textAlign: 'left' }}>
               <label htmlFor={`group-select-${product.id}`} style={{ fontSize: '11px', fontWeight: '800', color: 'var(--color-text-muted)', display: 'block', marginBottom: '4px' }}>Porsiyon / Kişilik Seçimi:</label>
               <select 
