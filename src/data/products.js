@@ -311,7 +311,7 @@ export const INITIAL_PRODUCTS = [
   {
     id: 'pizza-kalzone',
     category: 'pizzalar',
-    name: 'Kalzone (Kapalı Pizza)',
+    name: 'Kalzone Pizza',
     description: 'Dana Salam, Sucuk, Mantar, Mozzarella Peyniri, Özel Di Napoli Sosu',
     basePrice: 285,
     pricesByPeople: { '2': 410, '4': 540, '6': 675 },
