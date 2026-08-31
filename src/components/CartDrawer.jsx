@@ -56,6 +56,21 @@ export default function CartDrawer({
 
   const handleCheckout = () => {
     if (cart.length === 0) return;
+
+    // Meta Pixel Checkout & Purchase Tracking
+    if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
+      window.fbq('track', 'InitiateCheckout', {
+        value: finalTotal,
+        currency: 'TRY'
+      });
+      window.fbq('track', 'Purchase', {
+        value: finalTotal,
+        currency: 'TRY',
+        num_items: cart.reduce((sum, item) => sum + item.quantity, 0),
+        contents: cart.map(item => ({ id: item.id, quantity: item.quantity, item_price: item.price || item.basePrice || 0 }))
+      });
+    }
+
     onPlaceOrder({
       subtotal,
       discount: discount + yeKazanDiscount,
