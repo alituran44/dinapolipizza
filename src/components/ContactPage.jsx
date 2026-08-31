@@ -68,9 +68,17 @@ export default function ContactPage({ onGoToMenu }) {
               <MapPin size={18} color="var(--color-burgundy)" />
               <span>Kemalpaşa Mah. Şair Ece Ayhan Meydanı No:9/A Saat Kulesi Karşısı Merkez / Çanakkale</span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px' }}>
-              <Phone size={18} color="var(--color-burgundy)" />
-              <span style={{ fontWeight: 'bold' }}>+90 505 726 17 17 / 0 286 212 50 51 / 0 286 212 30 17 / 0 286 212 32 76</span>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '13px' }}>
+              <Phone size={18} color="var(--color-burgundy)" style={{ flexShrink: 0, marginTop: '2px' }} />
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px 12px', fontWeight: 'bold' }}>
+                <a href="tel:+905057261717" style={{ color: 'var(--color-burgundy)', textDecoration: 'none' }}>+90 505 726 17 17</a>
+                <span style={{ color: '#cbd5e1' }}>•</span>
+                <a href="tel:02862125051" style={{ color: '#1e293b', textDecoration: 'none' }}>0 286 212 50 51</a>
+                <span style={{ color: '#cbd5e1' }}>•</span>
+                <a href="tel:02862123017" style={{ color: '#1e293b', textDecoration: 'none' }}>0 286 212 30 17</a>
+                <span style={{ color: '#cbd5e1' }}>•</span>
+                <a href="tel:02862123276" style={{ color: '#1e293b', textDecoration: 'none' }}>0 286 212 32 76</a>
+              </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px' }}>
               <Mail size={18} color="var(--color-burgundy)" />
