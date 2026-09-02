@@ -1462,11 +1462,12 @@ export default function App() {
 
             {/* Campaign Image */}
             {popupSettings.image && (
-              <div style={{ width: '100%', height: '220px', overflow: 'hidden', backgroundColor: '#f1f5f9', position: 'relative' }}>
+              <div className="popup-reklam-img-wrap" style={{ width: '100%', maxHeight: '280px', overflow: 'hidden', backgroundColor: '#18181b', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <img 
                   src={popupSettings.image} 
                   alt={popupSettings.title} 
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  className="popup-reklam-img"
+                  style={{ width: '100%', height: 'auto', maxHeight: '280px', objectFit: 'contain', display: 'block' }}
                 />
               </div>
             )}

@@ -106,9 +106,13 @@ export default function Header({
 
             <div style={{ background: '#1C1917', padding: '16px', borderRadius: '16px', border: '1px solid #FFB70D', marginBottom: '18px' }}>
               <img 
-                src="/app_qr.png" 
+                src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https%3A%2F%2Fapp.dinapolipizza.com.tr%2F%3Finstall%3Dtrue&margin=10" 
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = '/app_qr.png';
+                }}
                 alt="Di Napoli Mobil Uygulama QR Kod" 
-                style={{ width: '170px', height: '170px', borderRadius: '12px', margin: '0 auto', display: 'block', border: '2px solid #FFB70D', boxShadow: '0 4px 16px rgba(0,0,0,0.6)' }} 
+                style={{ width: '170px', height: '170px', borderRadius: '12px', margin: '0 auto', display: 'block', border: '2px solid #FFB70D', boxShadow: '0 4px 16px rgba(0,0,0,0.6)', background: 'white', padding: '6px' }} 
               />
               <div style={{ fontSize: '0.8rem', color: '#FFB70D', fontWeight: '800', marginTop: '10px' }}>
                 📷 Telefon Kamerasıyla Okutun & İndirin

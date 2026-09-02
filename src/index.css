@@ -5788,10 +5788,13 @@ button {
   background: white;
   border-radius: 24px;
   width: 90%;
-  max-width: 450px;
+  max-width: 480px;
+  max-height: 90vh;
   overflow: hidden;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
   position: relative;
+  display: flex;
+  flex-direction: column;
   animation: popupScaleUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -5800,18 +5803,39 @@ button {
   to { transform: scale(1) translateY(0); opacity: 1; }
 }
 
-/* Popup Mobil Dikey Sığma ve Kaydırma Garantisi */
+.popup-reklam-img-wrap {
+  width: 100%;
+  max-height: 280px;
+  background: #18181b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.popup-reklam-img {
+  width: 100% !important;
+  height: auto !important;
+  max-height: 280px !important;
+  object-fit: contain !important;
+  display: block !important;
+}
+
+/* Popup Mobil Dikey Sığma ve Tam Görsel Garantisi */
 @media (max-width: 480px) {
   .popup-reklam-card {
-    max-height: 85vh !important;
-    display: flex !important;
-    flex-direction: column !important;
-    width: 92% !important;
+    max-height: 90vh !important;
+    width: 94% !important;
     border-radius: 20px !important;
   }
-  .popup-reklam-card > div:nth-child(2) {
-    height: 150px !important;
-    flex-shrink: 0 !important;
+  .popup-reklam-img-wrap {
+    max-height: 210px !important;
+  }
+  .popup-reklam-img {
+    max-height: 210px !important;
+    object-fit: contain !important;
   }
   .popup-reklam-card > div:nth-child(3) {
     padding: 16px 20px !important;
