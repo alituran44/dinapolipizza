@@ -101,14 +101,46 @@ export default function Footer({ onGoToAbout, onGoToContact, onAdminClick }) {
           </div>
 
           <div className="footer-column">
-            <h4>Bize Ulaşın</h4>
+            <h4>Şubelerimiz</h4>
             <ul className="footer-contact-list">
-              <li className="contact-address-text">
-                <MapPin size={14} style={{ display: 'inline', marginRight: '6px' }} />
-                Kemalpaşa Mah. Şair Ece Ayhan Meydanı No:9/A Saat Kulesi Karşısı Merkez / Çanakkale
+              <li style={{ marginBottom: '12px' }}>
+                <div style={{ fontWeight: '800', color: '#ffb703', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+                  <MapPin size={14} style={{ color: '#ffb703', flexShrink: 0 }} />
+                  <span>Merkez Şube: Dinapolipizza Saat Kulesi</span>
+                </div>
+                <p style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.75)', margin: '0 0 4px 20px', lineHeight: '1.4' }}>
+                  Kemalpaşa Mah. Şair Ece Ayhan Meydanı No:9/A Saat Kulesi Karşısı Merkez / Çanakkale
+                </p>
+                <a 
+                  href="https://maps.google.com/maps?q=40.14917,26.40114(Di%20Napoli%20Pizza%20Saat%20Kulesi)" 
+                  target="_blank" 
+                  rel="noreferrer"
+                  style={{ fontSize: '11px', color: '#60a5fa', textDecoration: 'none', marginLeft: '20px', display: 'inline-flex', alignItems: 'center', gap: '4px', fontWeight: 'bold' }}
+                >
+                  Haritada Gör ↗
+                </a>
               </li>
-              <li>
-                <a href="mailto:dinapolipizza1997@gmail.com">
+
+              <li style={{ marginBottom: '12px' }}>
+                <div style={{ fontWeight: '800', color: '#ffb703', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+                  <MapPin size={14} style={{ color: '#ffb703', flexShrink: 0 }} />
+                  <span>Şube: Dinapolipizza Hamidiye</span>
+                </div>
+                <p style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.75)', margin: '0 0 4px 20px', lineHeight: '1.4' }}>
+                  Hamidiye Mh. Rauf Denktaş Cd. Sahra Sit. No: 1 B2 Blok Kepez / Çanakkale
+                </p>
+                <a 
+                  href="https://www.google.com/maps/search/?api=1&query=Hamidiye+Mahallesi+Rauf+Denkta%C5%9F+Caddesi+Sahra+Sitesi+No:1+Kepez+%C3%87anakkale" 
+                  target="_blank" 
+                  rel="noreferrer"
+                  style={{ fontSize: '11px', color: '#60a5fa', textDecoration: 'none', marginLeft: '20px', display: 'inline-flex', alignItems: 'center', gap: '4px', fontWeight: 'bold' }}
+                >
+                  Haritada Gör ↗
+                </a>
+              </li>
+
+              <li style={{ marginTop: '6px' }}>
+                <a href="mailto:dinapolipizza1997@gmail.com" style={{ fontSize: '12px' }}>
                   <Mail size={14} style={{ display: 'inline', marginRight: '6px' }} />
                   dinapolipizza1997@gmail.com
                 </a>
@@ -116,7 +148,7 @@ export default function Footer({ onGoToAbout, onGoToContact, onAdminClick }) {
               <li>
                 <button 
                   onClick={onGoToContact}
-                  style={{ border: 'none', background: 'none', color: '#ffb703', fontWeight: 'bold', fontSize: '12px', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center', gap: '4px', marginTop: '8px' }}
+                  style={{ border: 'none', background: 'none', color: '#ffb703', fontWeight: 'bold', fontSize: '12px', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center', gap: '4px', marginTop: '6px' }}
                 >
                   <span>✉ Bize Mesaj Gönderin &rarr;</span>
                 </button>

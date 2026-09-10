@@ -17,7 +17,32 @@ export default function BranchMapModal({
   const [selectedBranchId, setSelectedBranchId] = useState('kordon');
   const [branchIndex, setBranchIndex] = useState(0);
 
+  const branches = [
+    {
+      id: 'kordon',
+      name: 'DİNAPOLİPİZZA SAAT KULESİ (MERKEZ)',
+      distance: '0.1 KM',
+      address: 'Kemalpaşa Mah. Şair Ece Ayhan Meydanı No:9/A Saat Kulesi Karşısı Merkez / Çanakkale',
+      mapUrl: 'https://maps.google.com/maps?q=40.14917,26.40114(Di%20Napoli%20Pizza%20Saat%20Kulesi)&t=&z=16&ie=UTF8&iwloc=B&output=embed',
+      hours: '11:00 - 01:00',
+      status: 'AÇIK'
+    },
+    {
+      id: 'hamidiye',
+      name: 'DİNAPOLİPİZZA HAMİDİYE (KEPEZ)',
+      distance: '3.2 KM',
+      address: 'Hamidiye Mh. Rauf Denktaş Cd. Sahra Sit. No: 1 B2 Blok Kepez / Çanakkale',
+      mapUrl: 'https://maps.google.com/maps?q=Hamidiye+Mahallesi+Rauf+Denkta%C5%9F+Caddesi+Sahra+Sitesi+No:1+Kepez+%C3%87anakkale&t=&z=16&ie=UTF8&iwloc=B&output=embed',
+      hours: '11:00 - 00:00',
+      status: 'AÇIK'
+    }
+  ];
+
   const getMapSrc = () => {
+    if (activeTab === 'pickup') {
+      const br = branches.find(b => b.id === selectedBranchId);
+      return br ? br.mapUrl : branches[0].mapUrl;
+    }
     return "https://maps.google.com/maps?q=40.14917,26.40114(Di%20Napoli%20Pizza%20Saat%20Kulesi)&t=&z=16&ie=UTF8&iwloc=B&output=embed";
   };
 
@@ -42,22 +67,12 @@ export default function BranchMapModal({
   };
 
   const handleBranchSubmit = () => {
-    onSelectBranch("Kemalpaşa Mah. Şair Ece Ayhan Meydanı No:9/A (Saat Kulesi Şubesi)");
+    const selectedBranch = branches.find(b => b.id === selectedBranchId) || branches[0];
+    onSelectBranch(`${selectedBranch.address} (${selectedBranch.name})`, selectedBranch);
     onClose();
   };
 
-  const branches = [
-    {
-      id: 'kordon',
-      name: 'CANAKKALE SAAT KULESI',
-      distance: '0.1 KM',
-      address: 'Kemalpaşa Mah. Şair Ece Ayhan Meydanı No:9/A Saat Kulesi Karşısı Merkez / Çanakkale',
-      hours: '11:00 - 01:00',
-      status: 'AÇIK'
-    }
-  ];
-
-  const filteredBranches = onlyOpen ? [] : branches; // Simulating onlyOpen filter
+  const filteredBranches = onlyOpen ? branches.filter(b => b.status === 'AÇIK') : branches;
 
   return (
     <div style={{

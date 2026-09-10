@@ -12,6 +12,8 @@ export default function CartPage({
   onClose,
   deliveryMode, // 'delivery' or 'pickup'
   selectedAddress,
+  selectedBranch = 'saat-kulesi',
+  onSelectBranch,
   user,
   onUpdateUserWallet,
   userAddresses = [],
@@ -20,6 +22,25 @@ export default function CartPage({
   whatsAppNumber = '',
   whatsAppTemplate = ''
 }) {
+  const pickupBranches = [
+    {
+      id: 'saat-kulesi',
+      name: 'Dinapolipizza Saat Kulesi (Merkez)',
+      address: 'Kemalpaşa Mah. Şair Ece Ayhan Meydanı No:9/A Saat Kulesi Karşısı Merkez / Çanakkale',
+      mapUrl: 'https://maps.google.com/maps?q=40.14917,26.40114(Di%20Napoli%20Pizza%20Saat%20Kulesi)'
+    },
+    {
+      id: 'hamidiye',
+      name: 'Dinapolipizza Hamidiye (Kepez)',
+      address: 'Hamidiye Mh. Rauf Denktaş Cd. Sahra Sit. No: 1 B2 Blok Kepez / Çanakkale',
+      mapUrl: 'https://www.google.com/maps/search/?api=1&query=Hamidiye+Mahallesi+Rauf+Denkta%C5%9F+Caddesi+Sahra+Sitesi+No:1+Kepez+%C3%87anakkale'
+    }
+  ];
+
+  const [activeBranchId, setActiveBranchId] = useState(
+    selectedBranch && selectedBranch.includes('hamidiye') ? 'hamidiye' : 'saat-kulesi'
+  );
+
   const recommendedItems = [
     {
       id: 'salata-ton',
@@ -178,7 +199,10 @@ export default function CartPage({
       productPhotosText = '\n' + photoLinks.join('\n');
     }
 
-    const deliveryMethodText = (paymentMethod === 'takeout' || deliveryMode === 'pickup') ? 'Gel-Al (Şubeden) 🛍️' : 'Adrese Teslim 🚀';
+    const activeBranchObj = pickupBranches.find(b => b.id === activeBranchId) || pickupBranches[0];
+    const deliveryMethodText = (paymentMethod === 'takeout' || deliveryMode === 'pickup') 
+      ? `Gel-Al (Şubeden) 🛍️ [${activeBranchObj.name}]` 
+      : 'Adrese Teslim 🚀';
     
     let couponSuffix = '';
     if (appliedCoupon) {
@@ -186,7 +210,7 @@ export default function CartPage({
     }
 
     const actualAddressDetails = (paymentMethod === 'takeout' || deliveryMode === 'pickup')
-      ? 'Kemalpaşa Mah. Şair Ece Ayhan Meydanı No:9/A Saat Kulesi Karşısı Merkez / Çanakkale'
+      ? `${activeBranchObj.address} (${activeBranchObj.name})`
       : (selectedAddress || 'Girilmedi');
 
     let messageText = whatsAppTemplate
@@ -383,7 +407,61 @@ export default function CartPage({
                       </button>
                     </>
                   ) : (
-                    <p style={{ margin: 0 }}><strong>Saat Kulesi Karşısı, Merkez/Çanakkale</strong> şubemizden beklemeden teslim alacaksınız.</p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      <p style={{ margin: 0, fontSize: '13px', color: '#475569', fontWeight: 'bold' }}>
+                        Lütfen siparişinizi teslim alacağınız şubeyi seçin:
+                      </p>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        {pickupBranches.map(br => {
+                          const isBrSelected = activeBranchId === br.id;
+                          return (
+                            <div 
+                              key={br.id}
+                              onClick={() => {
+                                setActiveBranchId(br.id);
+                                if (onSelectBranch) onSelectBranch(br.id);
+                              }}
+                              style={{
+                                padding: '12px 14px',
+                                borderRadius: '10px',
+                                border: isBrSelected ? '2px solid var(--color-burgundy)' : '1px solid #cbd5e1',
+                                backgroundColor: isBrSelected ? '#fff5f5' : '#ffffff',
+                                cursor: 'pointer',
+                                transition: 'all 0.2s',
+                                display: 'flex',
+                                alignItems: 'flex-start',
+                                gap: '10px'
+                              }}
+                            >
+                              <input 
+                                type="radio" 
+                                name="cart_pickup_branch" 
+                                checked={isBrSelected} 
+                                onChange={() => {}} 
+                                style={{ marginTop: '3px', accentColor: 'var(--color-burgundy)' }}
+                              />
+                              <div style={{ flexGrow: 1 }}>
+                                <div style={{ fontWeight: '800', fontSize: '13px', color: isBrSelected ? 'var(--color-burgundy)' : '#1e293b' }}>
+                                  {br.name}
+                                </div>
+                                <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px', lineHeight: '1.4' }}>
+                                  {br.address}
+                                </div>
+                              </div>
+                              <a 
+                                href={br.mapUrl} 
+                                target="_blank" 
+                                rel="noreferrer" 
+                                onClick={(e) => e.stopPropagation()} 
+                                style={{ fontSize: '11px', color: '#2563eb', fontWeight: 'bold', textDecoration: 'none', flexShrink: 0 }}
+                              >
+                                Harita ↗
+                              </a>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
                   )}
                 </div>
               </div>

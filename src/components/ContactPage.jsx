@@ -10,6 +10,30 @@ export default function ContactPage({ onGoToMenu }) {
     message: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const [selectedBranchTab, setSelectedBranchTab] = useState('saat-kulesi');
+
+  const branches = [
+    {
+      id: 'saat-kulesi',
+      title: 'Merkez Şube: Saat Kulesi',
+      badge: 'Ana Merkez',
+      address: 'Kemalpaşa Mah. Şair Ece Ayhan Meydanı No:9/A Saat Kulesi Karşısı Merkez / Çanakkale',
+      mapUrl: 'https://maps.google.com/maps?q=40.14917,26.40114(Di%20Napoli%20Pizza%20Saat%20Kulesi)&t=&z=18&ie=UTF8&iwloc=B&output=embed',
+      directionsUrl: 'https://maps.google.com/maps?q=40.14917,26.40114(Di%20Napoli%20Pizza%20Saat%20Kulesi)',
+      phones: ['+90 505 726 17 17', '0 286 212 50 51', '0 286 212 30 17', '0 286 212 32 76']
+    },
+    {
+      id: 'hamidiye',
+      title: 'Şube: Dinapolipizza Hamidiye',
+      badge: 'Yeni Şube',
+      address: 'Hamidiye Mh. Rauf Denktaş Cd. Sahra Sit. No: 1 B2 Blok Kepez / Çanakkale',
+      mapUrl: 'https://maps.google.com/maps?q=Hamidiye+Mahallesi+Rauf+Denkta%C5%9F+Caddesi+Sahra+Sitesi+No:1+Kepez+%C3%87anakkale&t=&z=16&ie=UTF8&iwloc=B&output=embed',
+      directionsUrl: 'https://www.google.com/maps/search/?api=1&query=Hamidiye+Mahallesi+Rauf+Denkta%C5%9F+Caddesi+Sahra+Sitesi+No:1+Kepez+%C3%87anakkale',
+      phones: ['+90 505 726 17 17', '0 286 212 50 51']
+    }
+  ];
+
+  const currentBranch = branches.find(b => b.id === selectedBranchTab) || branches[0];
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -27,62 +51,128 @@ export default function ContactPage({ onGoToMenu }) {
       <div style={{ display: 'flex', gap: '8px', fontSize: '12px', color: '#64748b', marginBottom: '24px' }}>
         <span style={{ cursor: 'pointer' }} onClick={onGoToMenu}>Ana Sayfa</span>
         <span>&gt;</span>
-        <span style={{ fontWeight: 'bold' }}>İletişim</span>
+        <span style={{ fontWeight: 'bold' }}>İletişim & Şubelerimiz</span>
       </div>
 
-      <h1 style={{ fontSize: '32px', fontWeight: '900', color: 'var(--color-burgundy)', marginBottom: '32px', textAlign: 'left' }}>
-        İletişime Geçin
+      <h1 style={{ fontSize: '32px', fontWeight: '900', color: 'var(--color-burgundy)', marginBottom: '24px', textAlign: 'left' }}>
+        Şubelerimiz & İletişim
       </h1>
 
+      {/* Main Grid */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
+        gridTemplateColumns: '1.2fr 1fr',
         gap: '40px',
         alignItems: 'start'
       }} className="contact-grid">
         
         {/* Left Side: Map & Address Info */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          
+          {/* Branch Selector Tabs */}
+          <div style={{ display: 'flex', gap: '10px', background: '#f1f5f9', padding: '6px', borderRadius: '14px' }}>
+            {branches.map(br => (
+              <button
+                key={br.id}
+                type="button"
+                onClick={() => setSelectedBranchTab(br.id)}
+                style={{
+                  flex: 1,
+                  padding: '12px 14px',
+                  borderRadius: '10px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontWeight: '800',
+                  fontSize: '13px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '6px',
+                  transition: 'all 0.2s',
+                  backgroundColor: selectedBranchTab === br.id ? 'var(--color-burgundy)' : 'transparent',
+                  color: selectedBranchTab === br.id ? 'white' : '#475569',
+                  boxShadow: selectedBranchTab === br.id ? '0 4px 12px rgba(139,0,0,0.2)' : 'none'
+                }}
+              >
+                <MapPin size={16} />
+                <span>{br.title}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Interactive Google Map */}
           <div style={{
             borderRadius: '16px',
             overflow: 'hidden',
             boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
             border: '1px solid #e2e8f0',
-            height: '420px'
+            height: '380px',
+            position: 'relative'
           }}>
             <iframe 
-              src="https://maps.google.com/maps?q=40.14917,26.40114(Di%20Napoli%20Pizza%20Saat%20Kulesi)&t=&z=18&ie=UTF8&iwloc=B&output=embed" 
+              src={currentBranch.mapUrl} 
               width="100%" 
               height="100%" 
               style={{ border: 0 }} 
               allowFullScreen="" 
               loading="lazy" 
               referrerPolicy="no-referrer-when-downgrade"
-              title="Di Napoli Pizza Saat Kulesi Şubesi"
+              title={currentBranch.title}
             ></iframe>
           </div>
 
-          {/* Quick contact tags */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', padding: '16px', backgroundColor: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px' }}>
-              <MapPin size={18} color="var(--color-burgundy)" />
-              <span>Kemalpaşa Mah. Şair Ece Ayhan Meydanı No:9/A Saat Kulesi Karşısı Merkez / Çanakkale</span>
+          {/* Quick contact tags for selected branch */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', padding: '20px', backgroundColor: '#f8fafc', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ fontWeight: '900', fontSize: '15px', color: 'var(--color-burgundy)' }}>
+                📍 {currentBranch.title}
+              </div>
+              <a
+                href={currentBranch.directionsUrl}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  backgroundColor: '#2563eb',
+                  color: 'white',
+                  textDecoration: 'none',
+                  fontSize: '11px',
+                  fontWeight: '800',
+                  padding: '6px 12px',
+                  borderRadius: '8px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  boxShadow: '0 2px 6px rgba(37,99,235,0.3)'
+                }}
+              >
+                🗺️ Yol Tarifi Al ↗
+              </a>
             </div>
+
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '13px', color: '#334155' }}>
+              <MapPin size={18} color="var(--color-burgundy)" style={{ flexShrink: 0, marginTop: '2px' }} />
+              <span style={{ lineHeight: '1.5' }}>{currentBranch.address}</span>
+            </div>
+
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '13px' }}>
               <Phone size={18} color="var(--color-burgundy)" style={{ flexShrink: 0, marginTop: '2px' }} />
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px 12px', fontWeight: 'bold' }}>
-                <a href="tel:+905057261717" style={{ color: 'var(--color-burgundy)', textDecoration: 'none' }}>+90 505 726 17 17</a>
-                <span style={{ color: '#cbd5e1' }}>•</span>
-                <a href="tel:02862125051" style={{ color: '#1e293b', textDecoration: 'none' }}>0 286 212 50 51</a>
-                <span style={{ color: '#cbd5e1' }}>•</span>
-                <a href="tel:02862123017" style={{ color: '#1e293b', textDecoration: 'none' }}>0 286 212 30 17</a>
-                <span style={{ color: '#cbd5e1' }}>•</span>
-                <a href="tel:02862123276" style={{ color: '#1e293b', textDecoration: 'none' }}>0 286 212 32 76</a>
+                {currentBranch.phones.map((phone, pIdx) => (
+                  <React.Fragment key={pIdx}>
+                    <a href={`tel:${phone.replace(/\s+/g, '')}`} style={{ color: pIdx === 0 ? 'var(--color-burgundy)' : '#1e293b', textDecoration: 'none' }}>
+                      {phone}
+                    </a>
+                    {pIdx < currentBranch.phones.length - 1 && <span style={{ color: '#cbd5e1' }}>•</span>}
+                  </React.Fragment>
+                ))}
               </div>
             </div>
+
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px' }}>
               <Mail size={18} color="var(--color-burgundy)" />
-              <span>dinapolipizza1997@gmail.com</span>
+              <a href="mailto:dinapolipizza1997@gmail.com" style={{ color: '#475569', textDecoration: 'none' }}>
+                dinapolipizza1997@gmail.com
+              </a>
             </div>
           </div>
         </div>

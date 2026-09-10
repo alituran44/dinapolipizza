@@ -60,6 +60,7 @@ export default function App() {
     }
   }); // 'menu', 'cart', 'referral', 'about', 'contact'
   const [deliveryMode, setDeliveryMode] = useState('delivery'); // 'delivery' or 'pickup'
+  const [selectedBranch, setSelectedBranch] = useState('saat-kulesi'); // 'saat-kulesi' or 'hamidiye'
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
   const [whatsAppNumber, setWhatsAppNumber] = useState(() => {
     try {
@@ -856,7 +857,7 @@ export default function App() {
             payment_method: paymentMethod === 'takeout' ? 'Gel-Al' : (paymentMethod === 'cash' ? 'Kapıda Nakit' : 'Kapıda Kredi Kartı'),
             total_amount: summary.total,
             items: itemsSummary,
-            branch: 'Saat Kulesi Şubesi',
+            branch: actualDeliveryMode === 'pickup' ? (selectedBranch === 'hamidiye' ? 'Dinapolipizza Hamidiye' : 'Dinapolipizza Saat Kulesi') : 'Dinapolipizza Saat Kulesi',
             timestamp: new Date().toISOString()
           })
         })
@@ -879,7 +880,7 @@ export default function App() {
               payment_method: paymentMethod === 'takeout' ? 'Gel-Al' : (paymentMethod === 'cash' ? 'Kapıda Nakit' : 'Kapıda Kredi Kartı'),
               total_amount: summary.total,
               items: itemsSummary,
-              branch: 'Saat Kulesi Şubesi',
+              branch: actualDeliveryMode === 'pickup' ? (selectedBranch === 'hamidiye' ? 'Dinapolipizza Hamidiye' : 'Dinapolipizza Saat Kulesi') : 'Dinapolipizza Saat Kulesi',
               timestamp: new Date().toISOString()
             })
           }).catch(httpErr => console.warn('Fly Kurye HTTP Fallback hatası:', httpErr));
@@ -1173,6 +1174,8 @@ export default function App() {
                 onClose={() => setCurrentPage('menu')}
                 deliveryMode={deliveryMode}
                 selectedAddress={address}
+                selectedBranch={selectedBranch}
+                onSelectBranch={(branchId) => setSelectedBranch(branchId)}
                 user={user}
                 onUpdateUserWallet={handleUpdateUserWallet}
                 userAddresses={userAddresses}
@@ -1238,6 +1241,8 @@ export default function App() {
             whatsAppCloudEndpoint={whatsAppCloudEndpoint}
             whatsAppIncludePhotos={whatsAppIncludePhotos}
             address={address}
+            selectedBranch={selectedBranch}
+            onSelectBranch={(branchId) => setSelectedBranch(branchId)}
           />
 
           {/* Kurye Sipariş Fişi Modalı */}
@@ -1266,8 +1271,9 @@ export default function App() {
             deliveryMode={deliveryMode}
             onChangeDeliveryMode={(mode) => setDeliveryMode(mode)}
             onSelectAddress={(addrText) => setAddress(addrText)}
-            onSelectBranch={(branchAddr) => {
+            onSelectBranch={(branchAddr, branchObj) => {
               setAddress(branchAddr);
+              setSelectedBranch(branchObj && branchObj.id === 'hamidiye' ? 'hamidiye' : 'saat-kulesi');
               setDeliveryMode('pickup');
             }}
           />

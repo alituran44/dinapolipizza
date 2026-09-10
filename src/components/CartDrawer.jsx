@@ -18,7 +18,9 @@ export default function CartDrawer({
   whatsAppToken = '',
   whatsAppCloudEndpoint = '',
   whatsAppIncludePhotos = true,
-  address = ''
+  address = '',
+  selectedBranch = 'saat-kulesi',
+  onSelectBranch
 }) {
   const [couponCode, setCouponCode] = useState('');
   const [discount, setDiscount] = useState(0);
@@ -111,12 +113,21 @@ export default function CartDrawer({
       productPhotosText = '\n' + photoLinks.join('\n');
     }
 
-    const deliveryMethodText = deliveryMode === 'delivery' ? 'Adrese Teslim 🚀' : 'Gel-Al (Şubeden) 🛍️';
+    const activeBranchName = selectedBranch && selectedBranch.includes('hamidiye') 
+      ? 'Dinapolipizza Hamidiye (Kepez)' 
+      : 'Dinapolipizza Saat Kulesi (Merkez)';
+    const activeBranchAddress = selectedBranch && selectedBranch.includes('hamidiye')
+      ? 'Hamidiye Mh. Rauf Denktaş Cd. Sahra Sit. No: 1 B2 Blok Kepez / Çanakkale'
+      : 'Kemalpaşa Mah. Şair Ece Ayhan Meydanı No:9/A Saat Kulesi Karşısı Merkez / Çanakkale';
+
+    const deliveryMethodText = deliveryMode === 'delivery' 
+      ? 'Adrese Teslim 🚀' 
+      : `Gel-Al (Şubeden) 🛍️ [${activeBranchName}]`;
     
     let messageText = whatsAppTemplate
       .replace('{sepet_detayi}', itemsSummary)
       .replace('{teslimat_tipi}', deliveryMethodText)
-      .replace('{adres_detayi}', address || 'Saat Kulesi Karşısı Merkez Şube')
+      .replace('{adres_detayi}', deliveryMode === 'delivery' ? (address || 'Saat Kulesi Karşısı Merkez Şube') : `${activeBranchAddress} (${activeBranchName})`)
       .replace('{toplam_tutar}', finalTotal)
       .replace('{urun_gorselleri}', productPhotosText || 'Fotoğraflar eklendi');
 
@@ -321,6 +332,48 @@ export default function CartDrawer({
                   <span>Ödenecek Tutar</span>
                   <span>{finalTotal} TL</span>
                 </div>
+
+                {deliveryMode === 'pickup' && (
+                  <div style={{ padding: '12px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0', marginTop: '10px', textAlign: 'left' }}>
+                    <div style={{ fontSize: '11px', fontWeight: '800', color: '#1e293b', marginBottom: '6px' }}>
+                      🛍️ Teslim Alınacak Şube:
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
+                      <button
+                        type="button"
+                        onClick={() => onSelectBranch && onSelectBranch('saat-kulesi')}
+                        style={{
+                          padding: '8px 6px',
+                          borderRadius: '8px',
+                          border: (!selectedBranch || selectedBranch.includes('saat-kulesi') || selectedBranch.includes('kordon') || selectedBranch.includes('MERKEZ')) ? '2px solid var(--color-burgundy)' : '1px solid #cbd5e1',
+                          background: (!selectedBranch || selectedBranch.includes('saat-kulesi') || selectedBranch.includes('kordon') || selectedBranch.includes('MERKEZ')) ? '#fff5f5' : 'white',
+                          fontWeight: 'bold',
+                          fontSize: '11px',
+                          color: (!selectedBranch || selectedBranch.includes('saat-kulesi') || selectedBranch.includes('kordon') || selectedBranch.includes('MERKEZ')) ? 'var(--color-burgundy)' : '#475569',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        Saat Kulesi (Merkez)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => onSelectBranch && onSelectBranch('hamidiye')}
+                        style={{
+                          padding: '8px 6px',
+                          borderRadius: '8px',
+                          border: (selectedBranch && selectedBranch.includes('hamidiye')) ? '2px solid var(--color-burgundy)' : '1px solid #cbd5e1',
+                          background: (selectedBranch && selectedBranch.includes('hamidiye')) ? '#fff5f5' : 'white',
+                          fontWeight: 'bold',
+                          fontSize: '11px',
+                          color: (selectedBranch && selectedBranch.includes('hamidiye')) ? 'var(--color-burgundy)' : '#475569',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        Hamidiye (Kepez)
+                      </button>
+                    </div>
+                  </div>
+                )}
 
                 {slicesGained > 0 && (
                   <div className="slices-alert">
