@@ -786,8 +786,21 @@ export default function App() {
       }).join(', ');
 
       const actualDeliveryMode = paymentMethod === 'takeout' ? 'pickup' : deliveryMode;
+      const isHamidiye = (actualDeliveryMode === 'pickup')
+        ? (selectedBranch && selectedBranch.includes('hamidiye'))
+        : ((selectedBranch && selectedBranch.includes('hamidiye')) || (address && (
+            address.toLowerCase().includes('kepez') || 
+            address.toLowerCase().includes('hamidiye')
+          )));
+      
+      const branchId = isHamidiye ? 'hamidiye' : 'saat-kulesi';
+      const branchName = isHamidiye ? 'Dinapolipizza Hamidiye (Kepez)' : 'Dinapolipizza Saat Kulesi (Merkez)';
+      const branchPhone = isHamidiye ? '0 505 640 17 35' : '+90 505 726 17 17';
+
       const actualAddress = actualDeliveryMode === 'pickup'
-        ? 'Kemalpaşa Mah. Şair Ece Ayhan Meydanı No:9/A Saat Kulesi Karşısı Merkez / Çanakkale'
+        ? (isHamidiye 
+            ? 'Hamidiye Mh. Rauf Denktaş Cd. Sahra Sit. No: 1 B2 Blok Kepez / Çanakkale' 
+            : 'Kemalpaşa Mah. Şair Ece Ayhan Meydanı No:9/A Saat Kulesi Karşısı Merkez / Çanakkale')
         : (address || 'Adres Girilmedi');
 
       const newOrder = {
@@ -795,11 +808,15 @@ export default function App() {
         itemsSummary,
         items: [...cart], // Sepetin o anki kopyasını siparişe ekle!
         deliveryMode: actualDeliveryMode,
+        branch: branchId,
+        branchName: branchName,
+        branchPhone: branchPhone,
         paymentMethod, // Seçilen ödeme yöntemini siparişe ekle!
         address: actualAddress,
         total: summary.total,
         slicesGained: summary.slicesGained,
-        status: '1' // Initial status: 'Sipariş Alındı'
+        status: '1', // Initial status: 'Sipariş Alındı'
+        createdAt: new Date().toISOString()
       };
 
       setOrders([...orders, newOrder]);
@@ -1351,15 +1368,15 @@ export default function App() {
 
           {/* Sağ Alt Köşe Yüzen WhatsApp Sipariş Butonu */}
           <a 
-            href={`https://api.whatsapp.com/send?phone=${whatsAppNumber}&text=${encodeURIComponent(
+            href={`https://api.whatsapp.com/send?phone=${selectedBranch === 'hamidiye' ? '905056401735' : whatsAppNumber}&text=${encodeURIComponent(
               cart.length > 0 
-                ? 'Merhaba Di Napoli! Sepetimdeki lezzetleri sipariş vermek istiyorum.' 
-                : 'Merhaba Di Napoli! Menünüz hakkında bilgi alabilir miyim?'
+                ? `Merhaba Di Napoli (${selectedBranch === 'hamidiye' ? 'Hamidiye Şubesi' : 'Saat Kulesi Merkez'})! Sepetimdeki lezzetleri sipariş vermek istiyorum.` 
+                : `Merhaba Di Napoli (${selectedBranch === 'hamidiye' ? 'Hamidiye Şubesi' : 'Saat Kulesi Merkez'})! Menünüz hakkında bilgi alabilir miyim?`
             )}`}
             target="_blank" 
             rel="noopener noreferrer" 
             className="whatsapp-floating-action-btn"
-            title="WhatsApp Sipariş Hattı"
+            title={`WhatsApp Sipariş Hattı (${selectedBranch === 'hamidiye' ? 'Hamidiye: 0505 640 17 35' : 'Saat Kulesi: 0505 726 17 17'})`}
             onClick={() => {
               if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
                 window.fbq('track', 'Contact', { content_name: 'WhatsApp Floating Button' });

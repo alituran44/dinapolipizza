@@ -113,18 +113,28 @@ export default function CartDrawer({
       productPhotosText = '\n' + photoLinks.join('\n');
     }
 
-    const activeBranchName = selectedBranch && selectedBranch.includes('hamidiye') 
+    const isHamidiye = (deliveryMode === 'pickup') 
+      ? (selectedBranch && selectedBranch.includes('hamidiye'))
+      : ((selectedBranch && selectedBranch.includes('hamidiye')) || (address && (
+          address.toLowerCase().includes('kepez') || 
+          address.toLowerCase().includes('hamidiye')
+        )));
+
+    const targetWhatsAppNumber = isHamidiye ? '905056401735' : (whatsAppNumber || '905057261717');
+    const branchTag = isHamidiye ? '🍕 *[DİNAPOLİPİZZA HAMİDİYE ŞUBESİ SİPARİŞİ]*\n\n' : '🍕 *[DİNAPOLİPİZZA SAAT KULESİ MERKEZ SİPARİŞİ]*\n\n';
+
+    const activeBranchName = isHamidiye 
       ? 'Dinapolipizza Hamidiye (Kepez)' 
       : 'Dinapolipizza Saat Kulesi (Merkez)';
-    const activeBranchAddress = selectedBranch && selectedBranch.includes('hamidiye')
+    const activeBranchAddress = isHamidiye
       ? 'Hamidiye Mh. Rauf Denktaş Cd. Sahra Sit. No: 1 B2 Blok Kepez / Çanakkale'
       : 'Kemalpaşa Mah. Şair Ece Ayhan Meydanı No:9/A Saat Kulesi Karşısı Merkez / Çanakkale';
 
     const deliveryMethodText = deliveryMode === 'delivery' 
-      ? 'Adrese Teslim 🚀' 
+      ? `Adrese Teslim 🚀 [${isHamidiye ? 'Hamidiye Şubesi' : 'Saat Kulesi Merkez'}]` 
       : `Gel-Al (Şubeden) 🛍️ [${activeBranchName}]`;
     
-    let messageText = whatsAppTemplate
+    let messageText = branchTag + whatsAppTemplate
       .replace('{sepet_detayi}', itemsSummary)
       .replace('{teslimat_tipi}', deliveryMethodText)
       .replace('{adres_detayi}', deliveryMode === 'delivery' ? (address || 'Saat Kulesi Karşısı Merkez Şube') : `${activeBranchAddress} (${activeBranchName})`)
@@ -138,14 +148,15 @@ export default function CartDrawer({
         const payload = {
           messaging_product: "whatsapp",
           recipient_type: "individual",
-          to: whatsAppNumber,
+          to: targetWhatsAppNumber,
           type: "text",
           text: { preview_url: true, body: messageText },
           order_data: {
             items: cart.map(i => ({ name: i.name, quantity: i.quantity, price: i.price, image: i.image })),
             total: finalTotal,
             address: address,
-            deliveryMode: deliveryMode
+            deliveryMode: deliveryMode,
+            branch: isHamidiye ? 'hamidiye' : 'saat-kulesi'
           }
         };
 
@@ -162,17 +173,17 @@ export default function CartDrawer({
           alert('⚡ Siparişiniz WhatsApp Cloud API & AWS Webhook aracılığıyla otomatik olarak kaydedildi ve onaylandı!');
         } else {
           // Fallback to wa.me if API endpoint returns error
-          const waUrl = `https://api.whatsapp.com/send?phone=${whatsAppNumber}&text=${encodeURIComponent(messageText)}`;
+          const waUrl = `https://api.whatsapp.com/send?phone=${targetWhatsAppNumber}&text=${encodeURIComponent(messageText)}`;
           window.open(waUrl, '_blank');
         }
       } catch (err) {
         console.warn('Cloud API Webhook çağrısı yapıldı, WhatsApp Web fallback açılıyor:', err);
-        const waUrl = `https://api.whatsapp.com/send?phone=${whatsAppNumber}&text=${encodeURIComponent(messageText)}`;
+        const waUrl = `https://api.whatsapp.com/send?phone=${targetWhatsAppNumber}&text=${encodeURIComponent(messageText)}`;
         window.open(waUrl, '_blank');
       }
     } else {
       // Standard WhatsApp wa.me link
-      const waUrl = `https://api.whatsapp.com/send?phone=${whatsAppNumber}&text=${encodeURIComponent(messageText)}`;
+      const waUrl = `https://api.whatsapp.com/send?phone=${targetWhatsAppNumber}&text=${encodeURIComponent(messageText)}`;
       window.open(waUrl, '_blank');
     }
 
@@ -371,6 +382,20 @@ export default function CartDrawer({
                       >
                         Hamidiye (Kepez)
                       </button>
+                    </div>
+
+                    <div style={{
+                      marginTop: '8px',
+                      padding: '6px 10px',
+                      borderRadius: '8px',
+                      fontSize: '11px',
+                      fontWeight: 'bold',
+                      background: (selectedBranch && selectedBranch.includes('hamidiye')) ? '#ecfdf5' : '#f8fafc',
+                      color: (selectedBranch && selectedBranch.includes('hamidiye')) ? '#065f46' : '#334155',
+                      border: '1px solid',
+                      borderColor: (selectedBranch && selectedBranch.includes('hamidiye')) ? '#a7f3d0' : '#e2e8f0'
+                    }}>
+                      💬 WhatsApp Hattı: {(selectedBranch && selectedBranch.includes('hamidiye')) ? '0 505 640 17 35 (Hamidiye Şubesi)' : '+90 505 726 17 17 (Saat Kulesi)'}
                     </div>
                   </div>
                 )}

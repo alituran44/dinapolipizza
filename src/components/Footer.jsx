@@ -93,7 +93,8 @@ export default function Footer({ onGoToAbout, onGoToContact, onAdminClick }) {
           <div className="footer-column">
             <h4>Sipariş Telefonlarımız</h4>
             <ul className="footer-phone-list">
-              <li><a href="tel:+905057261717" className="bold text-gold">📞 +90 505 726 17 17</a></li>
+              <li><a href="tel:+905057261717" className="bold text-gold">📞 Saat Kulesi: +90 505 726 17 17</a></li>
+              <li><a href="tel:05056401735" className="bold text-gold">📞 Hamidiye: 0 505 640 17 35</a></li>
               <li><a href="tel:02862125051">☎ 0 286 212 50 51</a></li>
               <li><a href="tel:02862123017">☎ 0 286 212 30 17</a></li>
               <li><a href="tel:02862123276">☎ 0 286 212 32 76</a></li>
@@ -111,14 +112,19 @@ export default function Footer({ onGoToAbout, onGoToContact, onAdminClick }) {
                 <p style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.75)', margin: '0 0 4px 20px', lineHeight: '1.4' }}>
                   Kemalpaşa Mah. Şair Ece Ayhan Meydanı No:9/A Saat Kulesi Karşısı Merkez / Çanakkale
                 </p>
-                <a 
-                  href="https://maps.google.com/maps?q=40.14917,26.40114(Di%20Napoli%20Pizza%20Saat%20Kulesi)" 
-                  target="_blank" 
-                  rel="noreferrer"
-                  style={{ fontSize: '11px', color: '#60a5fa', textDecoration: 'none', marginLeft: '20px', display: 'inline-flex', alignItems: 'center', gap: '4px', fontWeight: 'bold' }}
-                >
-                  Haritada Gör ↗
-                </a>
+                <div style={{ marginLeft: '20px', display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+                  <a href="tel:+905057261717" style={{ fontSize: '11px', color: '#ffb703', textDecoration: 'none', fontWeight: 'bold' }}>
+                    📞 +90 505 726 17 17
+                  </a>
+                  <a 
+                    href="https://maps.google.com/maps?q=40.14917,26.40114(Di%20Napoli%20Pizza%20Saat%20Kulesi)" 
+                    target="_blank" 
+                    rel="noreferrer"
+                    style={{ fontSize: '11px', color: '#60a5fa', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px', fontWeight: 'bold' }}
+                  >
+                    Haritada Gör ↗
+                  </a>
+                </div>
               </li>
 
               <li style={{ marginBottom: '12px' }}>
@@ -129,14 +135,19 @@ export default function Footer({ onGoToAbout, onGoToContact, onAdminClick }) {
                 <p style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.75)', margin: '0 0 4px 20px', lineHeight: '1.4' }}>
                   Hamidiye Mh. Rauf Denktaş Cd. Sahra Sit. No: 1 B2 Blok Kepez / Çanakkale
                 </p>
-                <a 
-                  href="https://www.google.com/maps/search/?api=1&query=Hamidiye+Mahallesi+Rauf+Denkta%C5%9F+Caddesi+Sahra+Sitesi+No:1+Kepez+%C3%87anakkale" 
-                  target="_blank" 
-                  rel="noreferrer"
-                  style={{ fontSize: '11px', color: '#60a5fa', textDecoration: 'none', marginLeft: '20px', display: 'inline-flex', alignItems: 'center', gap: '4px', fontWeight: 'bold' }}
-                >
-                  Haritada Gör ↗
-                </a>
+                <div style={{ marginLeft: '20px', display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+                  <a href="tel:05056401735" style={{ fontSize: '11px', color: '#ffb703', textDecoration: 'none', fontWeight: 'bold' }}>
+                    📞 0 505 640 17 35
+                  </a>
+                  <a 
+                    href="https://www.google.com/maps/search/?api=1&query=Hamidiye+Mahallesi+Rauf+Denkta%C5%9F+Caddesi+Sahra+Sitesi+No:1+Kepez+%C3%87anakkale" 
+                    target="_blank" 
+                    rel="noreferrer"
+                    style={{ fontSize: '11px', color: '#60a5fa', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px', fontWeight: 'bold' }}
+                  >
+                    Haritada Gör ↗
+                  </a>
+                </div>
               </li>
 
               <li style={{ marginTop: '6px' }}>

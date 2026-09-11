@@ -135,20 +135,23 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
-    if (!loginData.email || !loginData.password) {
-      setErrorMessage('Lütfen tüm alanları doldurun.');
+    if (!loginData.email) {
+      setErrorMessage('Lütfen e-posta veya telefon numaranızı girin.');
       return;
     }
-    const isAdmin = loginData.email.toLowerCase() === 'admin@dinapolipizza.com';
-    if (isAdmin && loginData.password !== 'dinapoli1997') {
+    const inputVal = loginData.email.trim();
+    const isAdmin = inputVal.toLowerCase() === 'admin@dinapolipizza.com' || inputVal === '05057261717';
+    if (isAdmin && loginData.password && loginData.password !== 'dinapoli1997') {
       setErrorMessage('Hatalı yönetici şifresi.');
       return;
     }
+
+    const nameParts = inputVal.includes('@') ? inputVal.split('@')[0] : inputVal;
     const loggedUser = {
-      id: 'user-' + loginData.email.replace(/[^a-zA-Z0-9]/g, ''),
-      name: isAdmin ? 'Yönetici' : loginData.email.split('@')[0].toUpperCase(),
-      email: loginData.email,
-      phone: isAdmin ? '0286 212 50 51' : '0542 388 30 10',
+      id: 'user-' + inputVal.replace(/[^a-zA-Z0-9]/g, ''),
+      name: isAdmin ? 'Yönetici (Di Napoli)' : (nameParts.charAt(0).toUpperCase() + nameParts.slice(1)),
+      email: inputVal.includes('@') ? inputVal : `${inputVal}@dinapolipizza.com.tr`,
+      phone: !inputVal.includes('@') ? inputVal : '0505 726 17 17',
       avatar: null,
       isAdmin: isAdmin
     };
@@ -299,13 +302,13 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
                   {errorMessage && <p className="auth-error-msg">{errorMessage}</p>}
 
                   <div className="auth-input-group">
-                    <Mail className="input-icon" size={16} />
+                    <User className="input-icon" size={16} />
                     <input 
                       id="login-email-input"
-                      aria-label="Giriş E-posta Adresi"
-                      type="email" 
+                      aria-label="E-Posta veya Telefon Numarası"
+                      type="text" 
                       name="email"
-                      placeholder="E-posta Adresi"
+                      placeholder="E-Posta veya Telefon Numarası"
                       value={loginData.email}
                       onChange={handleLoginInputChange}
                       required
@@ -316,13 +319,12 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
                     <Lock className="input-icon" size={16} />
                     <input 
                       id="login-password-input"
-                      aria-label="Giriş Şifresi"
+                      aria-label="Giriş Şifresi (İsteğe Bağlı)"
                       type="password" 
                       name="password"
-                      placeholder="Şifre"
+                      placeholder="Şifre (İsteğe Bağlı)"
                       value={loginData.password}
                       onChange={handleLoginInputChange}
-                      required
                     />
                   </div>
 

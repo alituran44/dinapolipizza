@@ -264,8 +264,8 @@
       {
         "id": "arkadas_menu",
         "name": "Arkadaş Menü",
-        "price": 575,
-        "basePrice": 575,
+        "price": 875,
+        "basePrice": 875,
         "description": "2 Small Pizza Alana 1 Coca-Cola BEDAVA!",
         "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80",
         "category": "campaigns"
@@ -648,6 +648,38 @@
         "description": "Eriyen peynir dolgulu mozzarella çubukları",
         "image": "https://www.dinapolipizza.com.tr/citir_mozzarella.png",
         "category": "drinks"
+      }
+    ],
+    "soslar": [
+      {
+        "id": "sos-ketchup",
+        "category": "soslar",
+        "name": "Paket Ketçap",
+        "description": "Ekstra lezzet katan paket ketçap",
+        "price": 10,
+        "image": "sos_ketchup.png",
+        "popular": false,
+        "customizable": false
+      },
+      {
+        "id": "sos-mayo",
+        "category": "soslar",
+        "name": "Paket Mayonez",
+        "description": "Kremamsı ve leziz paket mayonez",
+        "price": 10,
+        "image": "sos_mayo.png",
+        "popular": false,
+        "customizable": false
+      },
+      {
+        "id": "sos-aci",
+        "category": "soslar",
+        "name": "Paket Acı Sos",
+        "description": "Acı severlere usta acı sos",
+        "price": 10,
+        "image": "sos_aci.png",
+        "popular": true,
+        "customizable": false
       }
     ]
   }

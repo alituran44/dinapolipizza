@@ -29,7 +29,7 @@ export default function ContactPage({ onGoToMenu }) {
       address: 'Hamidiye Mh. Rauf Denktaş Cd. Sahra Sit. No: 1 B2 Blok Kepez / Çanakkale',
       mapUrl: 'https://maps.google.com/maps?q=Hamidiye+Mahallesi+Rauf+Denkta%C5%9F+Caddesi+Sahra+Sitesi+No:1+Kepez+%C3%87anakkale&t=&z=16&ie=UTF8&iwloc=B&output=embed',
       directionsUrl: 'https://www.google.com/maps/search/?api=1&query=Hamidiye+Mahallesi+Rauf+Denkta%C5%9F+Caddesi+Sahra+Sitesi+No:1+Kepez+%C3%87anakkale',
-      phones: ['+90 505 726 17 17', '0 286 212 50 51']
+      phones: ['0 505 640 17 35', '0 286 212 50 51']
     }
   ];
 

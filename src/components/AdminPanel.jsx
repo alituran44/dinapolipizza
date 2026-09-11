@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { 
   Trash2, Edit, Plus, DollarSign, ClipboardList, 
   Settings, LogOut, LayoutDashboard, PlusCircle, Check,
-  Flame, Layers, Database, User
+  Flame, Layers, Database, User,
+  Building2, Store, MapPin, Phone, ExternalLink, Filter, CheckCircle2, Clock
 } from 'lucide-react';
 import { CATEGORIES } from '../data/products';
 
@@ -10,7 +11,7 @@ export default function AdminPanel({
   products, 
   onAddProduct, 
   onDeleteProduct, 
-  onUpdateProduct,
+  onUpdateProduct, 
   onResetDatabase,
   orders,
   onUpdateOrderStatus,
@@ -57,7 +58,20 @@ export default function AdminPanel({
   
   onClose 
 }) {
-  const [activeTab, setActiveTab] = useState('orders'); // 'orders', 'products', 'dough-crust', 'ingredients', 'dashboard', 'announcement'
+  const [activeTab, setActiveTab] = useState(() => {
+    try {
+      if (typeof window !== 'undefined') {
+        const hash = window.location.hash;
+        if (hash.includes('hamidiye')) return 'branch-hamidiye';
+        if (hash.includes('saatkulesi') || hash.includes('saat-kulesi')) return 'branch-saat-kulesi';
+      }
+    } catch (e) {}
+    return 'branch-saat-kulesi';
+  });
+
+  // Branch filter states
+  const [branchOrdersFilter, setBranchOrdersFilter] = useState('all'); // 'all', 'saat-kulesi', 'hamidiye'
+  const [branchSubStatusFilter, setBranchSubStatusFilter] = useState('all'); // 'all', 'active', 'completed'
 
   // WhatsApp states
   const [whatsAppNumberInput, setWhatsAppNumberInput] = useState(whatsAppNumber);
@@ -172,9 +186,222 @@ export default function AdminPanel({
   const [newCrust, setNewCrust] = useState({ name: '', price: '' });
   const [newIngredient, setNewIngredient] = useState({ name: '', price: '' });
 
-  // Stats calculation
-  const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
+  // Branch configurations
+  const BRANCHES = {
+    'saat-kulesi': {
+      id: 'saat-kulesi',
+      name: 'Saat Kulesi (Merkez)',
+      title: 'Saat Kulesi Şubesi Paneli',
+      fullName: 'Dinapolipizza Saat Kulesi (Merkez Şube)',
+      address: 'Kemalpaşa Mah. Şair Ece Ayhan Meydanı No:9/A Saat Kulesi Karşısı Merkez / Çanakkale',
+      phone: '+90 505 726 17 17',
+      landline: '0 286 212 50 51',
+      mapUrl: 'https://maps.google.com/maps?q=40.14917,26.40114(Di%20Napoli%20Pizza%20Saat%20Kulesi)',
+      badgeColor: '#8B0000',
+      badgeBg: '#fff5f5',
+      accentColor: '#b91c1c'
+    },
+    'hamidiye': {
+      id: 'hamidiye',
+      name: 'Hamidiye (Kepez)',
+      title: 'Hamidiye Şubesi Paneli',
+      fullName: 'Dinapolipizza Hamidiye Şubesi',
+      address: 'Hamidiye Mh. Rauf Denktaş Cd. Sahra Sit. No: 1 B2 Blok Kepez / Çanakkale',
+      phone: '0 505 640 17 35',
+      landline: '0 286 212 50 51',
+      mapUrl: 'https://www.google.com/maps/search/?api=1&query=Hamidiye+Mahallesi+Rauf+Denkta%C5%9F+Caddesi+Sahra+Sitesi+No:1+Kepez+%C3%87anakkale',
+      badgeColor: '#047857',
+      badgeBg: '#ecfdf5',
+      accentColor: '#059669'
+    }
+  };
+
+  // Helper to determine which branch an order belongs to
+  const getOrderBranch = (order) => {
+    if (order.branch === 'hamidiye') return 'hamidiye';
+    if (order.branch === 'saat-kulesi' || order.branch === 'kordon') return 'saat-kulesi';
+
+    const text = `${order.branchName || ''} ${order.address || ''} ${order.itemsSummary || ''}`.toLowerCase();
+    if (text.includes('hamidiye') || text.includes('kepez') || text.includes('rauf denktaş')) {
+      return 'hamidiye';
+    }
+    return 'saat-kulesi';
+  };
+
+  // Branch partitioned orders
+  const saatKulesiOrders = orders.filter(o => getOrderBranch(o) === 'saat-kulesi');
+  const hamidiyeOrders = orders.filter(o => getOrderBranch(o) === 'hamidiye');
+
+  const saatKulesiActive = saatKulesiOrders.filter(o => o.status !== 'completed');
+  const hamidiyeActive = hamidiyeOrders.filter(o => o.status !== 'completed');
+
+  const saatKulesiRevenue = saatKulesiOrders.reduce((sum, o) => sum + (Number(o.total) || 0), 0);
+  const hamidiyeRevenue = hamidiyeOrders.reduce((sum, o) => sum + (Number(o.total) || 0), 0);
+  const totalActiveOrders = orders.filter(o => o.status !== 'completed').length;
+
+  // Overall Stats calculation
+  const totalRevenue = orders.reduce((sum, order) => sum + (Number(order.total) || 0), 0);
   const totalOrdersCount = orders.length;
+
+  const renderOrdersTable = (ordersToRender, showBranchColumn = false, emptyMessage = "Henüz sipariş bulunmuyor.") => {
+    if (!ordersToRender || ordersToRender.length === 0) {
+      return (
+        <div className="admin-empty-state">
+          <ClipboardList size={48} />
+          <h3>Sipariş Bulunamadı</h3>
+          <p>{emptyMessage}</p>
+        </div>
+      );
+    }
+
+    return (
+      <table className="admin-table">
+        <thead>
+          <tr>
+            <th>Sipariş Kodu</th>
+            {showBranchColumn && <th>Şube</th>}
+            <th>Seçilen Ürünler / Özelleştirmeler</th>
+            <th>Teslimat Tipi</th>
+            <th>Toplam Tutar</th>
+            <th>Sipariş Durumu</th>
+            <th>Aksiyon</th>
+          </tr>
+        </thead>
+        <tbody>
+          {ordersToRender.slice().reverse().map((order) => {
+            const branchKey = getOrderBranch(order);
+            const branchCfg = BRANCHES[branchKey] || BRANCHES['saat-kulesi'];
+            return (
+              <tr key={order.id}>
+                <td className="bold">{order.id}</td>
+                {showBranchColumn && (
+                  <td>
+                    <span 
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '5px',
+                        padding: '4px 8px',
+                        borderRadius: '6px',
+                        fontSize: '11px',
+                        fontWeight: '800',
+                        color: branchCfg.badgeColor,
+                        backgroundColor: branchCfg.badgeBg,
+                        border: `1px solid ${branchCfg.badgeColor}33`
+                      }}
+                    >
+                      {branchKey === 'hamidiye' ? <Store size={12} /> : <Building2 size={12} />}
+                      {branchCfg.name}
+                    </span>
+                  </td>
+                )}
+                <td>
+                  <div className="order-details-summary" style={{ fontSize: '13px', maxWidth: '380px' }}>
+                    {order.itemsSummary}
+                  </div>
+                  {order.address && (
+                    <div style={{ fontSize: '11px', color: '#64748b', marginTop: '4px' }}>
+                      📍 {order.address}
+                    </div>
+                  )}
+                  {order.notes && (
+                    <div style={{ fontSize: '11px', color: '#b45309', marginTop: '2px', fontStyle: 'italic' }}>
+                      📝 Not: {order.notes}
+                    </div>
+                  )}
+                </td>
+                <td>
+                  <span className={`pill-type ${order.deliveryMode}`}>
+                    {order.deliveryMode === 'delivery' ? 'Adrese Teslim' : 'Gel-Al'}
+                  </span>
+                </td>
+                <td className="bold text-red">
+                  {editingOrderId === order.id ? (
+                    <input 
+                      type="number" 
+                      value={editingPrice}
+                      onChange={(e) => setEditingPrice(e.target.value)}
+                      style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '12px', color: '#1e293b', fontWeight: 'bold' }}
+                    />
+                  ) : (
+                    `${order.total} TL`
+                  )}
+                </td>
+                <td>
+                  <select 
+                    className="status-selector"
+                    value={order.status}
+                    onChange={(e) => onUpdateOrderStatus(order.id, e.target.value)}
+                  >
+                    <option value="1">1. Sipariş Alındı</option>
+                    <option value="2">2. Hazırlanıyor</option>
+                    <option value="3">3. Fırında</option>
+                    <option value="4">4. Paketleniyor</option>
+                    <option value="5">5. Yola Çıktı / Hazır</option>
+                    <option value="completed">✔ Tamamlandı</option>
+                  </select>
+                </td>
+                <td>
+                  <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                    {editingOrderId === order.id ? (
+                      <>
+                        <button 
+                          onClick={() => {
+                            onUpdateOrderTotal(order.id, Number(editingPrice));
+                            setEditingOrderId(null);
+                          }}
+                          style={{ padding: '6px 10px', backgroundColor: '#22c55e', color: 'white', borderRadius: '4px', border: 'none', cursor: 'pointer', fontSize: '11px', fontWeight: 'bold' }}
+                        >
+                          Kaydet
+                        </button>
+                        <button 
+                          onClick={() => setEditingOrderId(null)}
+                          style={{ padding: '6px 10px', backgroundColor: '#64748b', color: 'white', borderRadius: '4px', border: 'none', cursor: 'pointer', fontSize: '11px', fontWeight: 'bold' }}
+                        >
+                          İptal
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button 
+                          className="action-btn edit" 
+                          onClick={() => onShowSlip(order)}
+                          title="Kurye Fişini Yazdır"
+                          style={{ padding: '6px 10px', backgroundColor: 'var(--color-dark-blue)', color: 'white', borderRadius: '4px', border: 'none', cursor: 'pointer', fontSize: '11px', fontWeight: '800' }}
+                        >
+                          Fiş Yazdır
+                        </button>
+                        <button 
+                          onClick={() => {
+                            setEditingOrderId(order.id);
+                            setEditingPrice(order.total);
+                          }}
+                          style={{ padding: '6px 10px', backgroundColor: '#e2e8f0', color: '#1e293b', borderRadius: '4px', border: '1px solid #cbd5e1', cursor: 'pointer', fontSize: '11px', fontWeight: 'bold' }}
+                        >
+                          Düzenle
+                        </button>
+                        <button 
+                          onClick={() => {
+                            if (window.confirm("Bu siparişi silmek istediğinize emin misiniz?")) {
+                              onDeleteOrder(order.id);
+                            }
+                          }}
+                          style={{ padding: '6px 10px', backgroundColor: '#ef4444', color: 'white', borderRadius: '4px', border: 'none', cursor: 'pointer', fontSize: '11px', fontWeight: 'bold' }}
+                        >
+                          Sil
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    );
+  };
+
 
   const handleAddSubmit = (e) => {
     e.preventDefault();
@@ -314,18 +541,53 @@ export default function AdminPanel({
         </div>
         
         <nav className="admin-nav">
+          {/* ŞUBE PANELLERİ */}
+          <div style={{ padding: '6px 16px 4px', fontSize: '10px', fontWeight: '900', textTransform: 'uppercase', color: '#94a3b8', letterSpacing: '0.06em' }}>
+            Şube Panelleri
+          </div>
+
+          <button 
+            className={`admin-nav-item ${activeTab === 'branch-saat-kulesi' ? 'active' : ''}`}
+            onClick={() => setActiveTab('branch-saat-kulesi')}
+          >
+            <Building2 size={18} />
+            <span>Saat Kulesi Paneli</span>
+            {saatKulesiActive.length > 0 && (
+              <span className="orders-count-badge" style={{ backgroundColor: '#b91c1c' }}>
+                {saatKulesiActive.length}
+              </span>
+            )}
+          </button>
+          
+          <button 
+            className={`admin-nav-item ${activeTab === 'branch-hamidiye' ? 'active' : ''}`}
+            onClick={() => setActiveTab('branch-hamidiye')}
+          >
+            <Store size={18} />
+            <span>Hamidiye Paneli</span>
+            {hamidiyeActive.length > 0 && (
+              <span className="orders-count-badge" style={{ backgroundColor: '#059669' }}>
+                {hamidiyeActive.length}
+              </span>
+            )}
+          </button>
+
           <button 
             className={`admin-nav-item ${activeTab === 'orders' ? 'active' : ''}`}
             onClick={() => setActiveTab('orders')}
           >
             <ClipboardList size={18} />
-            <span>Gelen Siparişler</span>
-            {orders.filter(o => o.status !== 'completed').length > 0 && (
+            <span>Tüm Siparişler</span>
+            {totalActiveOrders > 0 && (
               <span className="orders-count-badge">
-                {orders.filter(o => o.status !== 'completed').length}
+                {totalActiveOrders}
               </span>
             )}
           </button>
+
+          <div style={{ padding: '12px 16px 4px', fontSize: '10px', fontWeight: '900', textTransform: 'uppercase', color: '#94a3b8', letterSpacing: '0.06em' }}>
+            Yönetim & Menü
+          </div>
           
           <button 
             className={`admin-nav-item ${activeTab === 'products' ? 'active' : ''}`}
@@ -391,130 +653,575 @@ export default function AdminPanel({
       {/* Main Content */}
       <main className="admin-main">
         
-        {/* Tab 1: Orders */}
-        {activeTab === 'orders' && (
-          <div className="admin-tab-content">
-            <h2 className="admin-tab-title">Gelen Siparişler</h2>
-            <div className="orders-list-panel">
-              {orders.length === 0 ? (
-                <div className="admin-empty-state">
-                  <ClipboardList size={48} />
-                  <h3>Henüz Sipariş Alınmadı</h3>
-                  <p>Müşteri siparişleri anlık olarak burada listelenecektir.</p>
+        {/* Tab: Branch Panels (Saat Kulesi & Hamidiye) */}
+        {(activeTab === 'branch-saat-kulesi' || activeTab === 'branch-hamidiye') && (() => {
+          const branchKey = activeTab === 'branch-hamidiye' ? 'hamidiye' : 'saat-kulesi';
+          const branch = BRANCHES[branchKey];
+          const branchOrdersList = branchKey === 'hamidiye' ? hamidiyeOrders : saatKulesiOrders;
+          const branchActiveList = branchOrdersList.filter(o => o.status !== 'completed');
+          const branchCompletedList = branchOrdersList.filter(o => o.status === 'completed');
+          const branchRev = branchKey === 'hamidiye' ? hamidiyeRevenue : saatKulesiRevenue;
+
+          const filteredBranchOrders = branchSubStatusFilter === 'active' 
+            ? branchActiveList 
+            : branchSubStatusFilter === 'completed'
+            ? branchCompletedList
+            : branchOrdersList;
+
+          const cleanPhone = branch.phone.replace(/[^0-9]/g, '');
+
+          return (
+            <div className="admin-tab-content">
+              {/* Top Branch Navigation Switcher */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '12px',
+                marginBottom: '20px',
+                padding: '12px 16px',
+                backgroundColor: '#ffffff',
+                borderRadius: '12px',
+                border: '1px solid #e2e8f0',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                  <span style={{ fontSize: '12px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    Hızlı Şube Değiştir:
+                  </span>
+                  <button
+                    onClick={() => setActiveTab('branch-saat-kulesi')}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      padding: '6px 14px',
+                      borderRadius: '8px',
+                      fontSize: '12px',
+                      fontWeight: '800',
+                      border: 'none',
+                      cursor: 'pointer',
+                      backgroundColor: branchKey === 'saat-kulesi' ? '#8B0000' : '#f1f5f9',
+                      color: branchKey === 'saat-kulesi' ? '#ffffff' : '#475569',
+                      boxShadow: branchKey === 'saat-kulesi' ? '0 2px 6px rgba(139,0,0,0.3)' : 'none'
+                    }}
+                  >
+                    <Building2 size={14} />
+                    Saat Kulesi ({saatKulesiActive.length})
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('branch-hamidiye')}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      padding: '6px 14px',
+                      borderRadius: '8px',
+                      fontSize: '12px',
+                      fontWeight: '800',
+                      border: 'none',
+                      cursor: 'pointer',
+                      backgroundColor: branchKey === 'hamidiye' ? '#047857' : '#f1f5f9',
+                      color: branchKey === 'hamidiye' ? '#ffffff' : '#475569',
+                      boxShadow: branchKey === 'hamidiye' ? '0 2px 6px rgba(4,120,87,0.3)' : 'none'
+                    }}
+                  >
+                    <Store size={14} />
+                    Hamidiye ({hamidiyeActive.length})
+                  </button>
                 </div>
-              ) : (
-                <table className="admin-table">
-                  <thead>
-                    <tr>
-                      <th>Sipariş Kodu</th>
-                      <th>Seçilen Ürünler / Özelleştirmeler</th>
-                      <th>Teslimat Tipi</th>
-                      <th>Toplam Tutar</th>
-                      <th>Sipariş Durumu</th>
-                      <th>Aksiyon</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {orders.slice().reverse().map((order) => (
-                      <tr key={order.id}>
-                        <td className="bold">{order.id}</td>
-                        <td>
-                          <div className="order-details-summary" style={{ fontSize: '13px', maxWidth: '380px' }}>
-                            {order.itemsSummary}
-                          </div>
-                        </td>
-                        <td>
-                          <span className={`pill-type ${order.deliveryMode}`}>
-                            {order.deliveryMode === 'delivery' ? 'Adrese Teslim' : 'Gel-Al'}
-                          </span>
-                        </td>
-                        <td className="bold text-red">
-                          {editingOrderId === order.id ? (
-                            <input 
-                              type="number" 
-                              value={editingPrice}
-                              onChange={(e) => setEditingPrice(e.target.value)}
-                              style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '12px', color: '#1e293b', fontWeight: 'bold' }}
-                            />
-                          ) : (
-                            `${order.total} TL`
-                          )}
-                        </td>
-                        <td>
-                          <select 
-                            className="status-selector"
-                            value={order.status}
-                            onChange={(e) => onUpdateOrderStatus(order.id, e.target.value)}
-                          >
-                            <option value="1">1. Sipariş Alındı</option>
-                            <option value="2">2. Hazırlanıyor</option>
-                            <option value="3">3. Fırında</option>
-                            <option value="4">4. Paketleniyor</option>
-                            <option value="5">5. Yola Çıktı / Hazır</option>
-                            <option value="completed">✔ Tamamlandı</option>
-                          </select>
-                        </td>
-                        <td>
-                          <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-                            {editingOrderId === order.id ? (
-                              <>
-                                <button 
-                                  onClick={() => {
-                                    onUpdateOrderTotal(order.id, Number(editingPrice));
-                                    setEditingOrderId(null);
-                                  }}
-                                  style={{ padding: '6px 10px', backgroundColor: '#22c55e', color: 'white', borderRadius: '4px', border: 'none', cursor: 'pointer', fontSize: '11px', fontWeight: 'bold' }}
-                                >
-                                  Kaydet
-                                </button>
-                                <button 
-                                  onClick={() => setEditingOrderId(null)}
-                                  style={{ padding: '6px 10px', backgroundColor: '#64748b', color: 'white', borderRadius: '4px', border: 'none', cursor: 'pointer', fontSize: '11px', fontWeight: 'bold' }}
-                                >
-                                  İptal
-                                </button>
-                              </>
-                            ) : (
-                              <>
-                                <button 
-                                  className="action-btn edit" 
-                                  onClick={() => onShowSlip(order)}
-                                  title="Kurye Fişini Yazdır"
-                                  style={{ padding: '6px 10px', backgroundColor: 'var(--color-dark-blue)', color: 'white', borderRadius: '4px', border: 'none', cursor: 'pointer', fontSize: '11px', fontWeight: '800' }}
-                                >
-                                  Fiş Yazdır
-                                </button>
-                                <button 
-                                  onClick={() => {
-                                    setEditingOrderId(order.id);
-                                    setEditingPrice(order.total);
-                                  }}
-                                  style={{ padding: '6px 10px', backgroundColor: '#e2e8f0', color: '#1e293b', borderRadius: '4px', border: '1px solid #cbd5e1', cursor: 'pointer', fontSize: '11px', fontWeight: 'bold' }}
-                                >
-                                  Düzenle
-                                </button>
-                                <button 
-                                  onClick={() => {
-                                    if (window.confirm("Bu siparişi silmek istediğinize emin misiniz?")) {
-                                      onDeleteOrder(order.id);
-                                    }
-                                  }}
-                                  style={{ padding: '6px 10px', backgroundColor: '#ef4444', color: 'white', borderRadius: '4px', border: 'none', cursor: 'pointer', fontSize: '11px', fontWeight: 'bold' }}
-                                >
-                                  Sil
-                                </button>
-                              </>
-                            )}
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
+
+                <button
+                  onClick={() => setActiveTab('orders')}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: '6px 14px',
+                    borderRadius: '8px',
+                    fontSize: '12px',
+                    fontWeight: '700',
+                    border: '1px solid #cbd5e1',
+                    backgroundColor: '#ffffff',
+                    color: '#334155',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <ClipboardList size={14} />
+                  Tüm Siparişleri Gör ({orders.length})
+                </button>
+              </div>
+
+              {/* Branch Hero Info Card */}
+              <div style={{
+                background: branchKey === 'hamidiye'
+                  ? 'linear-gradient(135deg, #064e3b 0%, #047857 100%)'
+                  : 'linear-gradient(135deg, #450a0a 0%, #8B0000 100%)',
+                color: '#ffffff',
+                borderRadius: '16px',
+                padding: '24px 28px',
+                marginBottom: '24px',
+                boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+                position: 'relative',
+                overflow: 'hidden'
+              }}>
+                <div style={{ position: 'relative', zIndex: 2 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
+                    <div>
+                      <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(255,255,255,0.15)', padding: '4px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '8px' }}>
+                        {branchKey === 'hamidiye' ? <Store size={14} /> : <Building2 size={14} />}
+                        {branch.fullName}
+                      </div>
+                      <h2 style={{ fontSize: '24px', fontWeight: '900', margin: '0 0 6px 0', letterSpacing: '-0.02em' }}>
+                        {branch.title}
+                      </h2>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', fontSize: '13px', opacity: 0.95, marginTop: '8px' }}>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                          <MapPin size={14} />
+                          {branch.address}
+                        </span>
+                        <a 
+                          href={`tel:${cleanPhone}`} 
+                          style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#ffffff', textDecoration: 'underline' }}
+                        >
+                          <Phone size={14} />
+                          {branch.phone}
+                        </a>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                      <a
+                        href={branch.mapUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          backgroundColor: 'rgba(255,255,255,0.18)',
+                          color: '#ffffff',
+                          padding: '8px 14px',
+                          borderRadius: '8px',
+                          fontSize: '12px',
+                          fontWeight: '700',
+                          textDecoration: 'none',
+                          border: '1px solid rgba(255,255,255,0.25)'
+                        }}
+                      >
+                        <MapPin size={14} />
+                        Google Haritalar
+                        <ExternalLink size={12} />
+                      </a>
+
+                      <a
+                        href={`https://wa.me/${cleanPhone.startsWith('90') ? cleanPhone : '90' + cleanPhone}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          backgroundColor: '#25D366',
+                          color: '#ffffff',
+                          padding: '8px 14px',
+                          borderRadius: '8px',
+                          fontSize: '12px',
+                          fontWeight: '800',
+                          textDecoration: 'none',
+                          boxShadow: '0 2px 6px rgba(37,211,102,0.4)'
+                        }}
+                      >
+                        <span>💬</span>
+                        WhatsApp Hattı
+                        <ExternalLink size={12} />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* KPI Metric Cards */}
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+                gap: '16px',
+                marginBottom: '24px'
+              }}>
+                <div style={{
+                  backgroundColor: '#ffffff',
+                  borderRadius: '12px',
+                  padding: '20px',
+                  border: '1px solid #e2e8f0',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '16px'
+                }}>
+                  <div style={{
+                    width: '48px',
+                    height: '48px',
+                    borderRadius: '12px',
+                    backgroundColor: branchActiveList.length > 0 ? '#fef2f2' : '#f8fafc',
+                    color: branchActiveList.length > 0 ? '#dc2626' : '#94a3b8',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <Clock size={24} />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '12px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase' }}>
+                      Aktif Siparişler
+                    </div>
+                    <div style={{ fontSize: '24px', fontWeight: '900', color: branchActiveList.length > 0 ? '#dc2626' : '#1e293b' }}>
+                      {branchActiveList.length} <span style={{ fontSize: '13px', fontWeight: '600', color: '#64748b' }}>adet</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{
+                  backgroundColor: '#ffffff',
+                  borderRadius: '12px',
+                  padding: '20px',
+                  border: '1px solid #e2e8f0',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '16px'
+                }}>
+                  <div style={{
+                    width: '48px',
+                    height: '48px',
+                    borderRadius: '12px',
+                    backgroundColor: '#ecfdf5',
+                    color: '#059669',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <CheckCircle2 size={24} />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '12px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase' }}>
+                      Tamamlanan
+                    </div>
+                    <div style={{ fontSize: '24px', fontWeight: '900', color: '#1e293b' }}>
+                      {branchCompletedList.length} <span style={{ fontSize: '13px', fontWeight: '600', color: '#64748b' }}>adet</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{
+                  backgroundColor: '#ffffff',
+                  borderRadius: '12px',
+                  padding: '20px',
+                  border: '1px solid #e2e8f0',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '16px'
+                }}>
+                  <div style={{
+                    width: '48px',
+                    height: '48px',
+                    borderRadius: '12px',
+                    backgroundColor: '#fef3c7',
+                    color: '#d97706',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <DollarSign size={24} />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '12px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase' }}>
+                      Şube Cirosu
+                    </div>
+                    <div style={{ fontSize: '24px', fontWeight: '900', color: '#1e293b' }}>
+                      {branchRev.toLocaleString('tr-TR')} <span style={{ fontSize: '14px', fontWeight: '700', color: '#b91c1c' }}>TL</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Orders Filter & Header */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '12px',
+                marginBottom: '16px'
+              }}>
+                <h3 style={{ fontSize: '18px', fontWeight: '800', color: '#1e293b', margin: 0 }}>
+                  {branch.name} Sipariş Listesi
+                </h3>
+
+                {/* Status Filter Buttons */}
+                <div style={{ display: 'inline-flex', backgroundColor: '#f1f5f9', padding: '4px', borderRadius: '8px', gap: '4px' }}>
+                  <button
+                    onClick={() => setBranchSubStatusFilter('all')}
+                    style={{
+                      padding: '6px 12px',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: '700',
+                      border: 'none',
+                      cursor: 'pointer',
+                      backgroundColor: branchSubStatusFilter === 'all' ? '#ffffff' : 'transparent',
+                      color: branchSubStatusFilter === 'all' ? '#1e293b' : '#64748b',
+                      boxShadow: branchSubStatusFilter === 'all' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
+                    }}
+                  >
+                    Tümü ({branchOrdersList.length})
+                  </button>
+                  <button
+                    onClick={() => setBranchSubStatusFilter('active')}
+                    style={{
+                      padding: '6px 12px',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: '700',
+                      border: 'none',
+                      cursor: 'pointer',
+                      backgroundColor: branchSubStatusFilter === 'active' ? '#ffffff' : 'transparent',
+                      color: branchSubStatusFilter === 'active' ? '#dc2626' : '#64748b',
+                      boxShadow: branchSubStatusFilter === 'active' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
+                    }}
+                  >
+                    Aktif Bekleyen ({branchActiveList.length})
+                  </button>
+                  <button
+                    onClick={() => setBranchSubStatusFilter('completed')}
+                    style={{
+                      padding: '6px 12px',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: '700',
+                      border: 'none',
+                      cursor: 'pointer',
+                      backgroundColor: branchSubStatusFilter === 'completed' ? '#ffffff' : 'transparent',
+                      color: branchSubStatusFilter === 'completed' ? '#059669' : '#64748b',
+                      boxShadow: branchSubStatusFilter === 'completed' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
+                    }}
+                  >
+                    Tamamlanan ({branchCompletedList.length})
+                  </button>
+                </div>
+              </div>
+
+              {/* Orders Table for this Branch */}
+              <div className="orders-list-panel">
+                {renderOrdersTable(
+                  filteredBranchOrders,
+                  false,
+                  `${branch.name} şubesine ait ${branchSubStatusFilter === 'active' ? 'bekleyen aktif' : branchSubStatusFilter === 'completed' ? 'tamamlanan' : ''} sipariş bulunmuyor.`
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
+
+        {/* Tab: All Orders (with branch filter & branch column) */}
+        {activeTab === 'orders' && (() => {
+          const filteredByBranch = branchOrdersFilter === 'saat-kulesi'
+            ? saatKulesiOrders
+            : branchOrdersFilter === 'hamidiye'
+            ? hamidiyeOrders
+            : orders;
+
+          const finalFilteredOrders = branchSubStatusFilter === 'active'
+            ? filteredByBranch.filter(o => o.status !== 'completed')
+            : branchSubStatusFilter === 'completed'
+            ? filteredByBranch.filter(o => o.status === 'completed')
+            : filteredByBranch;
+
+          return (
+            <div className="admin-tab-content">
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', marginBottom: '20px' }}>
+                <div>
+                  <h2 className="admin-tab-title" style={{ margin: 0, border: 'none', padding: 0 }}>
+                    Tüm Şubeler — Gelen Siparişler
+                  </h2>
+                  <p style={{ margin: '4px 0 0 0', fontSize: '13px', color: '#64748b' }}>
+                    Saat Kulesi ve Hamidiye şubelerine gelen tüm siparişlerin birleşik dökümü.
+                  </p>
+                </div>
+
+                {/* Dedicated Panel Shortcuts */}
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                  <button
+                    onClick={() => setActiveTab('branch-saat-kulesi')}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      padding: '8px 14px',
+                      borderRadius: '8px',
+                      fontSize: '12px',
+                      fontWeight: '800',
+                      border: '1px solid #fecaca',
+                      backgroundColor: '#fff5f5',
+                      color: '#8B0000',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <Building2 size={14} />
+                    Saat Kulesi Paneline Git
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('branch-hamidiye')}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      padding: '8px 14px',
+                      borderRadius: '8px',
+                      fontSize: '12px',
+                      fontWeight: '800',
+                      border: '1px solid #a7f3d0',
+                      backgroundColor: '#ecfdf5',
+                      color: '#047857',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <Store size={14} />
+                    Hamidiye Paneline Git
+                  </button>
+                </div>
+              </div>
+
+              {/* Filter Toolbar: Branch filter + Status filter */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '12px',
+                marginBottom: '20px',
+                padding: '14px 18px',
+                backgroundColor: '#ffffff',
+                borderRadius: '12px',
+                border: '1px solid #e2e8f0',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+              }}>
+                {/* Branch Filter Pills */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                  <span style={{ fontSize: '12px', fontWeight: '700', color: '#64748b', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    <Filter size={14} /> Şube:
+                  </span>
+                  <button
+                    onClick={() => setBranchOrdersFilter('all')}
+                    style={{
+                      padding: '6px 12px',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: '700',
+                      border: 'none',
+                      cursor: 'pointer',
+                      backgroundColor: branchOrdersFilter === 'all' ? '#1e293b' : '#f1f5f9',
+                      color: branchOrdersFilter === 'all' ? '#ffffff' : '#475569'
+                    }}
+                  >
+                    Tümü ({orders.length})
+                  </button>
+                  <button
+                    onClick={() => setBranchOrdersFilter('saat-kulesi')}
+                    style={{
+                      padding: '6px 12px',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: '700',
+                      border: 'none',
+                      cursor: 'pointer',
+                      backgroundColor: branchOrdersFilter === 'saat-kulesi' ? '#8B0000' : '#f1f5f9',
+                      color: branchOrdersFilter === 'saat-kulesi' ? '#ffffff' : '#475569'
+                    }}
+                  >
+                    🏢 Saat Kulesi ({saatKulesiOrders.length})
+                  </button>
+                  <button
+                    onClick={() => setBranchOrdersFilter('hamidiye')}
+                    style={{
+                      padding: '6px 12px',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: '700',
+                      border: 'none',
+                      cursor: 'pointer',
+                      backgroundColor: branchOrdersFilter === 'hamidiye' ? '#047857' : '#f1f5f9',
+                      color: branchOrdersFilter === 'hamidiye' ? '#ffffff' : '#475569'
+                    }}
+                  >
+                    🍕 Hamidiye ({hamidiyeOrders.length})
+                  </button>
+                </div>
+
+                {/* Status Filter */}
+                <div style={{ display: 'inline-flex', backgroundColor: '#f1f5f9', padding: '4px', borderRadius: '8px', gap: '4px' }}>
+                  <button
+                    onClick={() => setBranchSubStatusFilter('all')}
+                    style={{
+                      padding: '6px 12px',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: '700',
+                      border: 'none',
+                      cursor: 'pointer',
+                      backgroundColor: branchSubStatusFilter === 'all' ? '#ffffff' : 'transparent',
+                      color: branchSubStatusFilter === 'all' ? '#1e293b' : '#64748b',
+                      boxShadow: branchSubStatusFilter === 'all' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
+                    }}
+                  >
+                    Tümü
+                  </button>
+                  <button
+                    onClick={() => setBranchSubStatusFilter('active')}
+                    style={{
+                      padding: '6px 12px',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: '700',
+                      border: 'none',
+                      cursor: 'pointer',
+                      backgroundColor: branchSubStatusFilter === 'active' ? '#ffffff' : 'transparent',
+                      color: branchSubStatusFilter === 'active' ? '#dc2626' : '#64748b',
+                      boxShadow: branchSubStatusFilter === 'active' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
+                    }}
+                  >
+                    Aktif Bekleyen
+                  </button>
+                  <button
+                    onClick={() => setBranchSubStatusFilter('completed')}
+                    style={{
+                      padding: '6px 12px',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: '700',
+                      border: 'none',
+                      cursor: 'pointer',
+                      backgroundColor: branchSubStatusFilter === 'completed' ? '#ffffff' : 'transparent',
+                      color: branchSubStatusFilter === 'completed' ? '#059669' : '#64748b',
+                      boxShadow: branchSubStatusFilter === 'completed' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
+                    }}
+                  >
+                    Tamamlanan
+                  </button>
+                </div>
+              </div>
+
+              <div className="orders-list-panel">
+                {renderOrdersTable(
+                  finalFilteredOrders,
+                  true,
+                  'Filtrelenen kriterlere uygun sipariş bulunamadı.'
+                )}
+              </div>
+            </div>
+          );
+        })()}
 
         {/* Tab 2: Products & Campaigns */}
         {activeTab === 'products' && (
@@ -1095,6 +1802,103 @@ export default function AdminPanel({
                 </div>
               </div>
             </div>
+
+            {/* Şube Performans Karşılaştırması */}
+            <div style={{ marginTop: '24px' }}>
+              <h3 style={{ fontSize: '18px', fontWeight: '800', color: '#1e293b', marginBottom: '16px' }}>
+                Şube Performans Karşılaştırması
+              </h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+                {/* Saat Kulesi Card */}
+                <div style={{
+                  backgroundColor: '#ffffff',
+                  borderRadius: '12px',
+                  border: '1px solid #fecaca',
+                  borderTop: '4px solid #8B0000',
+                  padding: '20px',
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.04)'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Building2 size={20} color="#8B0000" />
+                      <div>
+                        <h4 style={{ margin: 0, fontSize: '16px', fontWeight: '800', color: '#8B0000' }}>Saat Kulesi (Merkez)</h4>
+                        <span style={{ fontSize: '11px', color: '#64748b' }}>Kemalpaşa Mah. Saat Kulesi Karşısı</span>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setActiveTab('branch-saat-kulesi')}
+                      style={{ padding: '6px 12px', fontSize: '11px', fontWeight: '800', borderRadius: '6px', border: '1px solid #fecaca', backgroundColor: '#fff5f5', color: '#8B0000', cursor: 'pointer' }}
+                    >
+                      Panele Git →
+                    </button>
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                    <div style={{ padding: '10px 14px', backgroundColor: '#f8fafc', borderRadius: '8px' }}>
+                      <span style={{ fontSize: '11px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase' }}>Şube Cirosu</span>
+                      <div style={{ fontSize: '18px', fontWeight: '900', color: '#8B0000' }}>{saatKulesiRevenue.toLocaleString('tr-TR')} TL</div>
+                    </div>
+                    <div style={{ padding: '10px 14px', backgroundColor: '#f8fafc', borderRadius: '8px' }}>
+                      <span style={{ fontSize: '11px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase' }}>Toplam Sipariş</span>
+                      <div style={{ fontSize: '18px', fontWeight: '900', color: '#1e293b' }}>{saatKulesiOrders.length}</div>
+                    </div>
+                    <div style={{ padding: '10px 14px', backgroundColor: '#f8fafc', borderRadius: '8px' }}>
+                      <span style={{ fontSize: '11px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase' }}>Aktif Bekleyen</span>
+                      <div style={{ fontSize: '18px', fontWeight: '900', color: '#dc2626' }}>{saatKulesiActive.length}</div>
+                    </div>
+                    <div style={{ padding: '10px 14px', backgroundColor: '#f8fafc', borderRadius: '8px' }}>
+                      <span style={{ fontSize: '11px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase' }}>Tamamlanan</span>
+                      <div style={{ fontSize: '18px', fontWeight: '900', color: '#059669' }}>{saatKulesiOrders.length - saatKulesiActive.length}</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Hamidiye Card */}
+                <div style={{
+                  backgroundColor: '#ffffff',
+                  borderRadius: '12px',
+                  border: '1px solid #a7f3d0',
+                  borderTop: '4px solid #047857',
+                  padding: '20px',
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.04)'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Store size={20} color="#047857" />
+                      <div>
+                        <h4 style={{ margin: 0, fontSize: '16px', fontWeight: '800', color: '#047857' }}>Hamidiye (Kepez)</h4>
+                        <span style={{ fontSize: '11px', color: '#64748b' }}>Rauf Denktaş Cd. Sahra Sit. Kepez</span>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setActiveTab('branch-hamidiye')}
+                      style={{ padding: '6px 12px', fontSize: '11px', fontWeight: '800', borderRadius: '6px', border: '1px solid #a7f3d0', backgroundColor: '#ecfdf5', color: '#047857', cursor: 'pointer' }}
+                    >
+                      Panele Git →
+                    </button>
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                    <div style={{ padding: '10px 14px', backgroundColor: '#f8fafc', borderRadius: '8px' }}>
+                      <span style={{ fontSize: '11px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase' }}>Şube Cirosu</span>
+                      <div style={{ fontSize: '18px', fontWeight: '900', color: '#047857' }}>{hamidiyeRevenue.toLocaleString('tr-TR')} TL</div>
+                    </div>
+                    <div style={{ padding: '10px 14px', backgroundColor: '#f8fafc', borderRadius: '8px' }}>
+                      <span style={{ fontSize: '11px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase' }}>Toplam Sipariş</span>
+                      <div style={{ fontSize: '18px', fontWeight: '900', color: '#1e293b' }}>{hamidiyeOrders.length}</div>
+                    </div>
+                    <div style={{ padding: '10px 14px', backgroundColor: '#f8fafc', borderRadius: '8px' }}>
+                      <span style={{ fontSize: '11px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase' }}>Aktif Bekleyen</span>
+                      <div style={{ fontSize: '18px', fontWeight: '900', color: '#dc2626' }}>{hamidiyeActive.length}</div>
+                    </div>
+                    <div style={{ padding: '10px 14px', backgroundColor: '#f8fafc', borderRadius: '8px' }}>
+                      <span style={{ fontSize: '11px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase' }}>Tamamlanan</span>
+                      <div style={{ fontSize: '18px', fontWeight: '900', color: '#059669' }}>{hamidiyeOrders.length - hamidiyeActive.length}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div className="dashboard-activity-panel" style={{ marginTop: '24px' }}>
               <h3>Sipariş İlerleme Raporu</h3>
               <div className="activity-status-summary">

@@ -25,7 +25,8 @@ export default function BranchMapModal({
       address: 'Kemalpaşa Mah. Şair Ece Ayhan Meydanı No:9/A Saat Kulesi Karşısı Merkez / Çanakkale',
       mapUrl: 'https://maps.google.com/maps?q=40.14917,26.40114(Di%20Napoli%20Pizza%20Saat%20Kulesi)&t=&z=16&ie=UTF8&iwloc=B&output=embed',
       hours: '11:00 - 01:00',
-      status: 'AÇIK'
+      status: 'AÇIK',
+      phone: '+90 505 726 17 17'
     },
     {
       id: 'hamidiye',
@@ -34,7 +35,8 @@ export default function BranchMapModal({
       address: 'Hamidiye Mh. Rauf Denktaş Cd. Sahra Sit. No: 1 B2 Blok Kepez / Çanakkale',
       mapUrl: 'https://maps.google.com/maps?q=Hamidiye+Mahallesi+Rauf+Denkta%C5%9F+Caddesi+Sahra+Sitesi+No:1+Kepez+%C3%87anakkale&t=&z=16&ie=UTF8&iwloc=B&output=embed',
       hours: '11:00 - 00:00',
-      status: 'AÇIK'
+      status: 'AÇIK',
+      phone: '0 505 640 17 35'
     }
   ];
 
@@ -422,6 +424,7 @@ export default function BranchMapModal({
                       <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#64748b', backgroundColor: '#f1f5f9', padding: '2px 6px', borderRadius: '4px' }}>{br.distance}</span>
                     </div>
                     <p style={{ fontSize: '11px', color: '#64748b', lineHeight: '1.4', margin: '4px 0', textAlign: 'left' }}>{br.address}</p>
+                    <p style={{ fontSize: '11px', color: '#8B0000', fontWeight: 'bold', margin: '2px 0', textAlign: 'left' }}>📞 Sipariş: {br.phone}</p>
                   </div>
                   
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '6px' }}>

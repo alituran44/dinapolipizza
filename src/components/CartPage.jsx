@@ -27,13 +27,17 @@ export default function CartPage({
       id: 'saat-kulesi',
       name: 'Dinapolipizza Saat Kulesi (Merkez)',
       address: 'Kemalpaşa Mah. Şair Ece Ayhan Meydanı No:9/A Saat Kulesi Karşısı Merkez / Çanakkale',
-      mapUrl: 'https://maps.google.com/maps?q=40.14917,26.40114(Di%20Napoli%20Pizza%20Saat%20Kulesi)'
+      mapUrl: 'https://maps.google.com/maps?q=40.14917,26.40114(Di%20Napoli%20Pizza%20Saat%20Kulesi)',
+      phone: '905057261717',
+      displayPhone: '+90 505 726 17 17'
     },
     {
       id: 'hamidiye',
       name: 'Dinapolipizza Hamidiye (Kepez)',
       address: 'Hamidiye Mh. Rauf Denktaş Cd. Sahra Sit. No: 1 B2 Blok Kepez / Çanakkale',
-      mapUrl: 'https://www.google.com/maps/search/?api=1&query=Hamidiye+Mahallesi+Rauf+Denkta%C5%9F+Caddesi+Sahra+Sitesi+No:1+Kepez+%C3%87anakkale'
+      mapUrl: 'https://www.google.com/maps/search/?api=1&query=Hamidiye+Mahallesi+Rauf+Denkta%C5%9F+Caddesi+Sahra+Sitesi+No:1+Kepez+%C3%87anakkale',
+      phone: '905056401735',
+      displayPhone: '0 505 640 17 35'
     }
   ];
 
@@ -200,9 +204,22 @@ export default function CartPage({
     }
 
     const activeBranchObj = pickupBranches.find(b => b.id === activeBranchId) || pickupBranches[0];
+
+    // Determine if this order is for Hamidiye branch
+    const isHamidiye = (paymentMethod === 'takeout' || deliveryMode === 'pickup')
+      ? (activeBranchId === 'hamidiye' || (selectedBranch && selectedBranch.includes('hamidiye')))
+      : ((selectedBranch && selectedBranch.includes('hamidiye')) || (selectedAddress && (
+          selectedAddress.toLowerCase().includes('kepez') || 
+          selectedAddress.toLowerCase().includes('hamidiye')
+        )));
+
+    // Hamidiye direct WhatsApp line: 905056401735, Saat Kulesi: whatsAppNumber || 905057261717
+    const targetWhatsAppNumber = isHamidiye ? '905056401735' : (whatsAppNumber || '905057261717');
+    const branchTag = isHamidiye ? '🍕 *[DİNAPOLİPİZZA HAMİDİYE ŞUBESİ SİPARİŞİ]*\n\n' : '🍕 *[DİNAPOLİPİZZA SAAT KULESİ MERKEZ SİPARİŞİ]*\n\n';
+
     const deliveryMethodText = (paymentMethod === 'takeout' || deliveryMode === 'pickup') 
       ? `Gel-Al (Şubeden) 🛍️ [${activeBranchObj.name}]` 
-      : 'Adrese Teslim 🚀';
+      : `Adrese Teslim 🚀 [${isHamidiye ? 'Hamidiye Şubesi' : 'Saat Kulesi Merkez'}]`;
     
     let couponSuffix = '';
     if (appliedCoupon) {
@@ -213,7 +230,7 @@ export default function CartPage({
       ? `${activeBranchObj.address} (${activeBranchObj.name})`
       : (selectedAddress || 'Girilmedi');
 
-    let messageText = whatsAppTemplate
+    let messageText = branchTag + whatsAppTemplate
       .replace('{sepet_detayi}', itemsSummary)
       .replace('{teslimat_tipi}', deliveryMethodText)
       .replace('{adres_detayi}', actualAddressDetails)
@@ -226,14 +243,15 @@ export default function CartPage({
         const payload = {
           messaging_product: "whatsapp",
           recipient_type: "individual",
-          to: whatsAppNumber,
+          to: targetWhatsAppNumber,
           type: "text",
           text: { preview_url: true, body: messageText },
           order_data: {
             items: cart.map(i => ({ name: i.name, quantity: i.quantity, price: i.price, image: i.image })),
             total: totalAmount,
             address: selectedAddress,
-            deliveryMode: deliveryMode
+            deliveryMode: deliveryMode,
+            branch: isHamidiye ? 'hamidiye' : 'saat-kulesi'
           }
         };
 
@@ -249,16 +267,16 @@ export default function CartPage({
         if (response.ok) {
           alert('⚡ Siparişiniz WhatsApp Cloud API & AWS Webhook aracılığıyla otomatik olarak kaydedildi ve onaylandı!');
         } else {
-          const waUrl = `https://api.whatsapp.com/send?phone=${whatsAppNumber}&text=${encodeURIComponent(messageText)}`;
+          const waUrl = `https://api.whatsapp.com/send?phone=${targetWhatsAppNumber}&text=${encodeURIComponent(messageText)}`;
           window.open(waUrl, '_blank');
         }
       } catch (err) {
         console.warn('Cloud API Webhook çağrısı yapıldı, WhatsApp Web fallback açılıyor:', err);
-        const waUrl = `https://api.whatsapp.com/send?phone=${whatsAppNumber}&text=${encodeURIComponent(messageText)}`;
+        const waUrl = `https://api.whatsapp.com/send?phone=${targetWhatsAppNumber}&text=${encodeURIComponent(messageText)}`;
         window.open(waUrl, '_blank');
       }
     } else {
-      const waUrl = `https://api.whatsapp.com/send?phone=${whatsAppNumber}&text=${encodeURIComponent(messageText)}`;
+      const waUrl = `https://api.whatsapp.com/send?phone=${targetWhatsAppNumber}&text=${encodeURIComponent(messageText)}`;
       window.open(waUrl, '_blank');
     }
 
@@ -447,6 +465,9 @@ export default function CartPage({
                                 <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px', lineHeight: '1.4' }}>
                                   {br.address}
                                 </div>
+                                <div style={{ fontSize: '11px', color: isBrSelected ? '#8B0000' : '#475569', fontWeight: 'bold', marginTop: '3px' }}>
+                                  📞 WhatsApp Sipariş: {br.displayPhone}
+                                </div>
                               </div>
                               <a 
                                 href={br.mapUrl} 
@@ -461,6 +482,16 @@ export default function CartPage({
                           );
                         })}
                       </div>
+
+                      {activeBranchId === 'hamidiye' ? (
+                        <div style={{ padding: '8px 12px', background: '#ecfdf5', border: '1px solid #a7f3d0', borderRadius: '8px', fontSize: '12px', color: '#065f46', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <span>💬 Siparişiniz doğrudan <strong>Hamidiye Şubesi WhatsApp Hesabına (0 505 640 17 35)</strong> gidecektir.</span>
+                        </div>
+                      ) : (
+                        <div style={{ padding: '8px 12px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '12px', color: '#334155', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <span>💬 Siparişiniz <strong>Saat Kulesi Merkez WhatsApp Hesabına (+90 505 726 17 17)</strong> gidecektir.</span>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
