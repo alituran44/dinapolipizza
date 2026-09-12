@@ -8,6 +8,7 @@ export default function CartDrawer({
   onUpdateQuantity,
   onRemoveItem,
   deliveryMode,
+  onChangeDeliveryMode,
   yeKazanSlices,
   onPlaceOrder,
   onGoToCartPage,
@@ -342,6 +343,62 @@ export default function CartDrawer({
                 <div className="summary-row total">
                   <span>Ödenecek Tutar</span>
                   <span>{finalTotal} TL</span>
+                </div>
+
+                {/* Teslimat Şekli Seçimi: Adrese Teslim vs Gel-Al */}
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: '6px',
+                  marginTop: '12px',
+                  padding: '3px',
+                  backgroundColor: '#f1f5f9',
+                  borderRadius: '10px'
+                }}>
+                  <button
+                    type="button"
+                    onClick={() => onChangeDeliveryMode && onChangeDeliveryMode('delivery')}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px',
+                      padding: '8px 10px',
+                      borderRadius: '8px',
+                      border: 'none',
+                      fontSize: '12px',
+                      fontWeight: '800',
+                      cursor: 'pointer',
+                      backgroundColor: deliveryMode === 'delivery' ? 'var(--color-burgundy)' : 'transparent',
+                      color: deliveryMode === 'delivery' ? '#ffffff' : '#64748b',
+                      boxShadow: deliveryMode === 'delivery' ? '0 2px 6px rgba(139,0,0,0.25)' : 'none',
+                      transition: 'all 0.2s'
+                    }}
+                  >
+                    🛵 Adrese Teslim
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onChangeDeliveryMode && onChangeDeliveryMode('pickup')}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px',
+                      padding: '8px 10px',
+                      borderRadius: '8px',
+                      border: 'none',
+                      fontSize: '12px',
+                      fontWeight: '800',
+                      cursor: 'pointer',
+                      backgroundColor: deliveryMode === 'pickup' ? 'var(--color-burgundy)' : 'transparent',
+                      color: deliveryMode === 'pickup' ? '#ffffff' : '#64748b',
+                      boxShadow: deliveryMode === 'pickup' ? '0 2px 6px rgba(139,0,0,0.25)' : 'none',
+                      transition: 'all 0.2s'
+                    }}
+                  >
+                    🛍️ Gel-Al (Şubeden)
+                  </button>
                 </div>
 
                 {deliveryMode === 'pickup' && (

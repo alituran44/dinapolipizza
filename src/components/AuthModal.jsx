@@ -613,32 +613,32 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
                       {/* Branch options cards list */}
                       <div className="branch-cards-grid">
                         <div 
-                          className={`branch-option-card ${selectedBranch === 'kordon' ? 'active' : ''}`}
-                          onClick={() => setSelectedBranch('kordon')}
+                          className={`branch-option-card ${(!selectedBranch || selectedBranch === 'saat-kulesi' || selectedBranch === 'kordon') ? 'active' : ''}`}
+                          onClick={() => setSelectedBranch('saat-kulesi')}
                         >
                           <div className="branch-card-meta">
-                            <h4>ÇANAKKALE KORDON</h4>
-                            <span className="dist-lbl">2.1 KM</span>
+                            <h4>DİNAPOLİPİZZA SAAT KULESİ (MERKEZ)</h4>
+                            <span className="dist-lbl">0.1 KM</span>
                           </div>
-                          <p>Cevatpaşa Mahallesi İnönü Caddesi No:64/1 Merkez ÇANAKKALE</p>
+                          <p>Kemalpaşa Mah. Şair Ece Ayhan Meydanı No:9/A Saat Kulesi Karşısı Merkez ÇANAKKALE</p>
                           <div className="branch-status-row">
-                            <span className="status-badge closed">KAPALI</span>
-                            <span className="hours-lbl">11:00 - 01:00</span>
+                            <span className="status-badge open">AÇIK</span>
+                            <span className="hours-lbl">📞 +90 505 726 17 17</span>
                           </div>
                         </div>
 
                         <div 
-                          className={`branch-option-card ${selectedBranch === 'kepez' ? 'active' : ''}`}
-                          onClick={() => setSelectedBranch('kepez')}
+                          className={`branch-option-card ${selectedBranch === 'hamidiye' ? 'active' : ''}`}
+                          onClick={() => setSelectedBranch('hamidiye')}
                         >
                           <div className="branch-card-meta">
-                            <h4>ÇANAKKALE KEPEZ</h4>
-                            <span className="dist-lbl">5.4 KM</span>
+                            <h4>DİNAPOLİPİZZA HAMİDİYE (KEPEZ)</h4>
+                            <span className="dist-lbl">3.2 KM</span>
                           </div>
-                          <p>Kepez Beldesi Boğazkent Mah. No:41/A Merkez ÇANAKKALE</p>
+                          <p>Hamidiye Mh. Rauf Denktaş Cd. Sahra Sit. No: 1 B2 Blok Kepez ÇANAKKALE</p>
                           <div className="branch-status-row">
                             <span className="status-badge open">AÇIK</span>
-                            <span className="hours-lbl">11:00 - 01:00</span>
+                            <span className="hours-lbl">📞 0 505 640 17 35</span>
                           </div>
                         </div>
                       </div>

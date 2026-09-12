@@ -320,11 +320,34 @@ export default function Header({
 
         {/* Right Side: Delivery Picker, User & Cart actions */}
         <div className="header-right-group">
-          {/* Kompakt Adres Çubuğu (Mobilde Tıklanabilir İkon) */}
-          <div className="compact-address-trigger-mobile" onClick={() => onOpenAddresses()} title="Teslimat Adresim">
-            <MapPin size={20} color="white" />
-            <span className="compact-address-mobile-text">
-              {address ? (address.length > 12 ? address.slice(0, 12) + '...' : address) : 'Konum Seçin'}
+          {/* Kompakt Adres / Gel-Al Çubuğu (Mobilde Tıklanabilir İkon) */}
+          <div 
+            className="compact-address-trigger-mobile" 
+            onClick={() => {
+              if (deliveryMode === 'pickup') {
+                onOpenMap();
+              } else {
+                onOpenAddresses();
+              }
+            }} 
+            title={deliveryMode === 'pickup' ? "Gel-Al Şube Seçimi" : "Teslimat Adresim"}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              backgroundColor: deliveryMode === 'pickup' ? 'rgba(212, 175, 55, 0.25)' : 'rgba(255, 255, 255, 0.15)',
+              border: deliveryMode === 'pickup' ? '1px solid var(--color-primary-blue)' : '1px solid rgba(255, 255, 255, 0.2)',
+              borderRadius: '20px',
+              padding: '4px 10px',
+              cursor: 'pointer'
+            }}
+          >
+            <MapPin size={16} color={deliveryMode === 'pickup' ? 'var(--color-primary-blue)' : 'white'} />
+            <span className="compact-address-mobile-text" style={{ color: deliveryMode === 'pickup' ? 'var(--color-primary-blue)' : 'white' }}>
+              {deliveryMode === 'pickup' 
+                ? '🛍️ Gel-Al' 
+                : (address ? (address.length > 12 ? address.slice(0, 12) + '...' : address) : '🛵 Adres Seç')
+              }
             </span>
           </div>
 

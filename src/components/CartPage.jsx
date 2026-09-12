@@ -11,6 +11,7 @@ export default function CartPage({
   onCheckout, 
   onClose,
   deliveryMode, // 'delivery' or 'pickup'
+  onChangeDeliveryMode,
   selectedAddress,
   selectedBranch = 'saat-kulesi',
   onSelectBranch,
@@ -390,8 +391,74 @@ export default function CartPage({
               <div className="cart-card-panel address-summary-card">
                 <div className="panel-icon-title">
                   {deliveryMode === 'delivery' ? <Truck size={20} className="blue-icon" /> : <MapPin size={20} className="blue-icon" />}
-                  <h3>Teslimat Yöntemi: {deliveryMode === 'delivery' ? 'Adrese Teslim' : 'Beklemeden Gel-Al'}</h3>
+                  <h3>Teslimat Şekli: {deliveryMode === 'delivery' ? 'Adrese Teslim' : 'Beklemeden Gel-Al (Şubeden)'}</h3>
                 </div>
+
+                {/* Teslimat Şekli Değiştirme Butonları */}
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: '8px',
+                  margin: '12px 0 16px',
+                  padding: '4px',
+                  backgroundColor: '#f1f5f9',
+                  borderRadius: '12px'
+                }}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (onChangeDeliveryMode) onChangeDeliveryMode('delivery');
+                      if (paymentMethod === 'takeout') setPaymentMethod('cash');
+                    }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      padding: '12px 14px',
+                      borderRadius: '10px',
+                      border: 'none',
+                      fontSize: '13px',
+                      fontWeight: '800',
+                      cursor: 'pointer',
+                      backgroundColor: deliveryMode === 'delivery' ? 'var(--color-burgundy)' : 'transparent',
+                      color: deliveryMode === 'delivery' ? '#ffffff' : '#64748b',
+                      boxShadow: deliveryMode === 'delivery' ? '0 2px 8px rgba(139,0,0,0.3)' : 'none',
+                      transition: 'all 0.2s'
+                    }}
+                  >
+                    <Truck size={16} />
+                    <span>🛵 Adrese Teslim</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (onChangeDeliveryMode) onChangeDeliveryMode('pickup');
+                      setPaymentMethod('takeout');
+                    }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      padding: '12px 14px',
+                      borderRadius: '10px',
+                      border: 'none',
+                      fontSize: '13px',
+                      fontWeight: '800',
+                      cursor: 'pointer',
+                      backgroundColor: deliveryMode === 'pickup' ? 'var(--color-burgundy)' : 'transparent',
+                      color: deliveryMode === 'pickup' ? '#ffffff' : '#64748b',
+                      boxShadow: deliveryMode === 'pickup' ? '0 2px 8px rgba(139,0,0,0.3)' : 'none',
+                      transition: 'all 0.2s'
+                    }}
+                  >
+                    <MapPin size={16} />
+                    <span>🛍️ Beklemeden Gel-Al</span>
+                  </button>
+                </div>
+
                 <div className="address-details-box" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   {deliveryMode === 'delivery' ? (
                     <>
@@ -524,7 +591,14 @@ export default function CartPage({
                     return (
                       <div
                         key={option.id}
-                        onClick={() => setPaymentMethod(option.id)}
+                        onClick={() => {
+                          setPaymentMethod(option.id);
+                          if (option.id === 'takeout' && onChangeDeliveryMode) {
+                            onChangeDeliveryMode('pickup');
+                          } else if (option.id !== 'takeout' && deliveryMode === 'pickup' && onChangeDeliveryMode) {
+                            onChangeDeliveryMode('delivery');
+                          }
+                        }}
                         style={{
                           flex: '1 1 calc(33.333% - 12px)',
                           minWidth: '110px',

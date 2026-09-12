@@ -19,7 +19,7 @@ import RewardModal from './components/RewardModal';
 import AddressesModal from './components/AddressesModal';
 import AboutPage from './components/AboutPage';
 import ContactPage from './components/ContactPage';
-import { Award, Gift } from 'lucide-react';
+import { Award, Gift, Truck, Store } from 'lucide-react';
 import { 
   INITIAL_PRODUCTS, INITIAL_DOUGHS, INITIAL_CRUSTS, INITIAL_INGREDIENTS 
 } from './data/products';
@@ -1021,6 +1021,123 @@ export default function App() {
             <main className="main-content">
               {currentPage === 'menu' && (
               <>
+                {/* Hızlı Teslimat & Şubeden Gel-Al Seçim Barı (Mobil & Masaüstü) */}
+                <div style={{
+                  backgroundColor: '#200505',
+                  borderBottom: '1px solid rgba(212, 175, 55, 0.35)',
+                  padding: '10px 16px',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.18)',
+                  position: 'relative',
+                  zIndex: 20
+                }}>
+                  <div className="container" style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: '12px'
+                  }}>
+                    {/* Mode Toggle Buttons */}
+                    <div style={{
+                      display: 'inline-flex',
+                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                      padding: '4px',
+                      borderRadius: '30px',
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                      gap: '4px'
+                    }}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setDeliveryMode('delivery');
+                          setIsMapModalOpen(true);
+                        }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          padding: '8px 16px',
+                          borderRadius: '24px',
+                          border: 'none',
+                          fontSize: '13px',
+                          fontWeight: '800',
+                          cursor: 'pointer',
+                          backgroundColor: deliveryMode === 'delivery' ? 'var(--color-primary-blue)' : 'transparent',
+                          color: deliveryMode === 'delivery' ? '#2B0505' : '#ffffff',
+                          transition: 'all 0.2s',
+                          boxShadow: deliveryMode === 'delivery' ? '0 2px 8px rgba(212, 175, 55, 0.4)' : 'none'
+                        }}
+                      >
+                        <Truck size={16} />
+                        <span>Adrese Teslim</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setDeliveryMode('pickup');
+                          setIsMapModalOpen(true);
+                        }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          padding: '8px 16px',
+                          borderRadius: '24px',
+                          border: 'none',
+                          fontSize: '13px',
+                          fontWeight: '800',
+                          cursor: 'pointer',
+                          backgroundColor: deliveryMode === 'pickup' ? 'var(--color-primary-blue)' : 'transparent',
+                          color: deliveryMode === 'pickup' ? '#2B0505' : '#ffffff',
+                          transition: 'all 0.2s',
+                          boxShadow: deliveryMode === 'pickup' ? '0 2px 8px rgba(212, 175, 55, 0.4)' : 'none'
+                        }}
+                      >
+                        <Store size={16} />
+                        <span>🛍️ Beklemeden Gel-Al</span>
+                      </button>
+                    </div>
+
+                    {/* Active Selection Details & Change Button */}
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '10px',
+                      fontSize: '13px',
+                      color: '#ffffff',
+                      flexWrap: 'wrap'
+                    }}>
+                      <span style={{ color: 'rgba(255, 255, 255, 0.75)' }}>
+                        {deliveryMode === 'delivery' ? 'Teslimat Bölgesi:' : 'Seçili Gel-Al Şubesi:'}
+                      </span>
+                      <strong style={{ color: 'var(--color-primary-blue)' }}>
+                        {deliveryMode === 'delivery' 
+                          ? (address || 'Çanakkale Merkez') 
+                          : (selectedBranch === 'hamidiye' ? '🍕 Dinapolipizza Hamidiye (Kepez)' : '🏢 Dinapolipizza Saat Kulesi (Merkez)')
+                        }
+                      </strong>
+                      <button
+                        type="button"
+                        onClick={() => setIsMapModalOpen(true)}
+                        style={{
+                          background: 'rgba(255, 255, 255, 0.15)',
+                          border: '1px solid rgba(255, 255, 255, 0.3)',
+                          color: '#ffffff',
+                          padding: '5px 12px',
+                          borderRadius: '8px',
+                          fontSize: '11px',
+                          fontWeight: '800',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s'
+                        }}
+                      >
+                        {deliveryMode === 'delivery' ? 'Adres Değiştir ↗' : 'Şube Değiştir ↗'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Header Altı Video Banner Akışı */}
                 <div className="header-video-banner" style={{ 
                   position: 'relative', 
@@ -1190,6 +1307,7 @@ export default function App() {
                 }}
                 onClose={() => setCurrentPage('menu')}
                 deliveryMode={deliveryMode}
+                onChangeDeliveryMode={(mode) => setDeliveryMode(mode)}
                 selectedAddress={address}
                 selectedBranch={selectedBranch}
                 onSelectBranch={(branchId) => setSelectedBranch(branchId)}
@@ -1247,6 +1365,7 @@ export default function App() {
             onUpdateQuantity={handleUpdateQuantity}
             onRemoveItem={handleRemoveItem}
             deliveryMode={deliveryMode}
+            onChangeDeliveryMode={(mode) => setDeliveryMode(mode)}
             yeKazanSlices={yeKazanSlices}
             onPlaceOrder={handlePlaceOrder}
             onGoToCartPage={() => setCurrentPage('cart')}
