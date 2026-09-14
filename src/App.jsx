@@ -859,51 +859,42 @@ export default function App() {
         console.error("Email API calling failed:", emailErr);
       }
 
-      // Fly Kurye Entegrasyonu - Siparişi Kurye Ekranına Gönder
-      try {
-        fetch('https://flykurye.com/api/createOrderv2', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            order_id: orderId,
-            customer_name: user ? user.name : 'Misafir Müşteri',
-            customer_phone: user ? user.phone : '0505 726 17 17',
-            address: actualAddress,
-            payment_method: paymentMethod === 'takeout' ? 'Gel-Al' : (paymentMethod === 'cash' ? 'Kapıda Nakit' : 'Kapıda Kredi Kartı'),
-            total_amount: summary.total,
-            items: itemsSummary,
-            branch: actualDeliveryMode === 'pickup' ? (selectedBranch === 'hamidiye' ? 'Dinapolipizza Hamidiye' : 'Dinapolipizza Saat Kulesi') : 'Dinapolipizza Saat Kulesi',
-            timestamp: new Date().toISOString()
-          })
-        })
-        .then(res => {
-          console.log('Fly Kurye API Status:', res.status);
-        })
-        .catch(err => {
-          console.warn('Fly Kurye API HTTPS hatası, HTTP fallback deneniyor:', err);
-          fetch('http://flykurye.com/api/createOrderv2', {
+      // Fly Kurye Entegrasyonu - Siparişi Kurye Ekranına Gönder (Sadece adrese teslim siparişler için)
+      if (actualDeliveryMode !== 'pickup') {
+        try {
+          fetch('/api/flykurye', {
             method: 'POST',
-            mode: 'no-cors',
             headers: {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              order_id: orderId,
-              customer_name: user ? user.name : 'Misafir Müşteri',
-              customer_phone: user ? user.phone : '0505 726 17 17',
+              orderId: orderId,
+              customerName: user ? user.name : 'Misafir Müşteri',
+              customerPhone: user ? user.phone : '0505 726 17 17',
               address: actualAddress,
-              payment_method: paymentMethod === 'takeout' ? 'Gel-Al' : (paymentMethod === 'cash' ? 'Kapıda Nakit' : 'Kapıda Kredi Kartı'),
-              total_amount: summary.total,
-              items: itemsSummary,
-              branch: actualDeliveryMode === 'pickup' ? (selectedBranch === 'hamidiye' ? 'Dinapolipizza Hamidiye' : 'Dinapolipizza Saat Kulesi') : 'Dinapolipizza Saat Kulesi',
-              timestamp: new Date().toISOString()
+              addressDetail: isHamidiye ? 'Kepez Şube Bölgesi' : 'Merkez Şube Bölgesi',
+              orderNote: `${isHamidiye ? 'Hamidiye' : 'Saat Kulesi'} Şubesi - ${paymentMethod === 'cash' ? 'Kapıda Nakit' : 'Kapıda Kredi Kartı'}`,
+              paymentMethod: paymentMethod,
+              total: summary.total,
+              items: cart.map(item => ({
+                name: item.name + (item.customInfo?.selectedPizzas ? ` (${item.customInfo.selectedPizzas.map(p => p.name).join(', ')})` : ''),
+                quantity: item.quantity || 1,
+                price: item.price || 0
+              })),
+              branch: branchName,
+              deliveryMode: actualDeliveryMode
             })
-          }).catch(httpErr => console.warn('Fly Kurye HTTP Fallback hatası:', httpErr));
-        });
-      } catch (flyKuryeErr) {
-        console.error('Fly Kurye integration call failed:', flyKuryeErr);
+          })
+          .then(async res => {
+            const result = await res.json().catch(() => ({}));
+            console.log('Fly Kurye / Ropaket Entegrasyon Yanıtı:', result);
+          })
+          .catch(err => {
+            console.warn('Fly Kurye entegrasyon çağrısı iletilemedi:', err);
+          });
+        } catch (flyKuryeErr) {
+          console.error('Fly Kurye integration call failed:', flyKuryeErr);
+        }
       }
 
       // Complete referral transaction if user phone matches any invite
