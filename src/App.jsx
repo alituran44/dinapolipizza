@@ -182,11 +182,13 @@ export default function App() {
       const saved = localStorage.getItem('dinapoli_products');
       if (saved) {
         const parsed = JSON.parse(saved);
-        // Sync latest prices from INITIAL_PRODUCTS while preserving custom items
-        return INITIAL_PRODUCTS.map(initItem => {
+        // Sync latest prices and images from INITIAL_PRODUCTS while preserving custom items
+        const synced = INITIAL_PRODUCTS.map(initItem => {
           const cachedItem = parsed.find(p => p.id === initItem.id);
           return cachedItem ? { ...cachedItem, ...initItem } : initItem;
         });
+        const customAdminItems = parsed.filter(p => !INITIAL_PRODUCTS.some(init => init.id === p.id));
+        return [...synced, ...customAdminItems];
       }
       return INITIAL_PRODUCTS;
     } catch (e) {
