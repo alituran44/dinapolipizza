@@ -69,7 +69,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Arkadaş Menü',
     description: '2 Medium Pizza Alana Porsiyon Patates + 1 Coca-Cola BEDAVA!',
     basePrice: 889,
-    image: '/firsat_sefin.png',
+    image: '/firsat_arkadas.png',
     yeKazanSlice: 2,
     popular: true,
     customizable: true,
@@ -399,7 +399,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Ekonomik Menü',
     description: 'Small Mista Pizza + Patates + Ayran',
     basePrice: 309,
-    image: '/menu_doyuran_combo.png',
+    image: '/menu_ekonomik.png',
     yeKazanSlice: 1,
     popular: true,
     customizable: false
@@ -410,7 +410,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Ekonomik Menü Duble',
     description: 'Medium Mista Pizza + Patates + Şişe Cola',
     basePrice: 409,
-    image: '/menu_doyuran_combo.png',
+    image: '/menu_ekonomik.png',
     yeKazanSlice: 1,
     popular: false,
     customizable: false
@@ -454,7 +454,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Fix Menü',
     description: 'Small Mista Pizza + Patates + 2 Parça Sosis + Şişe Cola',
     basePrice: 319,
-    image: '/menu_sosisli.png',
+    image: '/menu_fix.png',
     yeKazanSlice: 1,
     popular: false,
     customizable: false
@@ -465,7 +465,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Fix Menü Ekstra',
     description: 'Medium Mista Pizza + Patates + 4 Parça Sosis',
     basePrice: 429,
-    image: '/menu_sosisli.png',
+    image: '/menu_fix.png',
     yeKazanSlice: 1,
     popular: false,
     customizable: false
@@ -498,7 +498,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Genç Menü',
     description: 'Small Mista Pizza + Patates + 2 Parça Soğan Halkası + Şişe Cola',
     basePrice: 319,
-    image: '/menu_doyuran_combo.png',
+    image: '/menu_genc.png',
     yeKazanSlice: 1,
     popular: false,
     customizable: false
@@ -509,7 +509,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Genç Menü Duble',
     description: 'Medium Mista Pizza + Patates + 2 Parça Soğan Halkası + Şişe Cola',
     basePrice: 439,
-    image: '/menu_doyuran_combo.png',
+    image: '/menu_genc.png',
     yeKazanSlice: 1,
     popular: false,
     customizable: false
@@ -542,7 +542,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Chicken Menü',
     description: 'Çıtır Tavuk Parçaları + Patates + Ayran',
     basePrice: 339,
-    image: '/citir_tavuklu.jpg',
+    image: '/menu_chicken.png',
     yeKazanSlice: 1,
     popular: false,
     customizable: false
