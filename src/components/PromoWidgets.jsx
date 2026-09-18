@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import RewardModal from './RewardModal';
 
 export default function PromoWidgets({ yeKazanSlices, products = [], onDealClick }) {
@@ -10,17 +11,40 @@ export default function PromoWidgets({ yeKazanSlices, products = [], onDealClick
   // Duplicate items 4 times to ensure infinite smooth seamless scrolling
   const repeatedDeals = [...deals, ...deals, ...deals, ...deals];
 
-  // Dynamic CSS variables for precise transform looping
-  const totalItemWidth = 320; // 300px width + 20px gap
+  // Dynamic CSS variables for precise transform looping (310px card width + 20px gap)
+  const totalItemWidth = 330;
   const scrollWidth = -(totalItemWidth * deals.length) + 'px';
   const animationDuration = Math.max(12, deals.length * 4.5) + 's';
 
   return (
-    <section className="promo-widgets-section" style={{ padding: '32px 0', overflow: 'hidden' }}>
+    <section className="promo-widgets-section" style={{ padding: '28px 0 36px 0', overflow: 'hidden' }}>
       <div className="container">
-        <h3 style={{ fontSize: '20px', fontWeight: '850', color: 'var(--color-dark-blue)', marginBottom: '20px', textAlign: 'left' }}>
-          Özel Kampanyalar
-        </h3>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+              <span style={{ 
+                display: 'inline-flex', 
+                alignItems: 'center', 
+                gap: '5px',
+                padding: '4px 12px', 
+                borderRadius: '20px', 
+                background: 'rgba(122, 12, 12, 0.08)', 
+                color: 'var(--color-primary-red)', 
+                fontSize: '11px', 
+                fontWeight: '800',
+                letterSpacing: '0.4px'
+              }}>
+                <Sparkles size={13} /> SÜPER FIRSATLAR
+              </span>
+            </div>
+            <h3 style={{ fontSize: '22px', fontWeight: '850', color: 'var(--color-dark-blue)', margin: 0, textAlign: 'left' }}>
+              Özel Kampanyalar & Menüler
+            </h3>
+          </div>
+          <span style={{ fontSize: '13px', fontWeight: '600', color: 'var(--color-text-muted)' }}>
+            Kaydırarak keşfet & tıkla
+          </span>
+        </div>
         
         <div className="promo-marquee-container">
           <div 
@@ -31,58 +55,56 @@ export default function PromoWidgets({ yeKazanSlices, products = [], onDealClick
             }}
           >
             {repeatedDeals.map((deal, idx) => (
-              <article key={`${deal.id}-${idx}`} className="deal-card-item" style={{ 
-                flex: '0 0 300px',
-                scrollSnapAlign: 'start',
-                position: 'relative', 
-                borderRadius: 'var(--radius-md)', 
-                overflow: 'hidden', 
-                height: '220px', 
-                border: '1px solid var(--color-border)',
-                boxShadow: 'var(--shadow-sm)',
-                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-                cursor: 'pointer'
-              }}
-              onClick={() => onDealClick && onDealClick(deal)}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-4px)';
-                e.currentTarget.style.boxShadow = 'var(--shadow-md)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
-              }}
+              <article 
+                key={`${deal.id}-${idx}`} 
+                className="deal-card-item"
+                onClick={() => onDealClick && onDealClick(deal)}
               >
-                <img src={deal.image} alt={deal.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" decoding="async" />
-                <div className="deal-slide-overlay" style={{ 
-                  position: 'absolute', 
-                  top: 0, 
-                  left: 0, 
-                  width: '100%', 
-                  height: '100%', 
-                  background: 'linear-gradient(to top, rgba(43,5,5,0.92) 20%, rgba(43,5,5,0.1) 100%)', 
-                  display: 'flex', 
-                  flexDirection: 'column', 
-                  justifyContent: 'flex-end', 
-                  padding: '20px', 
-                  color: 'white', 
-                  textAlign: 'left' 
-                }}>
-                  <span className="deal-badge" style={{ 
-                    width: 'fit-content', 
-                    padding: '4px 10px', 
-                    borderRadius: 'var(--radius-sm)', 
-                    fontSize: '11px', 
-                    fontWeight: '800', 
-                    marginBottom: '8px',
-                    background: deal.popular ? 'var(--color-primary-red)' : 'var(--color-primary-blue)',
-                    color: 'white'
-                  }}>
+                {/* Media Container: 100% visible, bright, unshaded food photo */}
+                <div className="deal-card-media">
+                  <img 
+                    src={deal.image} 
+                    alt={deal.name} 
+                    className="deal-card-img" 
+                    loading="lazy" 
+                    decoding="async"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = '/super_kampanya.png';
+                    }}
+                  />
+                  
+                  {/* Popular Deal Badge */}
+                  <span className="deal-card-badge-left">
                     {deal.popular ? 'POPÜLER FIRSAT' : 'ÖZEL KAMPANYA'}
                   </span>
-                  <h4 style={{ fontSize: '18px', fontWeight: '800', color: 'white', marginBottom: '4px' }}>{deal.name}</h4>
-                  <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.85)', marginBottom: '8px', lineHeight: '1.4' }}>{deal.description}</p>
-                  <span style={{ fontSize: '18px', fontWeight: '900', color: 'var(--color-primary-blue)' }}>{deal.basePrice} TL</span>
+
+                  {/* Ye-Kazan Slice Reward Badge */}
+                  {deal.yeKazanSlice > 0 && (
+                    <span className="deal-card-badge-right">
+                      +{deal.yeKazanSlice} Dilim
+                    </span>
+                  )}
+                </div>
+
+                {/* Body Content */}
+                <div className="deal-card-body">
+                  <div>
+                    <h4 className="deal-card-title" title={deal.name}>{deal.name}</h4>
+                    <p className="deal-card-desc">{deal.description}</p>
+                  </div>
+
+                  <div className="deal-card-footer">
+                    <div className="deal-card-price-wrap">
+                      <span className="deal-card-price-label">Fırsat Fiyatı</span>
+                      <span className="deal-card-price">{deal.basePrice} TL</span>
+                    </div>
+
+                    <div className="deal-card-btn">
+                      <span>Fırsatı Seç</span>
+                      <ArrowRight size={13} />
+                    </div>
+                  </div>
                 </div>
               </article>
             ))}
