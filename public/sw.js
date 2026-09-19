@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dinapoli-main-v1.0.3';
+const CACHE_NAME = 'dinapoli-main-v1.0.5';
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
@@ -7,9 +7,7 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
-      return Promise.all(keys.map(key => {
-        if (key !== CACHE_NAME) return caches.delete(key);
-      }));
+      return Promise.all(keys.map(key => caches.delete(key)));
     }).then(() => self.clients.claim())
   );
 });

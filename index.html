@@ -70,7 +70,27 @@
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-          navigator.serviceWorker.register('/sw.js').catch(function(err) { console.log('SW Reg error', err); });
+          navigator.serviceWorker.register('/sw.js').then(function(reg) {
+            reg.update();
+            reg.onupdatefound = function() {
+              var installing = reg.installing;
+              if (installing) {
+                installing.onstatechange = function() {
+                  if (installing.state === 'installed' && navigator.serviceWorker.controller) {
+                    window.location.reload();
+                  }
+                };
+              }
+            };
+          }).catch(function(err) { console.log('SW Reg error', err); });
+        });
+
+        var refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', function() {
+          if (!refreshing) {
+            refreshing = true;
+            window.location.reload();
+          }
         });
       }
     </script>

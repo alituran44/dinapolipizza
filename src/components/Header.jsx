@@ -35,10 +35,7 @@ export default function Header({
 
 
   const [pwaBarVisible, setPwaBarVisible] = useState(true);
-  const [showInstallModal, setShowInstallModal] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return window.innerWidth < 768;
-  });
+  const [showInstallModal, setShowInstallModal] = useState(false);
 
   const handleSelectMode = (mode) => {
     setDeliveryMode(mode);

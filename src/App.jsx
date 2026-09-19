@@ -176,9 +176,17 @@ export default function App() {
     { id: 'addr-2', title: 'Ev', text: 'İsmetpaşa Mahallesi, Atikhisar Caddesi, No: 42, Çanakkale / Merkez' }
   ]);
   
+  const MENU_BUILD_VERSION = '2026.09.20.03';
+  
   // Customization database states
   const [products, setProducts] = useState(() => {
     try {
+      const savedVersion = localStorage.getItem('dinapoli_menu_build_version');
+      if (savedVersion !== MENU_BUILD_VERSION) {
+        localStorage.removeItem('dinapoli_products');
+        localStorage.setItem('dinapoli_menu_build_version', MENU_BUILD_VERSION);
+        return INITIAL_PRODUCTS;
+      }
       const saved = localStorage.getItem('dinapoli_products');
       if (saved) {
         const parsed = JSON.parse(saved);
