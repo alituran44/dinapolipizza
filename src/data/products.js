@@ -410,7 +410,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Ekonomik Menü Duble',
     description: 'Medium Mista Pizza + Patates + Şişe Cola',
     basePrice: 409,
-    image: '/menu_ekonomik.png',
+    image: '/menu_ekonomik_duble.png',
     yeKazanSlice: 1,
     popular: false,
     customizable: false
@@ -421,7 +421,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Öğrenci Menü',
     description: 'Small Mista Pizza + Patates + Rus Salatası + Şişe Cola',
     basePrice: 319,
-    image: '/menu_doyuran_combo.png',
+    image: '/menu_dinapoli_ekstra.png',
     yeKazanSlice: 1,
     popular: true,
     customizable: false
@@ -476,7 +476,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Di Napoli Menü',
     description: 'Small Mista Pizza + Patates + 2 Parça Tavuk + Şişe Cola',
     basePrice: 359,
-    image: '/menu_dinapoli_ekstra.png',
+    image: '/menu_dinapoli_menu.png',
     yeKazanSlice: 1,
     popular: true,
     customizable: false

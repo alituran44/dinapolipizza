@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dinapoli-main-v1.0.0';
+const CACHE_NAME = 'dinapoli-main-v1.0.3';
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
