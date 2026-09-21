@@ -5996,39 +5996,41 @@ button {
   }
 }
 
-/* Direct On-Screen QR Code Widget & Hero QR */
+/* Direct On-Screen QR Code Overlay & Widget (Ortalanmış ve Büyütülmüş) */
+.direct-screen-qr-overlay {
+  animation: qrOverlayFadeIn 0.25s ease-out;
+}
+
 .direct-screen-qr-widget {
-  animation: qrWidgetPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: qrWidgetPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.direct-screen-qr-widget:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.9), 0 0 30px rgba(255, 183, 13, 0.45) !important;
+@keyframes qrOverlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes qrWidgetPop {
   from {
-    transform: translateY(40px) scale(0.85);
+    transform: scale(0.85);
     opacity: 0;
   }
   to {
-    transform: translateY(0) scale(1);
+    transform: scale(1);
     opacity: 1;
   }
 }
 
 @media (max-width: 768px) {
   .direct-screen-qr-widget {
-    bottom: 16px !important;
-    left: 16px !important;
-    padding: 16px 18px !important;
-    width: 250px !important;
-    max-width: calc(100vw - 32px) !important;
+    padding: 20px 16px !important;
+    width: 320px !important;
+    max-width: 92vw !important;
   }
   .direct-screen-qr-widget img {
-    width: 190px !important;
-    height: 190px !important;
+    width: 230px !important;
+    height: 230px !important;
   }
   .hero-app-qr-card {
     width: 100% !important;

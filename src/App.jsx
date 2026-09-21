@@ -1756,116 +1756,157 @@ export default function App() {
         </div>
       )}
 
-      {/* DİREKT EKRANDA GÖRÜNEN SABİT KAREKOD KARTI (Tıklama Gerekmeden Açık) */}
+      {/* DİREKT EKRANDA GÖRÜNEN SABİT KAREKOD KARTI (Tıklama Gerekmeden Açık & Ekranın Tam Ortasında) */}
       {!isQrDismissed && (
         <div 
-          className="direct-screen-qr-widget"
+          className="direct-screen-qr-overlay"
+          onClick={() => setIsQrDismissed(true)}
           style={{
             position: 'fixed',
-            bottom: '24px',
-            left: '24px',
+            inset: 0,
             zIndex: 9999,
-            background: '#141211',
-            border: '3px solid #FFB70D',
-            borderRadius: '26px',
-            padding: '20px 22px',
-            boxShadow: '0 20px 60px rgba(0,0,0,0.95), 0 0 35px rgba(255,183,13,0.45)',
+            background: 'rgba(10, 8, 7, 0.68)',
+            backdropFilter: 'blur(6px)',
             display: 'flex',
-            flexDirection: 'column',
             alignItems: 'center',
-            textAlign: 'center',
-            width: '300px',
-            maxWidth: 'calc(100vw - 48px)',
-            boxSizing: 'border-box',
-            color: '#FFFFFF'
+            justifyContent: 'center',
+            padding: '20px'
           }}
         >
-          {/* Küçültme / Gizleme butonu */}
-          <button
-            type="button"
-            onClick={() => setIsQrDismissed(true)}
-            title="Kapat"
+          <div 
+            className="direct-screen-qr-widget"
+            onClick={(e) => e.stopPropagation()}
             style={{
-              position: 'absolute',
-              top: '12px',
-              right: '12px',
-              background: 'rgba(255,255,255,0.15)',
-              border: 'none',
-              borderRadius: '50%',
-              width: '28px',
-              height: '28px',
-              color: '#FFF',
-              fontSize: '14px',
-              cursor: 'pointer',
+              position: 'relative',
+              background: '#141211',
+              border: '3.5px solid #FFB70D',
+              borderRadius: '28px',
+              padding: '24px 26px',
+              boxShadow: '0 24px 70px rgba(0,0,0,0.95), 0 0 45px rgba(255,183,13,0.5)',
               display: 'flex',
+              flexDirection: 'column',
               alignItems: 'center',
-              justifyContent: 'center',
-              fontWeight: '800'
+              textAlign: 'center',
+              width: '350px',
+              maxWidth: '92vw',
+              maxHeight: '92vh',
+              overflowY: 'auto',
+              boxSizing: 'border-box',
+              color: '#FFFFFF'
             }}
           >
-            ✕
-          </button>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px', paddingRight: '18px' }}>
-            <img src="/logo.png" alt="Di Napoli" style={{ width: '34px', height: '34px', objectFit: 'contain' }} />
-            <span style={{ fontSize: '1.15rem', fontWeight: '900', color: '#FFB70D', fontFamily: 'var(--font-title, sans-serif)', letterSpacing: '0.4px' }}>
-              Mobil Uygulama
-            </span>
-          </div>
-
-          {/* DİREKT GÖRÜNÜR BÜYÜK KAREKOD */}
-          <div style={{
-            background: '#FFFFFF',
-            padding: '10px',
-            borderRadius: '18px',
-            border: '2.5px solid #FFB70D',
-            boxShadow: '0 8px 22px rgba(0,0,0,0.5)',
-            marginBottom: '14px'
-          }}>
-            <img 
-              src="/app_qr.png" 
-              alt="Di Napoli Mobil Uygulama QR Kod"
+            {/* Küçültme / Gizleme butonu */}
+            <button
+              type="button"
+              onClick={() => setIsQrDismissed(true)}
+              title="Kapat"
               style={{
-                width: '235px',
-                height: '235px',
-                display: 'block',
-                borderRadius: '10px'
+                position: 'absolute',
+                top: '12px',
+                right: '12px',
+                background: 'rgba(255,255,255,0.15)',
+                border: 'none',
+                borderRadius: '50%',
+                width: '32px',
+                height: '32px',
+                color: '#FFF',
+                fontSize: '15px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: '800',
+                transition: 'all 0.2s'
               }}
-              onError={(e) => {
-                e.currentTarget.onerror = null;
-                e.currentTarget.src = 'https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=https%3A%2F%2Fapp.dinapolipizza.com.tr%2F%3Finstall%3Dtrue&margin=10';
+              onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.3)'}
+              onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.15)'}
+            >
+              ✕
+            </button>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px', paddingRight: '24px' }}>
+              <img src="/logo.png" alt="Di Napoli" style={{ width: '38px', height: '38px', objectFit: 'contain' }} />
+              <span style={{ fontSize: '1.25rem', fontWeight: '900', color: '#FFB70D', fontFamily: 'var(--font-title, sans-serif)', letterSpacing: '0.4px' }}>
+                Mobil Uygulama
+              </span>
+            </div>
+
+            {/* DİREKT GÖRÜNÜR BÜYÜK KAREKOD */}
+            <div style={{
+              background: '#FFFFFF',
+              padding: '10px',
+              borderRadius: '20px',
+              border: '3px solid #FFB70D',
+              boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
+              marginBottom: '14px'
+            }}>
+              <img 
+                src="/app_qr.png" 
+                alt="Di Napoli Mobil Uygulama QR Kod"
+                style={{
+                  width: '275px',
+                  height: '275px',
+                  maxWidth: '100%',
+                  display: 'block',
+                  borderRadius: '12px'
+                }}
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = 'https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=https%3A%2F%2Fapp.dinapolipizza.com.tr%2F%3Finstall%3Dtrue&margin=10';
+                }}
+              />
+            </div>
+
+            <div style={{ fontSize: '1rem', color: '#FFB70D', fontWeight: '800', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span>📷 Kameranla Okut, Hemen İndir!</span>
+            </div>
+
+            <a
+              href="https://app.dinapolipizza.com.tr/?install=true"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                width: '100%',
+                background: 'linear-gradient(135deg, #FFB70D 0%, #F59E0B 100%)',
+                color: '#1A1715',
+                textDecoration: 'none',
+                padding: '13px 20px',
+                borderRadius: '14px',
+                fontSize: '1rem',
+                fontWeight: '900',
+                boxShadow: '0 4px 16px rgba(255,183,13,0.5)',
+                cursor: 'pointer',
+                marginBottom: '8px',
+                transition: 'transform 0.2s'
               }}
-            />
-          </div>
+              onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
+              onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+            >
+              <Smartphone size={20} />
+              <span>Telefonda Doğrudan Aç ↗</span>
+            </a>
 
-          <div style={{ fontSize: '0.96rem', color: '#FFB70D', fontWeight: '800', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span>📷 Kameranla Okut İndir</span>
+            <button
+              type="button"
+              onClick={() => setIsQrDismissed(true)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: 'rgba(255,255,255,0.65)',
+                fontSize: '0.82rem',
+                cursor: 'pointer',
+                padding: '6px',
+                fontWeight: '600',
+                textDecoration: 'underline'
+              }}
+            >
+              Web Sitesinden Siparişe Devam Et ✕
+            </button>
           </div>
-
-          <a
-            href="https://app.dinapolipizza.com.tr/?install=true"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '8px',
-              width: '100%',
-              background: 'linear-gradient(135deg, #FFB70D 0%, #F59E0B 100%)',
-              color: '#1A1715',
-              textDecoration: 'none',
-              padding: '12px 18px',
-              borderRadius: '14px',
-              fontSize: '0.95rem',
-              fontWeight: '900',
-              boxShadow: '0 4px 14px rgba(255,183,13,0.45)',
-              cursor: 'pointer'
-            }}
-          >
-            <Smartphone size={18} />
-            <span>Telefonda Aç ↗</span>
-          </a>
         </div>
       )}
 
