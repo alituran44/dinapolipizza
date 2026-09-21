@@ -1766,15 +1766,16 @@ export default function App() {
             left: '24px',
             zIndex: 9999,
             background: '#141211',
-            border: '2.5px solid #FFB70D',
-            borderRadius: '24px',
-            padding: '18px 20px',
-            boxShadow: '0 16px 48px rgba(0,0,0,0.9), 0 0 30px rgba(255,183,13,0.4)',
+            border: '3px solid #FFB70D',
+            borderRadius: '26px',
+            padding: '20px 22px',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.95), 0 0 35px rgba(255,183,13,0.45)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             textAlign: 'center',
-            width: '240px',
+            width: '300px',
+            maxWidth: 'calc(100vw - 48px)',
             boxSizing: 'border-box',
             color: '#FFFFFF'
           }}
@@ -1786,15 +1787,15 @@ export default function App() {
             title="Kapat"
             style={{
               position: 'absolute',
-              top: '10px',
-              right: '10px',
+              top: '12px',
+              right: '12px',
               background: 'rgba(255,255,255,0.15)',
               border: 'none',
               borderRadius: '50%',
-              width: '26px',
-              height: '26px',
+              width: '28px',
+              height: '28px',
               color: '#FFF',
-              fontSize: '13px',
+              fontSize: '14px',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -1805,9 +1806,9 @@ export default function App() {
             ✕
           </button>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px', paddingRight: '16px' }}>
-            <img src="/logo.png" alt="Di Napoli" style={{ width: '28px', height: '28px', objectFit: 'contain' }} />
-            <span style={{ fontSize: '0.98rem', fontWeight: '900', color: '#FFB70D', fontFamily: 'var(--font-title, sans-serif)', letterSpacing: '0.3px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px', paddingRight: '18px' }}>
+            <img src="/logo.png" alt="Di Napoli" style={{ width: '34px', height: '34px', objectFit: 'contain' }} />
+            <span style={{ fontSize: '1.15rem', fontWeight: '900', color: '#FFB70D', fontFamily: 'var(--font-title, sans-serif)', letterSpacing: '0.4px' }}>
               Mobil Uygulama
             </span>
           </div>
@@ -1815,20 +1816,20 @@ export default function App() {
           {/* DİREKT GÖRÜNÜR BÜYÜK KAREKOD */}
           <div style={{
             background: '#FFFFFF',
-            padding: '8px',
-            borderRadius: '16px',
+            padding: '10px',
+            borderRadius: '18px',
             border: '2.5px solid #FFB70D',
-            boxShadow: '0 6px 18px rgba(0,0,0,0.5)',
-            marginBottom: '12px'
+            boxShadow: '0 8px 22px rgba(0,0,0,0.5)',
+            marginBottom: '14px'
           }}>
             <img 
               src="/app_qr.png" 
               alt="Di Napoli Mobil Uygulama QR Kod"
               style={{
-                width: '180px',
-                height: '180px',
+                width: '235px',
+                height: '235px',
                 display: 'block',
-                borderRadius: '8px'
+                borderRadius: '10px'
               }}
               onError={(e) => {
                 e.currentTarget.onerror = null;
@@ -1837,7 +1838,7 @@ export default function App() {
             />
           </div>
 
-          <div style={{ fontSize: '0.86rem', color: '#FFB70D', fontWeight: '800', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <div style={{ fontSize: '0.96rem', color: '#FFB70D', fontWeight: '800', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
             <span>📷 Kameranla Okut İndir</span>
           </div>
 
@@ -1854,15 +1855,15 @@ export default function App() {
               background: 'linear-gradient(135deg, #FFB70D 0%, #F59E0B 100%)',
               color: '#1A1715',
               textDecoration: 'none',
-              padding: '10px 14px',
-              borderRadius: '12px',
-              fontSize: '0.86rem',
+              padding: '12px 18px',
+              borderRadius: '14px',
+              fontSize: '0.95rem',
               fontWeight: '900',
-              boxShadow: '0 3px 12px rgba(255,183,13,0.45)',
+              boxShadow: '0 4px 14px rgba(255,183,13,0.45)',
               cursor: 'pointer'
             }}
           >
-            <Smartphone size={16} />
+            <Smartphone size={18} />
             <span>Telefonda Aç ↗</span>
           </a>
         </div>
