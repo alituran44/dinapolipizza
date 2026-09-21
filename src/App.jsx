@@ -19,12 +19,13 @@ import RewardModal from './components/RewardModal';
 import AddressesModal from './components/AddressesModal';
 import AboutPage from './components/AboutPage';
 import ContactPage from './components/ContactPage';
-import { Award, Gift, Truck, Store } from 'lucide-react';
+import { Award, Gift, Truck, Store, Smartphone } from 'lucide-react';
 import { 
   INITIAL_PRODUCTS, INITIAL_DOUGHS, INITIAL_CRUSTS, INITIAL_INGREDIENTS 
 } from './data/products';
 
 export default function App() {
+  const [isQrDismissed, setIsQrDismissed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     const handleResize = () => {
@@ -1196,9 +1197,72 @@ export default function App() {
                         <p className="banner-subtitle" style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.9)', maxWidth: '580px', textShadow: '0 1px 4px rgba(0,0,0,0.5)', marginBottom: '20px' }}>
                           Odun ateşinde pişen, el yapımı nefis İtalyan pizzaları ve doyuran menülerimizle hizmetinizdeyiz.
                         </p>
-                        <a href="#menu" className="banner-action-btn" style={{ display: 'inline-block' }}>
-                          Lezzetleri Keşfet
-                        </a>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
+                          <a href="#menu" className="banner-action-btn" style={{ display: 'inline-block' }}>
+                            Lezzetleri Keşfet
+                          </a>
+
+                          {/* DİREKT EKRANDA GÖRÜNEN MOBİL UYGULAMA KAREKODU (Tıklama Gerekmez) */}
+                          <div 
+                            className="hero-app-qr-card"
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '12px',
+                              background: 'rgba(20, 18, 17, 0.94)',
+                              border: '2px solid #FFB70D',
+                              borderRadius: '16px',
+                              padding: '8px 14px',
+                              boxShadow: '0 8px 30px rgba(0,0,0,0.65), 0 0 15px rgba(255,183,13,0.3)',
+                              backdropFilter: 'blur(8px)'
+                            }}
+                          >
+                            <img 
+                              src="/app_qr.png" 
+                              alt="Di Napoli Mobil Uygulama Karekod" 
+                              style={{ 
+                                width: '76px', 
+                                height: '76px', 
+                                borderRadius: '8px', 
+                                background: '#FFFFFF', 
+                                padding: '4px', 
+                                display: 'block', 
+                                flexShrink: 0,
+                                boxShadow: '0 2px 8px rgba(0,0,0,0.3)'
+                              }} 
+                              onError={(e) => {
+                                e.currentTarget.onerror = null;
+                                e.currentTarget.src = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https%3A%2F%2Fapp.dinapolipizza.com.tr%2F%3Finstall%3Dtrue&margin=10';
+                              }}
+                            />
+                            <div style={{ textAlign: 'left' }}>
+                              <div style={{ fontSize: '0.86rem', fontWeight: '900', color: '#FFB70D' }}>
+                                📲 Mobil Uygulama
+                              </div>
+                              <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.92)', margin: '2px 0 6px 0', lineHeight: '1.2' }}>
+                                Kameranla okut, hemen sipariş ver!
+                              </div>
+                              <a 
+                                href="https://app.dinapolipizza.com.tr/?install=true" 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                style={{ 
+                                  display: 'inline-block',
+                                  fontSize: '0.74rem', 
+                                  fontWeight: '800', 
+                                  color: '#141211',
+                                  background: '#FFB70D',
+                                  padding: '3px 10px',
+                                  borderRadius: '6px',
+                                  textDecoration: 'none',
+                                  boxShadow: '0 2px 6px rgba(255,183,13,0.3)'
+                                }}
+                              >
+                                Telefonda Aç ↗
+                              </a>
+                            </div>
+                          </div>
+                        </div>
                       </div>
 
                       {/* Right: Ye-Kazan Loyalty Card */}
@@ -1690,6 +1754,149 @@ export default function App() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* DİREKT EKRANDA GÖRÜNEN SABİT KAREKOD KARTI (Tıklama Gerekmeden Açık) */}
+      {!isQrDismissed && (
+        <div 
+          className="direct-screen-qr-widget"
+          style={{
+            position: 'fixed',
+            bottom: '24px',
+            left: '24px',
+            zIndex: 9999,
+            background: '#141211',
+            border: '2px solid #FFB70D',
+            borderRadius: '20px',
+            padding: '14px 16px',
+            boxShadow: '0 12px 40px rgba(0,0,0,0.85), 0 0 25px rgba(255,183,13,0.35)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            textAlign: 'center',
+            width: '185px',
+            boxSizing: 'border-box',
+            color: '#FFFFFF'
+          }}
+        >
+          {/* Küçültme / Gizleme butonu */}
+          <button
+            type="button"
+            onClick={() => setIsQrDismissed(true)}
+            title="Kapat"
+            style={{
+              position: 'absolute',
+              top: '8px',
+              right: '8px',
+              background: 'rgba(255,255,255,0.1)',
+              border: 'none',
+              borderRadius: '50%',
+              width: '22px',
+              height: '22px',
+              color: '#FFF',
+              fontSize: '11px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontWeight: '800'
+            }}
+          >
+            ✕
+          </button>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px', paddingRight: '14px' }}>
+            <img src="/logo.png" alt="Di Napoli" style={{ width: '22px', height: '22px', objectFit: 'contain' }} />
+            <span style={{ fontSize: '0.82rem', fontWeight: '800', color: '#FFB70D', fontFamily: 'var(--font-title, sans-serif)' }}>
+              Mobil Uygulama
+            </span>
+          </div>
+
+          {/* DİREKT GÖRÜNÜR KAREKOD */}
+          <div style={{
+            background: '#FFFFFF',
+            padding: '6px',
+            borderRadius: '12px',
+            border: '2px solid #FFB70D',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+            marginBottom: '8px'
+          }}>
+            <img 
+              src="/app_qr.png" 
+              alt="Di Napoli Mobil Uygulama QR Kod"
+              style={{
+                width: '130px',
+                height: '130px',
+                display: 'block',
+                borderRadius: '6px'
+              }}
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https%3A%2F%2Fapp.dinapolipizza.com.tr%2F%3Finstall%3Dtrue&margin=10';
+              }}
+            />
+          </div>
+
+          <div style={{ fontSize: '0.74rem', color: '#FFB70D', fontWeight: '800', marginBottom: '8px' }}>
+            📷 Kameranla Okut İndir
+          </div>
+
+          <a
+            href="https://app.dinapolipizza.com.tr/?install=true"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px',
+              width: '100%',
+              background: 'linear-gradient(135deg, #FFB70D 0%, #F59E0B 100%)',
+              color: '#1A1715',
+              textDecoration: 'none',
+              padding: '8px 10px',
+              borderRadius: '10px',
+              fontSize: '0.75rem',
+              fontWeight: '900',
+              boxShadow: '0 2px 8px rgba(255,183,13,0.4)',
+              cursor: 'pointer'
+            }}
+          >
+            <Smartphone size={14} />
+            <span>Telefonda Aç ↗</span>
+          </a>
+        </div>
+      )}
+
+      {/* Kapatıldıysa tekrar açma butonu */}
+      {isQrDismissed && (
+        <button
+          type="button"
+          onClick={() => setIsQrDismissed(false)}
+          title="Karekod Uygulama İndirmeyi Göster"
+          style={{
+            position: 'fixed',
+            bottom: '24px',
+            left: '24px',
+            zIndex: 9999,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            background: '#141211',
+            color: '#FFB70D',
+            border: '2px solid #FFB70D',
+            padding: '10px 16px',
+            borderRadius: '30px',
+            fontWeight: '800',
+            fontSize: '0.85rem',
+            cursor: 'pointer',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.6), 0 0 16px rgba(255,183,13,0.3)',
+            transition: 'all 0.2s ease'
+          }}
+        >
+          <Smartphone size={18} />
+          <span>Karekod Göster (QR) 📲</span>
+        </button>
       )}
     </div>
   );

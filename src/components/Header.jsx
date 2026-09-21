@@ -34,26 +34,7 @@ export default function Header({
 
 
 
-  const [pwaBarVisible, setPwaBarVisible] = useState(true);
-  const [showInstallModal, setShowInstallModal] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    try {
-      const dismissed = sessionStorage.getItem('dinapoli_qr_modal_dismissed');
-      return !dismissed;
-    } catch (e) {
-      return true;
-    }
-  });
-
-  const handleDismissInstallModal = () => {
-    setShowInstallModal(false);
-    try {
-      sessionStorage.setItem('dinapoli_qr_modal_dismissed', 'true');
-      if (typeof window !== 'undefined') {
-        window.dispatchEvent(new Event('dinapoli_qr_dismissed'));
-      }
-    } catch (e) {}
-  };
+  const [isQrDismissed, setIsQrDismissed] = useState(false);
 
   const handleSelectMode = (mode) => {
     setDeliveryMode(mode);
@@ -65,156 +46,44 @@ export default function Header({
 
   return (
     <>
-      {/* POP-UP APP INSTALLATION MODAL ON MAIN WEBSITE (dinapolipizza.com.tr) */}
-      {showInstallModal && (
-        <div style={{
-          position: 'fixed',
-          top: 0, left: 0, right: 0, bottom: 0,
-          width: '100vw', height: '100vh',
-          backgroundColor: 'rgba(0, 0, 0, 0.88)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          zIndex: 100000000,
-          display: 'flex',
-          justifyContent: 'center',
+      {/* Üst Bilgilendirme ve Uygulama İndirme Bandı */}
+      <div style={{
+      background: '#0D0B0A',
+      borderBottom: '1px solid rgba(255, 183, 13, 0.35)',
+      padding: '7px 16px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '12px',
+      fontSize: '0.82rem',
+      color: '#FFFFFF',
+      fontWeight: '600',
+      textAlign: 'center',
+      flexWrap: 'wrap',
+      position: 'relative',
+      zIndex: 1000
+    }}>
+      <span>🍕 <strong>Di Napoli Mobil Uygulaması:</strong> Karekod ekranda hazır, kameranla okutup hemen sipariş verebilirsin!</span>
+      <a 
+        href="https://app.dinapolipizza.com.tr/?install=true" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        style={{
+          background: '#FFB70D',
+          color: '#141211',
+          padding: '2px 10px',
+          borderRadius: '12px',
+          fontWeight: '800',
+          fontSize: '0.74rem',
+          display: 'inline-flex',
           alignItems: 'center',
-          padding: '20px',
-          boxSizing: 'border-box'
-        }}>
-          <div style={{
-            background: '#141211',
-            border: '2px solid #FFB70D',
-            borderRadius: '24px',
-            padding: '28px 24px',
-            maxWidth: '420px',
-            width: '100%',
-            textAlign: 'center',
-            position: 'relative',
-            boxShadow: '0 20px 60px rgba(0,0,0,0.95)',
-            color: '#FFFFFF'
-          }}>
-            <button 
-              onClick={handleDismissInstallModal}
-              style={{
-                position: 'absolute', top: '14px', right: '14px',
-                background: 'rgba(255,255,255,0.15)', color: '#FFF',
-                border: 'none', width: '36px', height: '36px',
-                borderRadius: '50%', cursor: 'pointer', fontWeight: '800', fontSize: '1.1rem'
-              }}
-            >
-              ✕
-            </button>
-
-            <img 
-              src="/logo.png" 
-              alt="Di Napoli Pizza" 
-              style={{ width: '80px', height: '80px', objectFit: 'contain', margin: '0 auto 16px auto', borderRadius: '16px', boxShadow: '0 6px 20px rgba(255,183,13,0.3)' }} 
-            />
-
-            <div style={{ fontSize: '1.35rem', fontWeight: '900', color: '#FFB70D', marginBottom: '8px', fontFamily: 'var(--font-title, sans-serif)' }}>
-              Di Napoli Mobil Uygulamasını Yükleyin! 📲
-            </div>
-
-            <div style={{ fontSize: '0.88rem', color: 'rgba(255,255,255,0.85)', lineHeight: '1.5', marginBottom: '16px' }}>
-              Çanakkale Saat Kulesi karşısındaki gurme lezzetlerimiz cebinizde! Kamera ile okutun veya tıklayıp indirin.
-            </div>
-
-            <div style={{ background: '#1C1917', padding: '16px', borderRadius: '16px', border: '1px solid #FFB70D', marginBottom: '18px' }}>
-              <img 
-                src="/app_qr.png" 
-                onError={(e) => {
-                  e.currentTarget.onerror = null;
-                  e.currentTarget.src = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https%3A%2F%2Fapp.dinapolipizza.com.tr%2F%3Finstall%3Dtrue&margin=10';
-                }}
-                alt="Di Napoli Mobil Uygulama QR Kod" 
-                style={{ width: '170px', height: '170px', borderRadius: '12px', margin: '0 auto', display: 'block', border: '2px solid #FFB70D', boxShadow: '0 4px 16px rgba(0,0,0,0.6)', background: 'white', padding: '6px' }} 
-              />
-              <div style={{ fontSize: '0.8rem', color: '#FFB70D', fontWeight: '800', marginTop: '10px' }}>
-                📷 Telefon Kamerasıyla Okutun & İndirin
-              </div>
-            </div>
-
-            <a 
-              href="https://app.dinapolipizza.com.tr/?install=true"
-              onClick={handleDismissInstallModal}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '10px',
-                width: '100%',
-                background: 'linear-gradient(135deg, #FFB70D 0%, #F59E0B 100%)',
-                color: '#1A1715',
-                textDecoration: 'none',
-                padding: '16px',
-                borderRadius: '16px',
-                fontWeight: '900',
-                fontSize: '1.05rem',
-                boxShadow: '0 8px 25px rgba(255, 183, 13, 0.5)',
-                cursor: 'pointer',
-                marginBottom: '12px'
-              }}
-            >
-              <Smartphone size={22} /> UYGULAMAYI TELEFONA YÜKLE
-            </a>
-            <button 
-              onClick={handleDismissInstallModal}
-              style={{
-                width: '100%',
-                background: 'transparent',
-                color: 'rgba(255,255,255,0.5)',
-                border: 'none',
-                padding: '10px',
-                fontSize: '0.85rem',
-                cursor: 'pointer'
-              }}
-            >
-              Web Siteden Devam Et
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* FLOATING APP QR BUTTON ON DESKTOP & MOBILE */}
-      {!showInstallModal && (
-        <button
-          type="button"
-          onClick={() => setShowInstallModal(true)}
-          title="Di Napoli Uygulamasını Telefonunuza İndirin"
-          style={{
-            position: 'fixed',
-            bottom: '24px',
-            left: '24px',
-            zIndex: 9999,
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            background: '#141211',
-            color: '#FFB70D',
-            border: '2px solid #FFB70D',
-            padding: '10px 16px',
-            borderRadius: '30px',
-            fontWeight: '800',
-            fontSize: '0.85rem',
-            cursor: 'pointer',
-            boxShadow: '0 8px 24px rgba(0,0,0,0.6), 0 0 16px rgba(255,183,13,0.3)',
-            transition: 'all 0.2s ease'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'scale(1.05)';
-            e.currentTarget.style.background = '#FFB70D';
-            e.currentTarget.style.color = '#1A1715';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'scale(1)';
-            e.currentTarget.style.background = '#141211';
-            e.currentTarget.style.color = '#FFB70D';
-          }}
-        >
-          <Smartphone size={18} />
-          <span>Uygulamayı İndir (QR) 📲</span>
-        </button>
-      )}
+          gap: '4px',
+          textDecoration: 'none'
+        }}
+      >
+        <span>Telefonda Aç ↗</span>
+      </a>
+    </div>
 
     <header className="site-header-blue">
       <div className="container header-inner-blue">
@@ -373,9 +242,13 @@ export default function Header({
             <a href="#contact" className="nav-link-white" onClick={(e) => { e.preventDefault(); onGoToContact(); }}>İletişim</a>
 
             {/* Uygulamayı İndir (QR Kod) Butonu */}
-            <button
-              type="button"
-              onClick={() => setShowInstallModal(true)}
+            <a
+              href="https://app.dinapolipizza.com.tr/?install=true"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => {
+                setIsQrDismissed(false);
+              }}
               className="app-install-header-btn"
               style={{
                 display: 'inline-flex',
@@ -388,6 +261,7 @@ export default function Header({
                 fontWeight: '800',
                 fontSize: '0.82rem',
                 border: 'none',
+                textDecoration: 'none',
                 cursor: 'pointer',
                 boxShadow: '0 2px 10px rgba(255, 183, 13, 0.4)',
                 marginLeft: '8px',
@@ -404,7 +278,7 @@ export default function Header({
             >
               <Smartphone size={15} />
               <span>Uygulamayı İndir (QR)</span>
-            </button>
+            </a>
           </nav>
         </div>
 
@@ -723,12 +597,11 @@ export default function Header({
             {/* Navigation Links in Mobile Drawer */}
             <div className="mobile-drawer-nav-links">
               {/* Mobil Uygulama & Karekod Butonu */}
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  setShowInstallModal(true);
-                }}
+              <a
+                href="https://app.dinapolipizza.com.tr/?install=true"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMobileMenuOpen(false)}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -741,7 +614,7 @@ export default function Header({
                   borderRadius: '12px',
                   fontWeight: '800',
                   fontSize: '0.92rem',
-                  border: 'none',
+                  textDecoration: 'none',
                   cursor: 'pointer',
                   boxShadow: '0 4px 12px rgba(255, 183, 13, 0.35)',
                   marginBottom: '14px'
@@ -749,7 +622,7 @@ export default function Header({
               >
                 <Smartphone size={18} />
                 <span>📲 Uygulamayı Yükle (Karekod)</span>
-              </button>
+              </a>
 
               <h4 className="drawer-section-title">Menü Hızlı Bağlantıları</h4>
               
