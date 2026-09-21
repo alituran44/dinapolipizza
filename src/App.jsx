@@ -1766,15 +1766,15 @@ export default function App() {
             left: '24px',
             zIndex: 9999,
             background: '#141211',
-            border: '2px solid #FFB70D',
-            borderRadius: '20px',
-            padding: '14px 16px',
-            boxShadow: '0 12px 40px rgba(0,0,0,0.85), 0 0 25px rgba(255,183,13,0.35)',
+            border: '2.5px solid #FFB70D',
+            borderRadius: '24px',
+            padding: '18px 20px',
+            boxShadow: '0 16px 48px rgba(0,0,0,0.9), 0 0 30px rgba(255,183,13,0.4)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             textAlign: 'center',
-            width: '185px',
+            width: '240px',
             boxSizing: 'border-box',
             color: '#FFFFFF'
           }}
@@ -1786,15 +1786,15 @@ export default function App() {
             title="Kapat"
             style={{
               position: 'absolute',
-              top: '8px',
-              right: '8px',
-              background: 'rgba(255,255,255,0.1)',
+              top: '10px',
+              right: '10px',
+              background: 'rgba(255,255,255,0.15)',
               border: 'none',
               borderRadius: '50%',
-              width: '22px',
-              height: '22px',
+              width: '26px',
+              height: '26px',
               color: '#FFF',
-              fontSize: '11px',
+              fontSize: '13px',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -1805,40 +1805,40 @@ export default function App() {
             ✕
           </button>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px', paddingRight: '14px' }}>
-            <img src="/logo.png" alt="Di Napoli" style={{ width: '22px', height: '22px', objectFit: 'contain' }} />
-            <span style={{ fontSize: '0.82rem', fontWeight: '800', color: '#FFB70D', fontFamily: 'var(--font-title, sans-serif)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px', paddingRight: '16px' }}>
+            <img src="/logo.png" alt="Di Napoli" style={{ width: '28px', height: '28px', objectFit: 'contain' }} />
+            <span style={{ fontSize: '0.98rem', fontWeight: '900', color: '#FFB70D', fontFamily: 'var(--font-title, sans-serif)', letterSpacing: '0.3px' }}>
               Mobil Uygulama
             </span>
           </div>
 
-          {/* DİREKT GÖRÜNÜR KAREKOD */}
+          {/* DİREKT GÖRÜNÜR BÜYÜK KAREKOD */}
           <div style={{
             background: '#FFFFFF',
-            padding: '6px',
-            borderRadius: '12px',
-            border: '2px solid #FFB70D',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
-            marginBottom: '8px'
+            padding: '8px',
+            borderRadius: '16px',
+            border: '2.5px solid #FFB70D',
+            boxShadow: '0 6px 18px rgba(0,0,0,0.5)',
+            marginBottom: '12px'
           }}>
             <img 
               src="/app_qr.png" 
               alt="Di Napoli Mobil Uygulama QR Kod"
               style={{
-                width: '130px',
-                height: '130px',
+                width: '180px',
+                height: '180px',
                 display: 'block',
-                borderRadius: '6px'
+                borderRadius: '8px'
               }}
               onError={(e) => {
                 e.currentTarget.onerror = null;
-                e.currentTarget.src = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https%3A%2F%2Fapp.dinapolipizza.com.tr%2F%3Finstall%3Dtrue&margin=10';
+                e.currentTarget.src = 'https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=https%3A%2F%2Fapp.dinapolipizza.com.tr%2F%3Finstall%3Dtrue&margin=10';
               }}
             />
           </div>
 
-          <div style={{ fontSize: '0.74rem', color: '#FFB70D', fontWeight: '800', marginBottom: '8px' }}>
-            📷 Kameranla Okut İndir
+          <div style={{ fontSize: '0.86rem', color: '#FFB70D', fontWeight: '800', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <span>📷 Kameranla Okut İndir</span>
           </div>
 
           <a
@@ -1849,20 +1849,20 @@ export default function App() {
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '6px',
+              gap: '8px',
               width: '100%',
               background: 'linear-gradient(135deg, #FFB70D 0%, #F59E0B 100%)',
               color: '#1A1715',
               textDecoration: 'none',
-              padding: '8px 10px',
-              borderRadius: '10px',
-              fontSize: '0.75rem',
+              padding: '10px 14px',
+              borderRadius: '12px',
+              fontSize: '0.86rem',
               fontWeight: '900',
-              boxShadow: '0 2px 8px rgba(255,183,13,0.4)',
+              boxShadow: '0 3px 12px rgba(255,183,13,0.45)',
               cursor: 'pointer'
             }}
           >
-            <Smartphone size={14} />
+            <Smartphone size={16} />
             <span>Telefonda Aç ↗</span>
           </a>
         </div>
