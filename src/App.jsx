@@ -619,14 +619,29 @@ export default function App() {
 
   useEffect(() => {
     if (popupSettings.active) {
-      const hasShown = sessionStorage.getItem('dinapoli_popup_shown');
-      if (!hasShown) {
-        const timer = setTimeout(() => {
+      const showPromoIfEligible = () => {
+        const hasShown = sessionStorage.getItem('dinapoli_popup_shown');
+        const qrDismissed = sessionStorage.getItem('dinapoli_qr_modal_dismissed');
+        if (!hasShown && qrDismissed) {
           setIsPopupOpen(true);
           sessionStorage.setItem('dinapoli_popup_shown', 'true');
-        }, 1500);
-        return () => clearTimeout(timer);
-      }
+        }
+      };
+
+      // Check initially if already dismissed
+      const initialTimer = setTimeout(showPromoIfEligible, 2000);
+
+      // Listen for when QR modal is dismissed by user
+      const handleQrDismissed = () => {
+        setTimeout(showPromoIfEligible, 600);
+      };
+
+      window.addEventListener('dinapoli_qr_dismissed', handleQrDismissed);
+
+      return () => {
+        clearTimeout(initialTimer);
+        window.removeEventListener('dinapoli_qr_dismissed', handleQrDismissed);
+      };
     }
   }, [popupSettings]);
 

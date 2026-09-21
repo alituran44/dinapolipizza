@@ -35,7 +35,25 @@ export default function Header({
 
 
   const [pwaBarVisible, setPwaBarVisible] = useState(true);
-  const [showInstallModal, setShowInstallModal] = useState(false);
+  const [showInstallModal, setShowInstallModal] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    try {
+      const dismissed = sessionStorage.getItem('dinapoli_qr_modal_dismissed');
+      return !dismissed;
+    } catch (e) {
+      return true;
+    }
+  });
+
+  const handleDismissInstallModal = () => {
+    setShowInstallModal(false);
+    try {
+      sessionStorage.setItem('dinapoli_qr_modal_dismissed', 'true');
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new Event('dinapoli_qr_dismissed'));
+      }
+    } catch (e) {}
+  };
 
   const handleSelectMode = (mode) => {
     setDeliveryMode(mode);
@@ -56,7 +74,7 @@ export default function Header({
           backgroundColor: 'rgba(0, 0, 0, 0.88)',
           backdropFilter: 'blur(12px)',
           WebkitBackdropFilter: 'blur(12px)',
-          zIndex: 999999,
+          zIndex: 100000000,
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
@@ -76,7 +94,7 @@ export default function Header({
             color: '#FFFFFF'
           }}>
             <button 
-              onClick={() => setShowInstallModal(false)}
+              onClick={handleDismissInstallModal}
               style={{
                 position: 'absolute', top: '14px', right: '14px',
                 background: 'rgba(255,255,255,0.15)', color: '#FFF',
@@ -103,10 +121,10 @@ export default function Header({
 
             <div style={{ background: '#1C1917', padding: '16px', borderRadius: '16px', border: '1px solid #FFB70D', marginBottom: '18px' }}>
               <img 
-                src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https%3A%2F%2Fapp.dinapolipizza.com.tr%2F%3Finstall%3Dtrue&margin=10" 
+                src="/app_qr.png" 
                 onError={(e) => {
                   e.currentTarget.onerror = null;
-                  e.currentTarget.src = '/app_qr.png';
+                  e.currentTarget.src = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https%3A%2F%2Fapp.dinapolipizza.com.tr%2F%3Finstall%3Dtrue&margin=10';
                 }}
                 alt="Di Napoli Mobil Uygulama QR Kod" 
                 style={{ width: '170px', height: '170px', borderRadius: '12px', margin: '0 auto', display: 'block', border: '2px solid #FFB70D', boxShadow: '0 4px 16px rgba(0,0,0,0.6)', background: 'white', padding: '6px' }} 
@@ -118,7 +136,7 @@ export default function Header({
 
             <a 
               href="https://app.dinapolipizza.com.tr/?install=true"
-              onClick={() => setShowInstallModal(false)}
+              onClick={handleDismissInstallModal}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -140,7 +158,7 @@ export default function Header({
               <Smartphone size={22} /> UYGULAMAYI TELEFONA YÜKLE
             </a>
             <button 
-              onClick={() => setShowInstallModal(false)}
+              onClick={handleDismissInstallModal}
               style={{
                 width: '100%',
                 background: 'transparent',
@@ -155,6 +173,47 @@ export default function Header({
             </button>
           </div>
         </div>
+      )}
+
+      {/* FLOATING APP QR BUTTON ON DESKTOP & MOBILE */}
+      {!showInstallModal && (
+        <button
+          type="button"
+          onClick={() => setShowInstallModal(true)}
+          title="Di Napoli Uygulamasını Telefonunuza İndirin"
+          style={{
+            position: 'fixed',
+            bottom: '24px',
+            left: '24px',
+            zIndex: 9999,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            background: '#141211',
+            color: '#FFB70D',
+            border: '2px solid #FFB70D',
+            padding: '10px 16px',
+            borderRadius: '30px',
+            fontWeight: '800',
+            fontSize: '0.85rem',
+            cursor: 'pointer',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.6), 0 0 16px rgba(255,183,13,0.3)',
+            transition: 'all 0.2s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'scale(1.05)';
+            e.currentTarget.style.background = '#FFB70D';
+            e.currentTarget.style.color = '#1A1715';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.background = '#141211';
+            e.currentTarget.style.color = '#FFB70D';
+          }}
+        >
+          <Smartphone size={18} />
+          <span>Uygulamayı İndir (QR) 📲</span>
+        </button>
       )}
 
     <header className="site-header-blue">
@@ -312,6 +371,40 @@ export default function Header({
 
             <a href="#about" className="nav-link-white" onClick={(e) => { e.preventDefault(); onGoToAbout(); }}>Hakkımızda</a>
             <a href="#contact" className="nav-link-white" onClick={(e) => { e.preventDefault(); onGoToContact(); }}>İletişim</a>
+
+            {/* Uygulamayı İndir (QR Kod) Butonu */}
+            <button
+              type="button"
+              onClick={() => setShowInstallModal(true)}
+              className="app-install-header-btn"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                background: 'linear-gradient(135deg, #FFB70D 0%, #F59E0B 100%)',
+                color: '#1A1715',
+                padding: '6px 14px',
+                borderRadius: '20px',
+                fontWeight: '800',
+                fontSize: '0.82rem',
+                border: 'none',
+                cursor: 'pointer',
+                boxShadow: '0 2px 10px rgba(255, 183, 13, 0.4)',
+                marginLeft: '8px',
+                transition: 'all 0.2s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.04)';
+                e.currentTarget.style.boxShadow = '0 4px 14px rgba(255, 183, 13, 0.6)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.boxShadow = '0 2px 10px rgba(255, 183, 13, 0.4)';
+              }}
+            >
+              <Smartphone size={15} />
+              <span>Uygulamayı İndir (QR)</span>
+            </button>
           </nav>
         </div>
 
@@ -629,6 +722,35 @@ export default function Header({
 
             {/* Navigation Links in Mobile Drawer */}
             <div className="mobile-drawer-nav-links">
+              {/* Mobil Uygulama & Karekod Butonu */}
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setShowInstallModal(true);
+                }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  width: '100%',
+                  background: 'linear-gradient(135deg, #FFB70D 0%, #F59E0B 100%)',
+                  color: '#1A1715',
+                  padding: '12px',
+                  borderRadius: '12px',
+                  fontWeight: '800',
+                  fontSize: '0.92rem',
+                  border: 'none',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 12px rgba(255, 183, 13, 0.35)',
+                  marginBottom: '14px'
+                }}
+              >
+                <Smartphone size={18} />
+                <span>📲 Uygulamayı Yükle (Karekod)</span>
+              </button>
+
               <h4 className="drawer-section-title">Menü Hızlı Bağlantıları</h4>
               
               <a href="#menu" className="drawer-nav-item" onClick={(e) => {
